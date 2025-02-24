@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { StyleSheet, Button } from 'react-native';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
-
+import EditScreenInfo from '../../components/EditScreenInfo';
+import { Text, View } from '../../components/Themed';
 export default function TabTwoScreen() {
   const [message, setMessage] = useState('This is tab two');
 
