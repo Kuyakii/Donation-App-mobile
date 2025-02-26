@@ -1,6 +1,8 @@
 # SaeS4
 
 ## Pour lancer l'application en dev :
+### Lancer le serveur web qui gère le backend 
+#### Ouvrir un terminal dans projet/backend et lancer : npx ts-node server.tsx
 ### Ouvrir un terminal et lancer :  "npx expo start"  
 ou alors aller dans package.json et lancer le script "start"
 ### Ensuite scanner le QrCode avec son téléphone pour lancer l'app
