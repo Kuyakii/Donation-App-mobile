@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 16,
         paddingVertical: 12,
-        marginBottom: 12,
+        marginTop: 20,
     },
     logoContainer: {
         width: 180,
