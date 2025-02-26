@@ -1,149 +1,38 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import UserProfileScreen from './userPage';
+import Header from '../../components/header';
+import SearchBar from '../../components/SearchBar';
+import Section from '../../components/Section';
+import FavoriteItem from '../../components/FavoriteItem';
+import AssociationItem from '../../components/AssociationItem';
+/*import NavigationBar from '../../components/NavigationBar';*/
 
 export default function Layout() {
-    const [currentScreen, setCurrentScreen] = useState('home');
-
-    // Render the appropriate screen based on currentScreen state
-    if (currentScreen === 'user') {
-        return <UserProfileScreen onNavigate={setCurrentScreen} />;
-    }
-
 
     return (
         <View style={styles.container}>
             <StatusBar barStyle="dark-content" />
-
-            {/* Header with logo and settings */}
-            <View style={styles.header}>
-                <View style={styles.logoContainer}>
-                    <Text style={styles.logoText}>Logo</Text>
-                </View>
-                <TouchableOpacity style={styles.settingsButton}>
-                    <Feather name="settings" size={24} color="black" />
-                </TouchableOpacity>
-            </View>
-
-            {/* Search bar */}
-            <View style={styles.searchContainer}>
-                <View style={styles.searchBar}>
-                    <Feather name="search" size={18} color="gray" style={styles.searchIcon} />
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Rechercher"
-                        placeholderTextColor="#999"
-                    />
-                </View>
-            </View>
-
-            {/* Scroll content */}
-            <ScrollView
-                style={styles.contentContainer}
-                contentContainerStyle={styles.scrollContent}
-                showsVerticalScrollIndicator={false}
-            >
-                {/* Favorite associations */}
-                <View style={styles.section}>
-                    <View style={styles.sectionHeader}>
-                        <View style={styles.sectionTitleContainer}>
-                            <Feather name="star" size={20} color="#FFD700" />
-                            <Text style={styles.sectionTitle}>Mes associations favorites</Text>
-                        </View>
-                        <Text style={styles.seeAllText}>Voir tout</Text>
-                    </View>
-
-                    <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.favoritesList}
-                    >
-                        {[1, 2, 3].map((num) => (
-                            <View key={num} style={styles.favoriteItem}>
-                                <View style={styles.favoriteImage}></View>
-                                <Text style={styles.favoriteText}>Asso {num}</Text>
-                            </View>
-                        ))}
+            <Header />
+            <SearchBar />
+            <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                <Section title="Mes associations favorites" icon="star">
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.favoritesList}>
+                        {[1, 2, 3].map(num => <FavoriteItem key={num} name={`Asso ${num}`} />)}
                     </ScrollView>
-                </View>
-
-                {/* Popular associations */}
-                <View style={styles.section}>
-                    <View style={styles.sectionHeader}>
-                        <View style={styles.sectionTitleContainer}>
-                            <Feather name="trending-up" size={20} color="black" />
-                            <Text style={styles.sectionTitle}>Associations populaire</Text>
-                        </View>
-                        <Text style={styles.seeAllText}>Voir tout</Text>
-                    </View>
-
-                    <View style={styles.verticalList}>
-                        {[1, 2].map((num) => (
-                            <View key={num} style={styles.associationItem}>
-                                <View style={styles.associationImage}></View>
-                                <View style={styles.associationInfo}>
-                                    <Text style={styles.associationName}>Asso {num}</Text>
-                                    <Text style={styles.associationDescription}>Description asso {num}</Text>
-                                </View>
-                            </View>
-                        ))}
-                    </View>
-                </View>
-
-                {/* Mental health associations */}
-                <View style={styles.section}>
-                    <View style={styles.sectionHeader}>
-                        <View style={styles.sectionTitleContainer}>
-                            <View style={styles.heartIconContainer}>
-                                <Feather name="heart" size={20} color="black" />
-                            </View>
-                            <Text style={styles.sectionTitle}>Associations santé mentale</Text>
-                        </View>
-                        <Text style={styles.seeAllText}>Voir tout</Text>
-                    </View>
-
-                    <View style={styles.verticalList}>
-                        {[1, 2].map((num) => (
-                            <View key={num} style={styles.associationItem}>
-                                <View style={styles.associationImage}></View>
-                                <View style={styles.associationInfo}>
-                                    <Text style={styles.associationName}>Asso {num}</Text>
-                                    <Text style={styles.associationDescription}>Description asso {num}</Text>
-                                </View>
-                            </View>
-                        ))}
-                    </View>
-                </View>
+                </Section>
+                <Section title="Associations populaire" icon="trending-up">
+                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`} description={`Description asso ${num}`} />)}
+                </Section>
+                <Section title="Associations santé mentale" icon="heart">
+                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`} description={`Description asso ${num}`} />)}
+                </Section>
             </ScrollView>
-
-            {/* Navigation bar */}
-            <View style={styles.navigationContainer}>
-                <View style={styles.navigationBar}>
-                    <TouchableOpacity style={styles.navItem}>
-                        <Feather name="map" size={22} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.navItem}>
-                        <Feather name="credit-card" size={22} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.navItem}
-                        onPress={() => setCurrentScreen('home')}>
-                        <Feather name="home" size={22} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.navItem}>
-                        <Feather name="maximize" size={22} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.navItem}
-                        onPress={() => setCurrentScreen('user')}>
-                        <Feather name="user" size={22} color="black" />
-                    </TouchableOpacity>
-                </View>
-            </View>
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {

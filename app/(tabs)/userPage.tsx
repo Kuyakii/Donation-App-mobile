@@ -2,12 +2,9 @@ import React from 'react';
 import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 
-// Define the prop types for UserProfileScreen
-interface UserProfileScreenProps {
-    onNavigate: (screen: string) => void;
-}
 
-export default function UserProfileScreen({ onNavigate }: UserProfileScreenProps) {
+
+export default function UserProfileScreen() {
     return (
         <SafeAreaView style={styles.container}>
             {/* Header avec logo et paramètres */}
@@ -95,31 +92,6 @@ export default function UserProfileScreen({ onNavigate }: UserProfileScreenProps
                     </View>
                 </View>
             </ScrollView>
-
-            {/* Navigation bar */}
-            <View style={styles.navigationContainer}>
-                <View style={styles.navigationBar}>
-                    <TouchableOpacity style={styles.navItem}>
-                        <Feather name="map" size={22} color="black"/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.navItem}>
-                        <Feather name="credit-card" size={22} color="black"/>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.navItem}
-                        onPress={() => onNavigate('home')}>
-                        <Feather name="home" size={22} color="black"/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.navItem}>
-                        <Feather name="search" size={22} color="black"/>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.navItem}
-                        onPress={() => onNavigate('user')}>
-                        <Feather name="user" size={22} color="black"/>
-                    </TouchableOpacity>
-                </View>
-            </View>
         </SafeAreaView>
     );
 }
