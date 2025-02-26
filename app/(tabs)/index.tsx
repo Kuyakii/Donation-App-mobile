@@ -157,7 +157,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 16,
         paddingVertical: 12,
-        marginTop: Platform.OS === 'ios' ? 44 : 0, // Pour iOS, ajoutez de l'espace pour la statusbar
     },
     logoContainer: {
         width: 180,
