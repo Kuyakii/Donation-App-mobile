@@ -22,3 +22,16 @@ ENFIN : USE donation_app_dev;
 Ici, les pages index et userPage n'utilisent pas de composants React => on perd l'intérêt du langage et il y aura du code dupliqué et difficile à maintenir.
 Cette branche va fix ça, utiliser donx les composants pour les pages futures.
 Aussi, j'ai fixe la navigation en utilisant le rooter de base => à revoir le style de la NavBar mais c'est bien plus fiable comme ça.
+
+### backAppTablesEtConnexionBDD :
+Ici, création de la base sous MariaDB et des tables. \
+Création du ./backend qui va contenir notre serveur back. \
+Respect des principes SOLID au mieux. \
+Dans le backend, nous avons créé une API REST qui gère des routes permettant de récupérer, ajouter, modifier et supprimer des associations et autres.
+
+Routes : \
+GET /associations : Récupère toutes les associations. \
+GET /associations/:id : Récupère une association par son ID. \
+POST /associations : Crée une nouvelle association. \
+PUT /associations/:id : Met à jour une association existante. \
+Ces routes permettent de gérer les données de l’application via des requêtes HTTP (GET, POST, PUT).

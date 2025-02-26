@@ -11,7 +11,6 @@ app.use(cors());
 app.use(express.json());
 
 // Instanciation des classes
-const dbConnection = new MariaDBConnection();
 const associationRepository = new AssociationRepository();
 
 // Routes
