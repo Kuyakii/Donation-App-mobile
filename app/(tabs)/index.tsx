@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
 import Header from '../../components/header';
 import SearchBar from '../../components/SearchBar';
 import Section from '../../components/Section';
 import FavoriteItem from '../../components/FavoriteItem';
 import AssociationItem from '../../components/AssociationItem';
+import {IAssociation} from "@/backend/interfaces/IAssociation";
 
 export default function Layout() {
-
+    const [associations, setAssociations] = useState([]); // Stocke toutes les associations
+    useEffect(() => {
+        fetchAssociations();
+    }, []);
+    const fetchAssociations = async () => {
+        try {
+            const response = await fetch('http://192.168.1.90:3000/associations');
+            const data = await response.json();
+            setAssociations(data); // Stocke toutes les associations dans le state
+        } catch (error) {
+            console.error('Erreur lors de la récupération des associations', error);
+        }
+    };
     return (
         <View style={styles.container}>
             <StatusBar barStyle="dark-content" />
@@ -24,6 +37,11 @@ export default function Layout() {
                 </Section>
                 <Section title="Associations santé mentale" icon="heart">
                     {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`} description={`Description asso ${num}`} />)}
+                </Section>
+                <Section title="Toutes les associations" icon="list">
+                    {associations.map((asso: IAssociation) => (
+                        <AssociationItem key={asso.idAssociation} name={asso.nom} description={asso.description} />
+                    ))}
                 </Section>
             </ScrollView>
         </View>

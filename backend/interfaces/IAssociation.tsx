@@ -3,4 +3,5 @@ export interface IAssociation {
     nom: string;
     description: string;
     localisation: string;
+    idType: number;
 }

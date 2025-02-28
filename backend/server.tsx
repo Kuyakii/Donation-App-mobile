@@ -40,9 +40,9 @@ app.get('/associations/:id', async (req: Request, res: Response) => {
 });
 
 app.post('/associations', async (req: Request, res: Response) => {
-    const { nom, description, localisation } = req.body;
+    const { nom, description, localisation, idType } = req.body;
     try {
-        const newAssociation = { nom, description, localisation };
+        const newAssociation = { nom, description, localisation, idType };
         await associationRepository.create(newAssociation);
         res.status(201).send('Association créée');
     } catch (error) {

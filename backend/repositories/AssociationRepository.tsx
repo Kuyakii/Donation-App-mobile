@@ -19,6 +19,17 @@ export class AssociationRepository {
         }
     }
 
+    // Récupérer toutes les associations favorites d'un user
+    async findAllFavorites(idUtilisateur: number): Promise<IAssociation[] | undefined> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query('SELECT * FROM Association WHERE idAssociation in ( SELECT idAssociation FROM AssociationsFavorites WHERE idUtilisateur = ?) ', [idUtilisateur]);
+            return rows as IAssociation[];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
+
     // Récupérer une association par son ID
     async findById(idAssociation: number): Promise<IAssociation | undefined> {
         const connection = await this.db.getConnection();
@@ -34,10 +45,10 @@ export class AssociationRepository {
     async create(association: Omit<IAssociation, 'idAssociation'>): Promise<void> {
         const connection = await this.db.getConnection();
         try {
-            const { nom, description, localisation } = association;
+            const { nom, description, localisation, idType } = association;
             await connection.query(
-                'INSERT INTO Association (nom, description, localisation) VALUES (?, ?, ?)',
-                [nom, description, localisation]
+                'INSERT INTO Association (nom, description, localisation, idType) VALUES (?, ?, ?, ?)',
+                [nom, description, localisation, idType]
             );
         } finally {
             connection.release(); // Libérer la connexion
@@ -48,10 +59,10 @@ export class AssociationRepository {
     async update(idAssociation: number, association: Partial<IAssociation>): Promise<void> {
         const connection = await this.db.getConnection();
         try {
-            const { nom, description, localisation } = association;
+            const { nom, description, localisation, idType } = association;
             await connection.query(
-                'UPDATE Association SET nom = ?, description = ?, localisation = ? WHERE idAssociation = ?',
-                [nom, description, localisation, idAssociation]
+                'UPDATE Association SET nom = ?, description = ?, localisation = ?, idType = ? WHERE idAssociation = ?',
+                [nom, description, localisation, idType, idAssociation]
             );
         } finally {
             connection.release(); // Libérer la connexion
