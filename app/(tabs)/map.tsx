@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
 import Header from '../../components/header';
 import {AssociationRepository} from "@/backend/repositories/AssociationRepository";
+import BASE_URL from "@/config";
+
 
 
 export default function map() {
     let dataAssos;
     const fetchAssociations = async () => {
         try {
-            const response = await fetch('http://192.168.1.90:3000/associations'); // Remplace par ton IP locale
+            const response = await fetch(`${BASE_URL}/associations`); // Remplace par ton IP locale
             const data = await response.json();
             console.log('Données récupérées :', data);
         } catch (error) {

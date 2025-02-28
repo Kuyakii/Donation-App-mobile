@@ -6,6 +6,8 @@ import Section from '../../components/Section';
 import FavoriteItem from '../../components/FavoriteItem';
 import AssociationItem from '../../components/AssociationItem';
 import {IAssociation} from "@/backend/interfaces/IAssociation";
+import BASE_URL from "@/config";
+
 
 export default function Layout() {
     const [associations, setAssociations] = useState([]); // Stocke toutes les associations
@@ -14,7 +16,7 @@ export default function Layout() {
     }, []);
     const fetchAssociations = async () => {
         try {
-            const response = await fetch('http://192.168.1.90:3000/associations');
+            const response = await fetch(`${BASE_URL}/associations`);
             const data = await response.json();
             setAssociations(data); // Stocke toutes les associations dans le state
         } catch (error) {

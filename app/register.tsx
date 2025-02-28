@@ -3,6 +3,7 @@ import {View, Text, TextInput, Button, StyleSheet, Alert, ScrollView} from 'reac
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import BoutonAccueil from "@/components/BoutonAccueil";
+import BASE_URL from "@/config";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -25,7 +26,7 @@ const LoginScreen = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://192.168.1.90:3000/register', {
+            const response = await fetch(`${BASE_URL}/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password, pseudonyme }),

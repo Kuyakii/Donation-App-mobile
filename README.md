@@ -1,7 +1,9 @@
 # SaeS4
 
 ## Pour lancer l'application en dev :
-### Lancer le serveur web qui gère le backend 
+### Mettre à jour le fichier ./config.tsx avec son adresse ip
+Ouvrir un bash et faire ipconfig et copier coller l'IPV4 dans la constante !
+### Lancer le serveur web qui gère le backend
 #### Ouvrir un terminal dans projet/backend et lancer : npx ts-node server.tsx
 ### Ouvrir un terminal et lancer :  "npx expo start"  
 ou alors aller dans package.json et lancer le script "start"
