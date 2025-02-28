@@ -1,7 +1,11 @@
 import express, { Request, Response } from 'express';
+
+import bodyParser from 'body-parser';
 import cors from 'cors';
-import { MariaDBConnection } from './database/MariaDBConnection';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { AssociationRepository } from './repositories/AssociationRepository';
+import { UtilisateurRepository } from './repositories/UtilisateurRepository';
 
 const app = express();
 const port = 3000;
@@ -12,6 +16,8 @@ app.use(express.json());
 
 // Instanciation des classes
 const associationRepository = new AssociationRepository();
+const userRepo = new UtilisateurRepository();
+const JWT_SECRET = 'votre_secret_jwt'; // À remplacer par une clé sécurisée
 
 // Routes
 app.get('/associations', async (req: Request, res: Response) => {
@@ -62,6 +68,70 @@ app.put('/associations/:id', async (req: Request, res: Response) => {
         console.error('Erreur lors de la mise à jour de l\'association', error);
         res.status(500).send('Erreur serveur');
     }
+});
+
+// Route pour l'inscription
+app.post('/register', async (req: Request, res: Response) => {
+    const { email, password, pseudonyme } = req.body;
+
+    // Vérifier si l'utilisateur existe déjà
+    const existingUser = await userRepo.findByEmail(email);
+    if (existingUser) {
+        res.status(400).json({ message: 'Cet email est déjà utilisé.' });
+    }
+
+    // Hasher le mot de passe
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Créer l'utilisateur
+    await userRepo.create({ email, password: hashedPassword, pseudonyme });
+
+    res.status(201).json({ message: 'Utilisateur inscrit avec succès.' });
+});
+
+// Route pour la connexion
+app.post('/login', async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+
+    // Trouver l'utilisateur par email
+    const user = await userRepo.findByEmail(email);
+    if (!user) {
+        res.status(400).json({ message: 'Email ou mot de passe incorrect.' });
+    }
+
+    // Vérifier le mot de passe
+    // @ts-ignore
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        res.status(400).json({ message: 'Email ou mot de passe incorrect.' });
+    }
+
+    // Générer un token JWT
+    // @ts-ignore
+    const token = jwt.sign({ id: user.idUtilisateur, email: user.email, role: user.role }, JWT_SECRET, {
+        expiresIn: '1h',
+    });
+
+    res.json({ token });
+});
+
+// Route pour le mot de passe oublié
+app.post('/mdpOublie', async (req: Request, res: Response) => {
+    const { email, newPassword } = req.body;
+
+    // Trouver l'utilisateur par email
+    const user = await userRepo.findByEmail(email);
+    if (!user) {
+        res.status(400).json({ message: 'Aucun utilisateur trouvé avec cet email.' });
+    }
+
+    // Hasher le nouveau mot de passe
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Mettre à jour le mot de passe
+    await userRepo.updatePassword(email, hashedPassword);
+
+    res.json({ message: 'Mot de passe mis à jour avec succès.' });
 });
 
 // Lancer le serveur
