@@ -29,9 +29,21 @@ Création du ./backend qui va contenir notre serveur back. \
 Respect des principes SOLID au mieux. \
 Dans le backend, nous avons créé une API REST qui gère des routes permettant de récupérer, ajouter, modifier et supprimer des associations et autres.
 
-Routes : \
+### Authentification
+Ici, création du login register et logout. \
+Dans le back => crétion du répo pour les utilisateurs et de la logique de connexion. \
+Manque peut être le forgot password et la recherche par le pseudo en plus du mail. Aussi c'est moche. \
+Les mdps sont chiffrés. \
+A voir encore pour respecter notre hiérarchie de classes pour l'héritage. \
+
+
+## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \
 POST /associations : Crée une nouvelle association. \
 PUT /associations/:id : Met à jour une association existante. \
+POST /register : inscription avec en body email, password et pseudo. \
+POST /login : connexion avec en body : email et password. \
+POST /mdpOublie : pour changer de password avec en body : email et password => non encore utilisée. \
+
 Ces routes permettent de gérer les données de l’application via des requêtes HTTP (GET, POST, PUT).
