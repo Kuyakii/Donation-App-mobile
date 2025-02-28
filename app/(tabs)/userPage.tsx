@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Button} from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Header from '../../components/header';  // Import du Header
 import SearchBar from '../../components/SearchBar';  // Import du SearchBar
@@ -7,17 +7,51 @@ import Section from '../../components/Section';  // Import de la Section
 import FavoriteItem from '../../components/FavoriteItem';  // Import de FavoriteItem
 import AssociationItem from '../../components/AssociationItem';  // Import de AssociationItem
 import DonationCard from '../../components/ProfileComponents/DonationCard';  // Import de composants spécifiques au profil
-import TopAssociations from '../../components/ProfileComponents/TopAssociations';  // Import de composants spécifiques au profil
+import TopAssociations from '../../components/ProfileComponents/TopAssociations';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {Navigation} from "lucide-react";
+import {useNavigation} from "@react-navigation/native";
+import BoutonDeconnexion from "@/components/BoutonDeconnexion";  // Import de composants spécifiques au profil
 
 export default function UserProfileScreen() {
+    const navigation = useNavigation();
+    const [token, setToken] = useState<string | null>(null); // Gérer l'état du token
+
+    useEffect(() => {
+        const checkToken = async () => {
+            try {
+                // Attendre la résolution de la promesse AsyncStorage
+                const storedToken = await AsyncStorage.getItem('token');
+                console.log('Token récupéré:', storedToken); // Afficher le token récupéré
+
+                if (!storedToken) {
+                    // Si pas de token, rediriger vers la page de connexion
+                    // @ts-ignore
+                    navigation.navigate('login');
+                } else {
+                    setToken(storedToken); // Mettre à jour l'état avec le token
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération du token:', error);
+                // @ts-ignore
+                navigation.navigate('login');
+            }
+        };
+
+        checkToken(); // Exécuter la fonction lors du montage du composant
+    }, [navigation]);
+
+    const utilisateur = AsyncStorage.getItem('utilisateur');
+    console.log(utilisateur);
+
     return (
         <SafeAreaView style={styles.container}>
             <Header />
 
             <SearchBar />
-
+            <BoutonDeconnexion></BoutonDeconnexion>
             <ScrollView style={styles.scrollView}>
-                <Text style={styles.welcomeTitle}>Bonjour, unNom</Text>
+                <Text style={styles.welcomeTitle}>Bonjour, efqef</Text>
 
                 <View style={styles.actionsContainer}>
                     <TouchableOpacity style={styles.actionButton}>

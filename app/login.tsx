@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import BoutonAccueil from "@/components/BoutonAccueil";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -29,6 +30,8 @@ const LoginScreen = () => {
             if (!response.ok) throw new Error(data.message || 'Erreur lors de la connexion.');
 
             await AsyncStorage.setItem('token', data.token);
+            await AsyncStorage.setItem('utilisateur', JSON.stringify(data.user));
+
 
             Alert.alert('Succès', 'Connexion réussie !');
             // @ts-ignore
@@ -46,6 +49,7 @@ const LoginScreen = () => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Connexion</Text>
+            <BoutonAccueil></BoutonAccueil>
 
             <TextInput
                 style={styles.input}

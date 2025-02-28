@@ -114,7 +114,7 @@ app.post('/login', async (req: Request, res: Response) => {
         expiresIn: '1h',
     });
 
-    res.json({ token });
+    res.json({ token, user });
 });
 
 // Route pour le mot de passe oublié
