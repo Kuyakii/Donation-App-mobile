@@ -1,18 +1,12 @@
 import mysql, { Pool, PoolConnection } from 'mysql2/promise';
 import { IDatabaseConnection } from '../interfaces/IDatabaseConnection';
+import {config} from "../config";
 
 export class MariaDBConnection implements IDatabaseConnection {
     private pool: Pool;
 
-    private config = {
-        host: 'localhost',
-        user: 'root',
-        password: 'admin',
-        database: 'donation_app_dev',
-    };
-
     constructor() {
-        this.pool = mysql.createPool(this.config);
+        this.pool = mysql.createPool(config);
     }
 
     async getConnection(): Promise<PoolConnection> {

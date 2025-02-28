@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
 import Header from '../../components/header';
 import {AssociationRepository} from "@/backend/repositories/AssociationRepository";
-import BASE_URL from "@/config";
+import {BASE_URL} from "@/config";
 
 
 

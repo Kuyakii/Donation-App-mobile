@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import BoutonAccueil from "@/components/BoutonAccueil";
 import BoutonInscription from "@/components/BoutonInscription";
-import BASE_URL from "@/config";
+import {BASE_URL} from "@/config";
 
 const LoginScreen = () => {
     const navigation = useNavigation();

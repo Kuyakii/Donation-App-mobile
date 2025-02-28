@@ -6,7 +6,7 @@ import Section from '../../components/Section';
 import FavoriteItem from '../../components/FavoriteItem';
 import AssociationItem from '../../components/AssociationItem';
 import {IAssociation} from "@/backend/interfaces/IAssociation";
-import BASE_URL from "@/config";
+import {BASE_URL} from "@/config";
 
 
 export default function Layout() {
