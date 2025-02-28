@@ -18,7 +18,8 @@ AVEC : mysql -u root -p \
 PUIS : CREATE DATABASE donation_app_dev; \
 ENFIN : USE donation_app_dev; 
 ### Créer les table avec le script (sur Trello : https://trello.com/c/P7fmOcc3)
-
+## Pas oublier d'aussi changer ./backend/config
+Mettre à jour les identifiants de connexion à la BDD : surtout user et password. \
 ## Branches  
 ### FixComponents :
 Ici, les pages index et userPage n'utilisent pas de composants React => on perd l'intérêt du langage et il y aura du code dupliqué et difficile à maintenir.
