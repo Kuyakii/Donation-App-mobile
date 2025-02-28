@@ -3,42 +3,42 @@ import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import BoutonAccueil from "@/components/BoutonAccueil";
-import BoutonInscription from "@/components/BoutonInscription";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
+    const [pseudonyme, setPseudo] = useState('');
     const [password, setPassword] = useState('');
+    const [re_password, setRePassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleLogin = async () => {
-        if (!email || !password) {
+    const handleRegister= async () => {
+        if (!email || !password || !pseudonyme || !re_password ) {
             Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
+            return;
+        }
+        if (password !== re_password ) {
+            Alert.alert('Erreur', 'Les mots de passe sont différents.');
             return;
         }
 
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://192.168.1.90:3000/login', {
+            const response = await fetch('http://192.168.1.90:3000/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email, password, pseudonyme }),
             });
 
             const data = await response.json();
 
-            if (!response.ok) throw new Error(data.message || 'Erreur lors de la connexion.');
+            if (!response.ok) throw new Error(data.message || "Erreur lors de l'inscription.");
 
-            await AsyncStorage.setItem('token', data.token);
-            await AsyncStorage.setItem('utilisateur', JSON.stringify(data.user));
-
-
-            Alert.alert('Succès', 'Connexion réussie !');
+            Alert.alert('Succès', 'Inscription réussie !');
             // @ts-ignore
-            navigation.navigate('(tabs)', {
-                screen: 'userPage',
-            });
+            navigation.navigate('login'
+            );
         } catch (error) {
             // @ts-ignore
             Alert.alert('Erreur', error.message);
@@ -51,25 +51,46 @@ const LoginScreen = () => {
         <View style={styles.container}>
             <Text style={styles.title}>Connexion</Text>
             <BoutonAccueil></BoutonAccueil>
-
+            <Text>Email</Text>
             <TextInput
                 style={styles.input}
+                aria-label={'Email'}
                 placeholder="Email"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
             />
-
+            <Text>Pseudonyme</Text>
             <TextInput
                 style={styles.input}
+                aria-label={'Pseudonyme'}
+                placeholder="Pseudonyme"
+                value={pseudonyme}
+                onChangeText={setPseudo}
+                keyboardType="default"
+                autoCapitalize="none"
+            />
+            <Text>Mot de passe</Text>
+            <TextInput
+                style={styles.input}
+                aria-label={'Mot de passe'}
                 placeholder="Mot de passe"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <BoutonInscription></BoutonInscription>
-            <Button title={isLoading ? 'Connexion...' : 'Se connecter'} onPress={handleLogin} disabled={isLoading} />
+            <Text>Confirmer votre mot de passe</Text>
+            <TextInput
+                style={styles.input}
+                aria-label={'Confirmer votre mot de passe'}
+                placeholder="Confirmer votre mot de passe"
+                value={re_password}
+                onChangeText={setRePassword}
+                secureTextEntry
+            />
+
+            <Button title={isLoading ? "Inscription..." : "S'inscrire"} onPress={handleRegister} disabled={isLoading} />
         </View>
     );
 };
