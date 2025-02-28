@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import {View, Text, TextInput, Button, StyleSheet, Alert, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import BoutonAccueil from "@/components/BoutonAccueil";
@@ -49,27 +49,28 @@ const LoginScreen = () => {
 
     return (
         <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scroll}>
             <Text style={styles.title}>Connexion</Text>
             <BoutonAccueil></BoutonAccueil>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-            />
-
-            <TextInput
-                style={styles.input}
-                placeholder="Mot de passe"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Mot de passe"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                />
             <BoutonInscription></BoutonInscription>
             <Button title={isLoading ? 'Connexion...' : 'Se connecter'} onPress={handleLogin} disabled={isLoading} />
+            </ScrollView>
         </View>
     );
 };
@@ -88,11 +89,17 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
+        width: '100%',
         borderColor: 'gray',
         borderWidth: 1,
         marginBottom: 12,
         paddingHorizontal: 8,
-    },
+    }, scroll: {
+        flex: 1,
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });
 
 export default LoginScreen;
