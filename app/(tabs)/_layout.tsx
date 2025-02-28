@@ -21,8 +21,21 @@ export default function TabLayout() {
                 tabBarStyle: {
                     backgroundColor: '#f2f2f2',
                     height: 60,
-                    paddingBottom: 10,
                     paddingTop: 10,
+                    marginBottom: 10, // Ajoute un espace en bas
+                    marginHorizontal: 20, // Optionnel: crée un effet "flottant" horizontal
+                    borderRadius: 16, // Optionnel: arrondit les coins pour un effet flottant
+                    position: 'absolute', // Rend la barre flottante
+                    bottom: 10, // Position par rapport au bas
+                    left: 0,
+                    right: 0,
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5,
+                },
+                // S'assurer que le contenu de l'écran n'est pas caché par la barre
+                tabBarItemStyle: {
+                    paddingBottom: 5,
                 },
                 headerShown: false,
             }}

@@ -1,16 +1,21 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {Feather} from '@expo/vector-icons';
 
-export default function Header() {
+interface HeaderProps {
+    title?: string
+}
+
+export default function Header({title}: HeaderProps) {
     return (
         <View style={styles.header}>
             <View style={styles.logoContainer}>
                 <Text style={styles.logoText}>Logo</Text>
             </View>
             <TouchableOpacity style={styles.settingsButton}>
-                <Feather name="settings" size={24} color="black" />
+                <Feather name="settings" size={24} color="black"/>
             </TouchableOpacity>
+
         </View>
     );
 }
@@ -20,9 +25,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 16,
-        paddingVertical: 12,
-        marginTop: 20,
+        marginTop: 50,
+        marginBottom: 12,
+        marginHorizontal: 10,
     },
     logoContainer: {
         width: 180,
@@ -30,6 +35,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#f2f2f2',
         alignItems: 'center',
         justifyContent: 'center',
+        position: 'absolute',
+        left: 95, //pour centrer
+
     },
     logoText: {
         fontSize: 18,
@@ -37,5 +45,9 @@ const styles = StyleSheet.create({
     },
     settingsButton: {
         padding: 8,
+    },
+    placeholder: {
+        width: 40, // La même taille que le bouton de paramètres
+        height: 40,
     },
 });
