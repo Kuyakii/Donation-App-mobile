@@ -73,12 +73,14 @@ export default function UserProfileScreen() {
 
                 {/* Section des Associations populaires */}
                 <Section title="Associations populaire" icon="trending-up">
-                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`} description={`Description asso ${num}`} />)}
+                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
+                                                        description={`Description asso ${num}`} imageName={undefined} />)}
                 </Section>
 
                 {/* Section des Associations santé mentale */}
                 <Section title="Associations santé mentale" icon="heart">
-                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`} description={`Description asso ${num}`} />)}
+                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
+                                                        description={`Description asso ${num}`} imageName={undefined} />)}
                 </Section>
             </ScrollView>
         </SafeAreaView>

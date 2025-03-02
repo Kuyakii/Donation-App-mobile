@@ -5,6 +5,8 @@
 Ouvrir un bash et faire ipconfig et copier coller l'IPV4 dans la constante !
 ### Lancer le serveur web qui gère le backend
 #### Ouvrir un terminal dans projet/backend et lancer : npx ts-node server.tsx
+Si un processus marche dessus, sur windows, lancer un bash powershell et : \ > récupérer le pid du processus avec netstat -ano | findstr :3000
+ \ > kill le processus : taskkill /PID [Le pid récupéré] /F
 ### Ouvrir un terminal et lancer :  "npx expo start"  
 ou alors aller dans package.json et lancer le script "start"
 ### Ensuite scanner le QrCode avec son téléphone pour lancer l'app
