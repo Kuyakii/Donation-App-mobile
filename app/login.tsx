@@ -32,6 +32,7 @@ const LoginScreen = () => {
             if (!response.ok) throw new Error(data.message || 'Erreur lors de la connexion.');
 
             await AsyncStorage.setItem('token', data.token);
+            console.log(data.user);
             await AsyncStorage.setItem('utilisateur', JSON.stringify(data.user));
 
 

@@ -29,6 +29,13 @@ export class UtilisateurRepository {
                 'INSERT INTO Utilisateur (email, password, Pseudonyme) VALUES (?, ?, ?)',
                 [email, password, pseudonyme]
             );
+            const invite = await this.findByEmail(email);
+            // @ts-ignore
+            const iduser = invite.idUtilisateur;
+            await connection.query(
+                'INSERT INTO Citoyen (idUtilisateur) VALUES (?)',
+                [iduser]
+            );
         } finally {
             connection.release();
         }
