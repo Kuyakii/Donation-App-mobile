@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 // @ts-ignore
-export default function Section({ title, icon, children }) {
+export default function Section({ title, icon, children, onSeeAllPress }) {
     return (
         <View style={styles.section}>
             <View style={styles.sectionHeader}>
@@ -11,7 +11,11 @@ export default function Section({ title, icon, children }) {
                     <Feather name={icon} size={20} color="black" />
                     <Text style={styles.sectionTitle}>{title}</Text>
                 </View>
-                <Text style={styles.seeAllText}>Voir tout</Text>
+                {onSeeAllPress && (
+                    <TouchableOpacity onPress={onSeeAllPress}>
+                        <Text style={styles.seeAllText}>Voir tout</Text>
+                    </TouchableOpacity>
+                )}
             </View>
             {children}
         </View>
