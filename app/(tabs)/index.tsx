@@ -7,22 +7,11 @@ import FavoriteItem from '../../components/FavoriteItem';
 import AssociationItem from '../../components/AssociationItem';
 import {IAssociation} from "@/backend/interfaces/IAssociation";
 import {BASE_URL} from "@/config";
+import {getAllAssociation} from "@/helpers";
 
 
 export default function Layout() {
-    const [associations, setAssociations] = useState([]); // Stocke toutes les associations
-    useEffect(() => {
-        fetchAssociations();
-    }, []);
-    const fetchAssociations = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/associations`);
-            const data = await response.json();
-            setAssociations(data); // Stocke toutes les associations dans le state
-        } catch (error) {
-            console.error('Erreur lors de la récupération des associations', error);
-        }
-    };
+    const associations = getAllAssociation();
     return (
         <View style={styles.container}>
             <StatusBar barStyle="dark-content" />
@@ -42,7 +31,7 @@ export default function Layout() {
                 </Section>
                 <Section title="Toutes les associations" icon="list">
                     {associations.map((asso: IAssociation) => (
-                        <AssociationItem key={asso.idAssociation} name={asso.nom} description={asso.description} />
+                        <AssociationItem key={asso.idAssociation} name={asso.nom} description={asso.descriptionCourte} />
                     ))}
                 </Section>
             </ScrollView>

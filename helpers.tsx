@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
+import {BASE_URL} from "@/config";
 
 export function getUtilisateurConectee() {
     const navigation = useNavigation();
@@ -58,4 +59,19 @@ export function checkLogin(){
     }, [navigation]);
 }
 
-
+export function getAllAssociation(){
+    const [associations, setAssociations] = useState([]); // Stocke toutes les associations
+    useEffect(() => {
+        fetchAssociations();
+    }, []);
+    const fetchAssociations = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/associations`);
+            const data = await response.json();
+            setAssociations(data); // Stocke toutes les associations dans le state
+        } catch (error) {
+            console.error('Erreur lors de la récupération des associations', error);
+        }
+    };
+    return associations;
+}

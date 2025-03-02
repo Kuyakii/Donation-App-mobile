@@ -45,10 +45,10 @@ export class AssociationRepository {
     async create(association: Omit<IAssociation, 'idAssociation'>): Promise<void> {
         const connection = await this.db.getConnection();
         try {
-            const { nom, description, localisation, idType } = association;
+            const { nom, description,descriptionCourte,nomImage, localisation, idType } = association;
             await connection.query(
-                'INSERT INTO Association (nom, description, localisation, idType) VALUES (?, ?, ?, ?)',
-                [nom, description, localisation, idType]
+                'INSERT INTO Association (nom, description,descriptionCourte,nomImage, localisation, idType) VALUES (?, ?, ?, ?, ?, ?)',
+                [nom, description,descriptionCourte,nomImage, localisation, idType]
             );
         } finally {
             connection.release(); // Libérer la connexion
@@ -59,10 +59,10 @@ export class AssociationRepository {
     async update(idAssociation: number, association: Partial<IAssociation>): Promise<void> {
         const connection = await this.db.getConnection();
         try {
-            const { nom, description, localisation, idType } = association;
+            const { nom, description,descriptionCourte,nomImage, localisation, idType } = association;
             await connection.query(
-                'UPDATE Association SET nom = ?, description = ?, localisation = ?, idType = ? WHERE idAssociation = ?',
-                [nom, description, localisation, idType, idAssociation]
+                'UPDATE Association SET nom = ?, description = ?,descriptionCourte = ? ,nomImage = ?, localisation = ?, idType = ? WHERE idAssociation = ?',
+                [nom, description,descriptionCourte,nomImage, localisation, idType, idAssociation]
             );
         } finally {
             connection.release(); // Libérer la connexion
