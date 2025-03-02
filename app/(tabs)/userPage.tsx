@@ -15,7 +15,7 @@ import BoutonDeconnexion from "@/components/BoutonDeconnexion";  // Import de co
 
 export default function UserProfileScreen() {
     const navigation = useNavigation();
-    const [token, setToken] = useState<string | null>(null); // Gérer l'état du token
+    const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
         const checkToken = async () => {
@@ -40,9 +40,32 @@ export default function UserProfileScreen() {
 
         checkToken(); // Exécuter la fonction lors du montage du composant
     }, [navigation]);
+    const [user, setUser] = useState<any>(null);
+    let utilisateur;
+    useEffect(() => {
+        const checkUser = async () => {
+            try {
+                utilisateur = await AsyncStorage.getItem('utilisateur');
+                if(utilisateur) {
+                    console.log("Utilisateur récupéré : " + JSON.parse(utilisateur));
+                    setUser(JSON.parse(utilisateur));
+                }
+            } catch (error) {
+                console.error("Erreur lors de la récupération de l'utilisateur:", error);
+                // @ts-ignore
+                navigation.navigate('login');
+            }
+        };
 
-    const utilisateur = AsyncStorage.getItem('utilisateur');
-    console.log(utilisateur);
+        checkUser(); // Exécuter la fonction lors du montage du composant
+    }, [navigation]);
+    let Pseudo;
+    let email
+    if(user){
+        Pseudo = user.Pseudonyme;
+        email = user.email;
+        console.log("Pseudo " + Pseudo + " Email " + email);
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -51,7 +74,7 @@ export default function UserProfileScreen() {
             <SearchBar />
             <BoutonDeconnexion></BoutonDeconnexion>
             <ScrollView style={styles.scrollView}>
-                <Text style={styles.welcomeTitle}>Bonjour, efqef</Text>
+                <Text style={styles.welcomeTitle}>Bonjour, {Pseudo}</Text>
 
                 <View style={styles.actionsContainer}>
                     <TouchableOpacity style={styles.actionButton}>
