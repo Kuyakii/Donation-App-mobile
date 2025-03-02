@@ -26,7 +26,7 @@ export class UtilisateurRepository {
         try {
             const { email, password, pseudonyme } = user;
             await connection.query(
-                'INSERT INTO Utilisateur (email, password, Pseudonyme) VALUES (?, ?, ?)',
+                'INSERT INTO Utilisateur (email, password, pseudonyme) VALUES (?, ?, ?)',
                 [email, password, pseudonyme]
             );
             const invite = await this.findByEmail(email);

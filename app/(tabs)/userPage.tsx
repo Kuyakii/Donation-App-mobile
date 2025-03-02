@@ -11,58 +11,17 @@ import TopAssociations from '../../components/ProfileComponents/TopAssociations'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Navigation} from "lucide-react";
 import {useNavigation} from "@react-navigation/native";
-import BoutonDeconnexion from "@/components/BoutonDeconnexion";  // Import de composants spécifiques au profil
+import BoutonDeconnexion from "@/components/BoutonDeconnexion";
+import {checkLogin, getUtilisateurConectee} from "@/helpers";  // Import de composants spécifiques au profil
 
 export default function UserProfileScreen() {
-    const navigation = useNavigation();
-    const [token, setToken] = useState<string | null>(null);
 
-    useEffect(() => {
-        const checkToken = async () => {
-            try {
-                // Attendre la résolution de la promesse AsyncStorage
-                const storedToken = await AsyncStorage.getItem('token');
-                console.log('Token récupéré:', storedToken); // Afficher le token récupéré
-
-                if (!storedToken) {
-                    // Si pas de token, rediriger vers la page de connexion
-                    // @ts-ignore
-                    navigation.navigate('login');
-                } else {
-                    setToken(storedToken); // Mettre à jour l'état avec le token
-                }
-            } catch (error) {
-                console.error('Erreur lors de la récupération du token:', error);
-                // @ts-ignore
-                navigation.navigate('login');
-            }
-        };
-
-        checkToken(); // Exécuter la fonction lors du montage du composant
-    }, [navigation]);
-    const [user, setUser] = useState<any>(null);
-    let utilisateur;
-    useEffect(() => {
-        const checkUser = async () => {
-            try {
-                utilisateur = await AsyncStorage.getItem('utilisateur');
-                if(utilisateur) {
-                    console.log("Utilisateur récupéré : " + JSON.parse(utilisateur));
-                    setUser(JSON.parse(utilisateur));
-                }
-            } catch (error) {
-                console.error("Erreur lors de la récupération de l'utilisateur:", error);
-                // @ts-ignore
-                navigation.navigate('login');
-            }
-        };
-
-        checkUser(); // Exécuter la fonction lors du montage du composant
-    }, [navigation]);
+    checkLogin();
+    const user = getUtilisateurConectee();
     let Pseudo;
     let email
     if(user){
-        Pseudo = user.Pseudonyme;
+        Pseudo = user.pseudonyme;
         email = user.email;
         console.log("Pseudo " + Pseudo + " Email " + email);
     }
