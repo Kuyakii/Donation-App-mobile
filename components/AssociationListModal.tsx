@@ -1,21 +1,46 @@
 import React from 'react';
 import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import AssociationItem from './AssociationItem';
+import {useNavigation} from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // @ts-ignore
 export default function AssociationListModal({ visible, onClose, associations }) {
+    const navigation = useNavigation();
+
+    // Fonction pour gérer la navigation vers la page de détails de l'association
+    const navigateToDetail = async (idAssociation: any) => {
+        await AsyncStorage.removeItem('association');
+        await AsyncStorage.setItem('association', idAssociation.toString());
+        onClose();
+        // @ts-ignore
+        navigation.navigate('(tabs)', {
+            screen: 'dons',
+        });
+    };
+
     return (
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
                     <Text style={styles.modalTitle}>Toutes les associations</Text>
+
+                    {/* Liste des associations */}
                     <FlatList
                         data={associations}
                         keyExtractor={(item) => item.idAssociation.toString()}
                         renderItem={({ item }) => (
-                            <AssociationItem name={item.nom} description={item.descriptionCourte} imageName={item.nomImage} />
+                            <TouchableOpacity onPress={() => navigateToDetail(item.idAssociation)}>
+                                <AssociationItem
+                                    name={item.nom}
+                                    description={item.descriptionCourte}
+                                    imageName={item.nomImage}
+                                />
+                            </TouchableOpacity>
                         )}
                     />
+
+                    {/* Bouton pour fermer la modal */}
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                         <Text style={styles.closeButtonText}>Fermer</Text>
                     </TouchableOpacity>
@@ -28,14 +53,15 @@ export default function AssociationListModal({ visible, onClose, associations })
 const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-end', // Assure que la modal soit en bas de l'écran ou centré
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
         backgroundColor: 'white',
+        width: '100%', // La modal prend toute la largeur de l'écran
+        height: '90%', // Prend 90% de la hauteur de l'écran
         padding: 20,
         borderRadius: 10,
-        marginHorizontal: 20,
     },
     modalTitle: {
         fontSize: 18,
