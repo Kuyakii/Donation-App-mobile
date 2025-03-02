@@ -20,6 +20,11 @@ ENFIN : USE donation_app_dev;
 ### Créer les table avec le script (sur Trello : https://trello.com/c/P7fmOcc3)
 ## Pas oublier d'aussi changer ./backend/config
 Mettre à jour les identifiants de connexion à la BDD : surtout user et password. \
+#### Pour ajouter une association :
+Voir l'exemple d'insertion dans le script (asso : AEJS) => ne pas oublier de bien échapper les ''. \
+Aussi, pour les images, mettre en base dans nomImage le  nom + extension du logo de l'assos et aussi : \
+#### Il faut l'ajouter dans le tableau associatif ./config.tsx en suivant le modèle
+
 ## Branches  
 ### FixComponents :
 Ici, les pages index et userPage n'utilisent pas de composants React => on perd l'intérêt du langage et il y aura du code dupliqué et difficile à maintenir.
@@ -39,6 +44,9 @@ Manque peut être le forgot password et la recherche par le pseudo en plus du ma
 Les mdps sont chiffrés. \
 A voir encore pour respecter notre hiérarchie de classes pour l'héritage. \
 
+### userPageDynamique
+Ici, je récupère les données de l'utilisateur depuis le back end. \
+Aussi, les associations pareil. \
 
 ## Routes : \
 GET /associations : Récupère toutes les associations. \

@@ -1,11 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import {images} from "@/config";
 
 // @ts-ignore
-export default function AssociationItem({ name, description }) {
+export default function AssociationItem({ name, description, imageName }) {
     return (
         <View style={styles.associationItem}>
-            <View style={styles.associationImage}></View>
+            <Image
+                style={styles.associationImage}
+                // @ts-ignore
+                source={images[imageName]} // Charge l'image dynamique
+            />
             <View style={styles.associationInfo}>
                 <Text style={styles.associationName}>{name}</Text>
                 <Text style={styles.associationDescription}>{description}</Text>
@@ -17,12 +22,14 @@ export default function AssociationItem({ name, description }) {
 const styles = StyleSheet.create({
     associationItem: {
         flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
     },
     associationImage: {
         width: 120,
         height: 90,
-        backgroundColor: '#f2f2f2',
         marginRight: 12,
+        resizeMode: 'cover', // Ajuste l'image
     },
     associationInfo: {
         justifyContent: 'center',

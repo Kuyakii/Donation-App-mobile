@@ -24,14 +24,16 @@ export default function Layout() {
                     </ScrollView>
                 </Section>
                 <Section title="Associations populaire" icon="trending-up">
-                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`} description={`Description asso ${num}`} />)}
+                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
+                                                        description={`Description asso ${num}`} imageName={undefined} />)}
                 </Section>
                 <Section title="Associations santé mentale" icon="heart">
-                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`} description={`Description asso ${num}`} />)}
+                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
+                                                        description={`Description asso ${num}`} imageName={undefined} />)}
                 </Section>
                 <Section title="Toutes les associations" icon="list">
                     {associations.map((asso: IAssociation) => (
-                        <AssociationItem key={asso.idAssociation} name={asso.nom} description={asso.descriptionCourte} />
+                        <AssociationItem key={asso.idAssociation} name={asso.nom} description={asso.descriptionCourte} imageName={asso.nomImage} />
                     ))}
                 </Section>
             </ScrollView>
