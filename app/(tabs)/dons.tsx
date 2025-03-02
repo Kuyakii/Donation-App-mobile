@@ -5,6 +5,8 @@ import {useRoute} from "@react-navigation/core";
 import {useNavigation} from "@react-navigation/native";
 import {IUtilisateur} from "@/backend/interfaces/IUtilisateur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {getAssociation} from "@/helpers";
+import AssociationItem from "@/components/AssociationItem";
 
 
 export default function dons() {
@@ -28,14 +30,15 @@ export default function dons() {
 
         getAssos();
     }, [navigation]);
-
-    if(assos)
-        console.log(assos);
+    let association = getAssociation(assos);
+    if(association)
+        console.log(association);
 
     return (
         <View style={styles.container}>
             <StatusBar barStyle="dark-content" />
             <Header />
+            <AssociationItem name={undefined} description={undefined} imageName={undefined}></AssociationItem>
         </View>
     );
 }
