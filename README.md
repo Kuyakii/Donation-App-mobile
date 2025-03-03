@@ -25,6 +25,7 @@ Mettre à jour les identifiants de connexion à la BDD : surtout user et passwor
 #### Pour ajouter une association :
 Voir l'exemple d'insertion dans le script (asso : AEJS) => ne pas oublier de bien échapper les ''. \
 Aussi, pour les images, mettre en base dans nomImage le  nom + extension du logo de l'assos et aussi : \
+Aussi pour les localisation, récupérer latitude et longitude de l'adresse ici par ex : https://geojson.io/#map=16.98/46.657553/0.06602 et utiliser dans le insert  ST_GeomFromText('POINT(0.06604683207572748 46.65740272882837)') => voir exemple.
 #### Il faut l'ajouter dans le tableau associatif ./config.tsx en suivant le modèle
 
 ## Branches  
@@ -49,6 +50,9 @@ A voir encore pour respecter notre hiérarchie de classes pour l'héritage. \
 ### userPageDynamique
 Ici, je récupère les données de l'utilisateur depuis le back end. \
 Aussi, les associations pareil. \
+
+### detailAssociation
+Au clique sur une association de la modale => ouverture de la page de détail avec toutes les infos et la carte aussi.
 
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
