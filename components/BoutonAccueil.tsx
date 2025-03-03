@@ -5,7 +5,6 @@ import {router} from "expo-router";
 
 const BoutonAccueil= () => {
     const navigation = useNavigation();
-
     const redirect =  () => {
             router.replace('/(tabs)');
     };

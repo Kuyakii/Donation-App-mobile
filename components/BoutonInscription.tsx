@@ -6,7 +6,6 @@ import {router} from "expo-router";
 
 const BoutonInscription= () => {
     const navigation = useNavigation();
-
     const redirect =  () => {
         // @ts-ignore
         router.replace('/register');
