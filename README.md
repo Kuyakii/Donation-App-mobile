@@ -57,6 +57,9 @@ Au clique sur une association de la modale => ouverture de la page de détail av
 ### fixNav
 La page detailsAssos à mtn la NAvBAr => pas possible pour l'instant pour login & register sinon il faut revoir un peu la logique.
 
+### loginPageStyle registerPageStyle
+La page login et register est un peu mieux mais faudra trouver un couleur autte que bleu
+
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \
