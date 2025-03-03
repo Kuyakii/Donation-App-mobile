@@ -3,19 +3,17 @@ import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet } from 'react
 import AssociationItem from './AssociationItem';
 import {useNavigation} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useRouter} from "expo-router";
 
 // @ts-ignore
 export default function AssociationListModal({ visible, onClose, associations }) {
-    const navigation = useNavigation();
+    const router = useRouter();
 
-    // Fonction pour gérer la navigation vers la page de détails de l'association
-    const navigateToDetail = async (idAssociation: any) => {
-        await AsyncStorage.removeItem('association');
-        await AsyncStorage.setItem('association', idAssociation.toString());
+    const handleNavigate = (idAssos: number) => {
         onClose();
-        // @ts-ignore
-        navigation.navigate('(tabs)', {
-            screen: 'dons',
+        router.push({
+            pathname: "/detailsAssos",
+            params: { id: idAssos},
         });
     };
 
@@ -30,7 +28,7 @@ export default function AssociationListModal({ visible, onClose, associations })
                         data={associations}
                         keyExtractor={(item) => item.idAssociation.toString()}
                         renderItem={({ item }) => (
-                            <TouchableOpacity onPress={() => navigateToDetail(item.idAssociation)}>
+                            <TouchableOpacity onPress={() => handleNavigate(item.idAssociation)}>
                                 <AssociationItem
                                     name={item.nom}
                                     description={item.descriptionCourte}
