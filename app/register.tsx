@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, Text, TextInput, Button, StyleSheet, Alert, ScrollView} from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import BoutonAccueil from "@/components/BoutonAccueil";
@@ -51,47 +51,52 @@ const LoginScreen = () => {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scroll}>
-            <Text style={styles.title}>Connexion</Text>
-            <BoutonAccueil></BoutonAccueil>
-                <Text>Email</Text>
+                <Text style={styles.title}>Inscription</Text>
+                <BoutonAccueil />
                 <TextInput
                     style={styles.input}
-                    aria-label={'Email'}
                     placeholder="Email"
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
                     autoCapitalize="none"
+                    placeholderTextColor="#888"
                 />
-                <Text>Pseudonyme</Text>
                 <TextInput
                     style={styles.input}
-                    aria-label={'Pseudonyme'}
                     placeholder="Pseudonyme"
                     value={pseudonyme}
                     onChangeText={setPseudo}
-                    keyboardType="default"
                     autoCapitalize="none"
+                    placeholderTextColor="#888"
                 />
-                <Text>Mot de passe</Text>
                 <TextInput
                     style={styles.input}
-                    aria-label={'Mot de passe'}
                     placeholder="Mot de passe"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
+                    placeholderTextColor="#888"
                 />
-                <Text>Confirmer votre mot de passe</Text>
                 <TextInput
                     style={styles.input}
-                    aria-label={'Confirmer votre mot de passe'}
                     placeholder="Confirmer votre mot de passe"
                     value={re_password}
                     onChangeText={setRePassword}
                     secureTextEntry
+                    placeholderTextColor="#888"
                 />
-            <Button title={isLoading ? "Inscription..." : "S'inscrire"} onPress={handleRegister} disabled={isLoading} />
+                <TouchableOpacity
+                    style={[styles.button, isLoading && styles.buttonDisabled]}
+                    onPress={handleRegister}
+                    disabled={isLoading}
+                >
+                    {isLoading ? (
+                        <Text style={styles.buttonText}>Inscription...</Text>
+                    ) : (
+                        <Text style={styles.buttonText}>S'inscrire</Text>
+                    )}
+                </TouchableOpacity>
             </ScrollView>
         </View>
     );
@@ -100,29 +105,58 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        padding: 20,
+        backgroundColor: '#F9FAFB',
+    },
+    scroll: {
+        flexGrow: 1,
         justifyContent: 'center',
-        padding: 16,
-        backgroundColor: 'white',
+        alignItems: 'center',
     },
     title: {
-        fontSize: 24,
-        marginBottom: 16,
-        textAlign: 'center',
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 24,
     },
     input: {
-        height: 40,
+        height: 50,
         width: '100%',
-        borderColor: 'gray',
+        borderColor: '#DDD',
         borderWidth: 1,
-        marginBottom: 12,
-        paddingHorizontal: 8,
-    }, scroll: {
-        flexGrow: 1,  // Permet de prendre tout l'espace vertical disponible
-        justifyContent: 'center',  // Centre les éléments verticalement
-        alignItems: 'center',  // Centre les éléments horizontalement
-        paddingHorizontal: 16,  // Ajoute un peu de marge sur les côtés
-    }
-
+        borderRadius: 12,
+        marginVertical: 10,
+        paddingHorizontal: 16,
+        backgroundColor: '#FFF',
+        color: '#333',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    button: {
+        height: 50,
+        width: '100%',
+        backgroundColor: '#2563EB',
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    buttonDisabled: {
+        backgroundColor: '#A9A9A9',
+    },
+    buttonText: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
 });
 
 export default LoginScreen;
