@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import {View, Text, TextInput, Button, StyleSheet, Alert, ScrollView} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import BoutonAccueil from "@/components/BoutonAccueil";
-import BoutonInscription from "@/components/BoutonInscription";
-import {BASE_URL} from "@/config";
+import BoutonAccueil from '@/components/BoutonAccueil';
+import BoutonInscription from '@/components/BoutonInscription';
+import { BASE_URL } from '@/config';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -35,7 +35,6 @@ const LoginScreen = () => {
             console.log(data.user);
             await AsyncStorage.setItem('utilisateur', JSON.stringify(data.user));
 
-
             Alert.alert('Succès', 'Connexion réussie !');
             // @ts-ignore
             navigation.navigate('(tabs)', {
@@ -52,8 +51,8 @@ const LoginScreen = () => {
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scroll}>
-            <Text style={styles.title}>Connexion</Text>
-            <BoutonAccueil></BoutonAccueil>
+                <Text style={styles.title}>Connexion</Text>
+                <BoutonAccueil />
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -61,17 +60,28 @@ const LoginScreen = () => {
                     onChangeText={setEmail}
                     keyboardType="email-address"
                     autoCapitalize="none"
+                    placeholderTextColor="#888"
                 />
-
                 <TextInput
                     style={styles.input}
                     placeholder="Mot de passe"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
+                    placeholderTextColor="#888"
                 />
-            <BoutonInscription></BoutonInscription>
-            <Button title={isLoading ? 'Connexion...' : 'Se connecter'} onPress={handleLogin} disabled={isLoading} />
+                <TouchableOpacity
+                    style={[styles.button, isLoading && styles.buttonDisabled]}
+                    onPress={handleLogin}
+                    disabled={isLoading}
+                >
+                    {isLoading ? (
+                        <ActivityIndicator size="small" color="#FFF" />
+                    ) : (
+                        <Text style={styles.buttonText}>Se connecter</Text>
+                    )}
+                </TouchableOpacity>
+                <BoutonInscription />
             </ScrollView>
         </View>
     );
@@ -80,28 +90,58 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        padding: 16,
-        backgroundColor: 'white',
+        padding: 20,
+        backgroundColor: '#F9FAFB',
     },
-    title: {
-        fontSize: 24,
-        marginBottom: 16,
-        textAlign: 'center',
-    },
-    input: {
-        height: 40,
-        width: '100%',
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 12,
-        paddingHorizontal: 8,
-    }, scroll: {
-        flex: 1,
+    scroll: {
         flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center',
-    }
+    },
+    title: {
+        fontSize: 32,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 24,
+    },
+    input: {
+        height: 50,
+        width: '100%',
+        borderColor: '#DDD',
+        borderWidth: 1,
+        borderRadius: 12,
+        marginVertical: 10,
+        paddingHorizontal: 16,
+        backgroundColor: '#FFF',
+        color: '#333',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    button: {
+        height: 50,
+        width: '100%',
+        backgroundColor: '#2563EB',
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginVertical: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    buttonDisabled: {
+        backgroundColor: '#A9A9A9',
+    },
+    buttonText: {
+        color: '#FFF',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
 });
 
 export default LoginScreen;

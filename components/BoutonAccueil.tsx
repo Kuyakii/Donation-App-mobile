@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Button } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {router} from "expo-router";
 
@@ -13,9 +12,31 @@ const BoutonAccueil= () => {
 
     return (
         <View>
-            <Button title="Retour" onPress={redirect} />
+            <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText} onPress={redirect}>Retour</Text>
+            </TouchableOpacity>
         </View>
     );
 };
-
+const styles = StyleSheet.create({
+    button: {
+        height: 40,
+        width: 100,
+        backgroundColor: '#2563EB',
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 30,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.6,
+        shadowRadius: 5,
+        elevation: 3
+    },
+    buttonText: {
+        color: '#FFF',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+});
 export default BoutonAccueil;
