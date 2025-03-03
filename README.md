@@ -54,6 +54,9 @@ Aussi, les associations pareil. \
 ### detailAssociation
 Au clique sur une association de la modale => ouverture de la page de détail avec toutes les infos et la carte aussi.
 
+### fixNav
+La page detailsAssos à mtn la NAvBAr => pas possible pour l'instant pour login & register sinon il faut revoir un peu la logique.
+
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \
