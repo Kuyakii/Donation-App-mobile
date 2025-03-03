@@ -7,10 +7,13 @@ import {IUtilisateur} from "@/backend/interfaces/IUtilisateur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {getAssociation} from "@/helpers";
 import AssociationItem from "@/components/AssociationItem";
+import {useLocalSearchParams} from "expo-router";
 
 
 export default function dons() {
-
+    const params = useLocalSearchParams();
+    const { id } = params;
+    console.log(id);
 
     return (
         <View style={styles.container}>

@@ -76,25 +76,25 @@ export function getAllAssociation(){
     return associations;
 }
 
-export function getAssociation(idAssociation: any){
+export const getAssociation = async (idAssociation: string | number | string[]) => {
     idAssociation = Number(idAssociation);
     console.log("ID reçu au getAssociation :", idAssociation);
-    const [association, setAssociation] = useState([]); // Stocke toutes les associations
+   /* const [association, setAssociation] = useState([]); // Stocke toutes les associations
     useEffect(() => {
         fetchAssociation();
     }, []);
     const fetchAssociation = async () => {
-        try {
+        try {*/
             const response = await fetch(`${BASE_URL}/associations/${idAssociation}`);
             const text = await response.text(); // On récupère la réponse en texte brut
             console.log("Réponse brute de l'API :", text); // Ajoute ce log
 
             const data = JSON.parse(text); // Essaie de parser en JSON
             console.log("Données parsées :", data);
-            setAssociation(data);
+           /* setAssociation(data);
         } catch (error) {
             console.error("Erreur lors de la récupération de l'associations", error);
         }
     };
-    return association;
+    return association;*/ return data;
 }
