@@ -65,20 +65,20 @@ export default function UserProfileScreen() {
                 <TopAssociations />
 
                 {/* Section des Associations favorites */}
-                <Section title="Mes associations favorites" icon="star">
+                <Section title="Mes associations favorites" icon="star" onSeeAllPress={undefined}>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.favoritesList}>
                         {[1, 2, 3].map(num => <FavoriteItem key={num} name={`Asso ${num}`} />)}
                     </ScrollView>
                 </Section>
 
                 {/* Section des Associations populaires */}
-                <Section title="Associations populaire" icon="trending-up">
+                <Section title="Associations populaire" icon="trending-up" onSeeAllPress={undefined}>
                     {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
                                                         description={`Description asso ${num}`} imageName={undefined} />)}
                 </Section>
 
                 {/* Section des Associations santé mentale */}
-                <Section title="Associations santé mentale" icon="heart">
+                <Section title="Associations santé mentale" icon="heart" onSeeAllPress={undefined}>
                     {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
                                                         description={`Description asso ${num}`} imageName={undefined} />)}
                 </Section>

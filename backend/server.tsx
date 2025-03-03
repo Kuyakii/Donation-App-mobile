@@ -32,6 +32,8 @@ app.get('/associations', async (req: Request, res: Response) => {
 
 app.get('/associations/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
+    console.log("Params reçus :", req.params);
+    console.log("ID reçu :", id);
     try {
         const association = await associationRepository.findById(Number(id));
         if (association) {
