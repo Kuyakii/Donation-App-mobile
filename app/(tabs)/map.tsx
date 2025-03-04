@@ -88,7 +88,7 @@ export default function MapScreen() {
                                     pathname: "/detailsAssos",
                                     params: { id: selectedAssociation.idAssociation},
                                 });}}/>
-                            <View style={{marginBottom: 5,}}></View>
+                            <View style={{marginBottom: 7,}}></View>
                             <Button title="Fermer" onPress={() => setModalVisible(false)} />
                         </View>
                     </View>

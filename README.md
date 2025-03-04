@@ -31,8 +31,8 @@ Aussi pour les localisation, récupérer latitude et longitude de l'adresse ici 
 ## Branches  
 ### FixComponents :
 Ici, les pages index et userPage n'utilisent pas de composants React => on perd l'intérêt du langage et il y aura du code dupliqué et difficile à maintenir.
-Cette branche va fix ça, utiliser donx les composants pour les pages futures.
-Aussi, j'ai fixe la navigation en utilisant le rooter de base => à revoir le style de la NavBar mais c'est bien plus fiable comme ça.
+Cette branche va fix ça, utiliser dons les composants pour les pages futures.
+Aussi, j'ai fixe la navigation en uti lisant le rooter de base => à revoir le style de la NavBar mais c'est bien plus fiable comme ça.
 
 ### backAppTablesEtConnexionBDD :
 Ici, création de la base sous MariaDB et des tables. \
@@ -60,6 +60,8 @@ La page detailsAssos à mtn la NAvBAr => pas possible pour l'instant pour login 
 ### loginPageStyle registerPageStyle
 La page login et register est un peu mieux mais faudra trouver un couleur autte que bleu
 
+### map
+La map est quasiment complète, Marker qui fait ouvrir une View avec Description Courte de l'Asso et bouton "Aller voir l'asso" qui redirige vers DetailAssos
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \
