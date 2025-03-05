@@ -7,12 +7,13 @@ import BoutonAccueil from "@/components/BoutonAccueil";
 import DetailAssociation from "@/components/DetailAssociation";
 import { getAssociation } from "@/helpers";
 import * as Location from "expo-location";
+import {IAssociation} from "@/backend/interfaces/IAssociation";
 
 export default function DetailsAssos() {
     const params = useLocalSearchParams();
     const { id } = params;
 
-    const [association, setAssociation] = useState(null);  // Stocker l'association dans le state
+    const [association, setAssociation] = useState<IAssociation | null>(null);  // Stocker l'association dans le state
 
     useEffect(() => {
         // Récupérer l'association de manière asynchrone

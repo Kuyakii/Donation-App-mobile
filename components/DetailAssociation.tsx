@@ -45,7 +45,9 @@ export default function DetailAssociation({ nom, description, localisation, desc
                 <MapView
                     style={styles.map}
                     initialRegion={{
+                        /* @ts-ignore */
                         latitude: coordinates.latitude,
+                        /* @ts-ignore */
                         longitude: coordinates.longitude,
                         latitudeDelta: 0.05,
                         longitudeDelta: 0.05,
@@ -53,7 +55,9 @@ export default function DetailAssociation({ nom, description, localisation, desc
                 >
                     <Marker
                         coordinate={{
+                            /* @ts-ignore */
                             latitude: coordinates.latitude,
+                            /* @ts-ignore */
                             longitude: coordinates.longitude,
                         }}
                         title={nom}

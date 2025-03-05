@@ -32,6 +32,7 @@ export default function DonationForm ({ association })  {
             <Text>Montant : {amount??0}</Text>
             <View style={styles.amountContainer}>
                 {[5, 10, 20, 50].map(value => (
+                    /* @ts-ignore */
                     <TouchableOpacity key={value} style={styles.amountButton} onPress={() => setAmount(value)}>
                         <Text style={styles.amountText}>{value}€</Text>
                     </TouchableOpacity>
@@ -40,6 +41,7 @@ export default function DonationForm ({ association })  {
                     style={styles.input}
                     keyboardType="numeric"
                     placeholder="Montant personnalisé"
+                    /* @ts-ignore */
                     onChangeText={(text) => setAmount(Number(text))}
                 />
             </View>
