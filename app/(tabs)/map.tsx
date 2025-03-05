@@ -5,10 +5,10 @@ import * as Location from 'expo-location';
 import Header from '../../components/header';
 import {BASE_URL, images} from '@/config';
 import {useRouter} from "expo-router";
+import {getAllAssociation} from "@/helpers";
 
 export default function MapScreen() {
     const [location, setLocation] = useState(null);
-    const [associations, setAssociations] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedAssociation, setSelectedAssociation] = useState(null);
     const router = useRouter();
@@ -36,20 +36,11 @@ export default function MapScreen() {
             });
 
             // Récupération des associations depuis l'API
-            fetchAssociations();
         })();
     }, []);
 
-    const fetchAssociations = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/associations`);
-            const data = await response.json();
-            setAssociations(data); // Supposant que "data" est un tableau d'associations avec latitude & longitude
-        } catch (error) {
-            console.error("Erreur lors de la récupération des associations :", error);
-        }
-    };
 
+    const associations = getAllAssociation();
     return (
         <View style={styles.container}>
             <MapView

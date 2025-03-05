@@ -47,8 +47,8 @@ export default function DetailAssociation({ nom, description, localisation, desc
                     initialRegion={{
                         latitude: coordinates.latitude,
                         longitude: coordinates.longitude,
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
+                        latitudeDelta: 0.05,
+                        longitudeDelta: 0.05,
                     }}
                 >
                     <Marker

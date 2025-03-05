@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Platform, StatusBar } from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, StyleSheet, Platform, StatusBar, Alert} from 'react-native';
 import Header from '@/components/header';
 import { useLocalSearchParams } from 'expo-router';
 import { router } from 'expo-router';
 import BoutonAccueil from "@/components/BoutonAccueil";
 import DetailAssociation from "@/components/DetailAssociation";
 import { getAssociation } from "@/helpers";
+import * as Location from "expo-location";
 
 export default function DetailsAssos() {
     const params = useLocalSearchParams();
