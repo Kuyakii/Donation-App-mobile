@@ -138,6 +138,15 @@ app.post('/mdpOublie', async (req: Request, res: Response) => {
     res.json({ message: 'Mot de passe mis à jour avec succès.' });
 });
 
+// Route pour une donation
+app.post('/dons', async (req: Request, res: Response) => {
+    const { idAssos, idUtilisateur, montant, typeDon } = req.body;
+    console.log(req.body)
+    /*await userRepo.create({ email, password: hashedPassword, pseudonyme });*/
+
+    res.status(201).json({ message: 'Don réalisé avec succès.' });
+});
+
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
     console.log(`Serveur backend en écoute sur http://localhost:${port}`);

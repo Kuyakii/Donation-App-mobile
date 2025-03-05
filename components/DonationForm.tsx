@@ -2,15 +2,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platform, StatusBar, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {checkLogin} from "@/helpers";
+import {checkLogin, getIdUser} from "@/helpers";
+import {BASE_URL} from "@/config";
 
 // @ts-ignore
 export default function DonationForm ({ association })  {
     const [amount, setAmount] = useState(null);
     const [isRecurring, setIsRecurring] = useState(false);
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleDonate = () => {
+    const handleDonate = async () => {
         if (!amount || amount <= 0) {
             Alert.alert("Erreur", "Veuillez choisir un montant valide.");
             return;
@@ -20,6 +22,31 @@ export default function DonationForm ({ association })  {
             Alert.alert("Connexion requise", "Vous devez être connecté pour faire un don récurrent.");
             checkLogin();
             return;
+        }
+        setIsLoading(true);
+        const idAssos = association.idAssociation;
+        const idUSer = getIdUser();
+        console.log(idAssos, idUSer);
+        try {
+            const response = await fetch(`${BASE_URL}/dons`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({idAssos, idUSer, amount, isRecurring}),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) throw new Error(data.message || "Erreur lors du don.");
+
+            Alert.alert('Succès', 'Don réussi !');
+            // @ts-ignore
+            navigation.navigate('(tabs)'
+            );
+        } catch (error) {
+            // @ts-ignore
+            Alert.alert('Erreur', error.message);
+        } finally {
+            setIsLoading(false);
         }
 
         Alert.alert("Merci!", `Vous avez donné ${amount}€ à ${association.nom}${isRecurring ? " en tant que don récurrent" : " en don unique"}.`);
@@ -51,6 +78,11 @@ export default function DonationForm ({ association })  {
             <TouchableOpacity style={styles.donateButton} onPress={handleDonate}>
                 <Text style={styles.donateButtonText}>Faire un don</Text>
             </TouchableOpacity>
+            {isLoading ? (
+                <Text style={styles.buttonText}>Don en cours...</Text>
+            ) : (
+                <Text style={styles.buttonText}>Donner</Text>
+            )}
         </View>
     );
 };
