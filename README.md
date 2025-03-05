@@ -62,6 +62,9 @@ La page login et register est un peu mieux mais faudra trouver un couleur autte 
 
 ### map
 La map est quasiment complète, Marker qui fait ouvrir une View avec Description Courte de l'Asso et bouton "Aller voir l'asso" qui redirige vers DetailAssos
+
+## ajoutNewAssos
+Ajout de nouvelles associations assez pour pouvoir faire des statistiques avec, nouvelle version du script SQL sur trello
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \
