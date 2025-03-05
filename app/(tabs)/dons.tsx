@@ -10,11 +10,15 @@ export default function Dons() {
     const params = useLocalSearchParams();
     const { id } = params;
     const [association, setAssociation] = useState(null);
-    if(!id){
-        Alert.alert("Choisir une association", "Vous devez choisir d'abord une association pour faire un don.");
-        // @ts-ignore
-        useNavigation().navigate('index');
-    }
+    useEffect(() => {
+        if (!id) {
+            Alert.alert("Choisir une association", "Vous devez choisir d'abord une association pour faire un don.");
+
+            setTimeout(() => {
+                router.replace("/(tabs)");
+            }, 100);
+        }
+    }, [id]);
     useEffect(() => {
         const fetchAssociation = async () => {
             const assoc = await getAssociation(id);
