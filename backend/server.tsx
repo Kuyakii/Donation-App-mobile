@@ -142,8 +142,7 @@ app.post('/mdpOublie', async (req: Request, res: Response) => {
 app.post('/dons', async (req: Request, res: Response) => {
     const { idAssos, idUtilisateur, montant, typeDon } = req.body;
     console.log(req.body)
-    /*await userRepo.create({ email, password: hashedPassword, pseudonyme });*/
-
+    await userRepo.donate(idAssos, idUtilisateur, montant, typeDon);
     res.status(201).json({ message: 'Don réalisé avec succès.' });
 });
 

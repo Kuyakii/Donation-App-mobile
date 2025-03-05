@@ -122,29 +122,4 @@ export function estConnecté() {
 
     return isLoggedIn;
 }
-export function getIdUser() {
-    const [id, setId] = useState<number>(0);
 
-    useEffect(() => {
-        const checkUserLogin = async () => {
-            try {
-                let user = await AsyncStorage.getItem('utilisateur');
-                if (typeof user === "string") {
-                    user = JSON.parse(user);
-                }
-                if (user) {
-                    setId(user.idUtilisateur);
-                } else {
-                    setId(0);
-                }
-            } catch (error) {
-                console.error("Erreur lors de la vérification de l'id :", error);
-                setId(0);
-            }
-        };
-
-        checkUserLogin(); // Vérification du token lors du montage du composant
-    }, []); // Ce useEffect ne se déclenche qu'une seule fois à l'initialisation du composant
-
-    return id;
-}

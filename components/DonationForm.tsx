@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platform, StatusBar, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {checkLogin, getIdUser} from "@/helpers";
+import {checkLogin, estConnecté, getIdUser, getUtilisateurConectee} from "@/helpers";
 import {BASE_URL} from "@/config";
 
 // @ts-ignore
@@ -25,7 +25,8 @@ export default function DonationForm ({ association })  {
         }
         setIsLoading(true);
         const idAssos = association.idAssociation;
-        const idUSer = getIdUser();
+        let idUSer: number = 0;
+
         console.log(idAssos, idUSer);
         try {
             const response = await fetch(`${BASE_URL}/dons`, {
