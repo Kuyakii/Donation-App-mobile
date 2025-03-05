@@ -4,6 +4,7 @@ import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platfo
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {checkLogin} from "@/helpers";
 
+// @ts-ignore
 export default function DonationForm ({ association })  {
     const [amount, setAmount] = useState(null);
     const [isRecurring, setIsRecurring] = useState(false);
@@ -24,6 +25,7 @@ export default function DonationForm ({ association })  {
         Alert.alert("Merci!", `Vous avez donné ${amount}€ à ${association.nom}${isRecurring ? " en tant que don récurrent" : " en don unique"}.`);
     };
 
+    // @ts-ignore
     return (
         <View style={styles.donationContainer}>
             <Text style={styles.title}>Faire un don à {association.nom}</Text>

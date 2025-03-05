@@ -30,7 +30,7 @@ export default function DetailsAssos() {
     // Fonction pour gérer la navigation vers la page des dons
     const navigateToDons = () => {
         router.push({
-            pathname: "/(tabs)/dons",
+            pathname: "/dons",
             params: { id: id },
         });
     };
