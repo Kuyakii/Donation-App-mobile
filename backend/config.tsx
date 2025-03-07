@@ -1,6 +1,6 @@
 export const config = {
     host: 'localhost',
-    user: 'root',
-    password: 'admin',
+    user: 'rosalieacco',
+    password: 'romeoÉ(ÀÈ',
     database: 'donation_app_dev',
 };
