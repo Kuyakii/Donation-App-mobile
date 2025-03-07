@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
         height: 150,
         borderRadius: 75,
         marginBottom: 10,
+        resizeMode :'contain'
     },
     shortDescription: {
         fontSize: 16,
