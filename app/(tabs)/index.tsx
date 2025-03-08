@@ -25,7 +25,7 @@ export default function Layout() {
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                 <Section title="Mes associations favorites" icon="star" onSeeAllPress={undefined}>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.favoritesList}>
-                        {[1, 2, 3].map(num => <FavoriteItem key={num} name={`Asso ${num}`} />)}
+                        {[1, 2, 3, 4].map(num => <FavoriteItem key={num} name={`Asso ${num}`} />)}
                     </ScrollView>
                 </Section>
                 <Section title="Associations populaire" icon="trending-up" onSeeAllPress={undefined}>
@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
     contentContainer: {
         flex: 1,
@@ -78,6 +77,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     favoritesList: {
-        paddingRight: 16,
+        width: '100%',
+        justifyContent: 'space-around',
     }
 });

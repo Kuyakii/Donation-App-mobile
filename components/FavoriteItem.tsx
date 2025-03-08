@@ -13,13 +13,12 @@ export default function FavoriteItem({ name }) {
 
 const styles = StyleSheet.create({
     favoriteItem: {
-        marginRight: 16,
         alignItems: 'center',
         width: 64,
     },
     favoriteImage: {
-        width: 64,
-        height: 64,
+        width: 70,
+        height: 70,
         backgroundColor: '#f2f2f2',
         marginBottom: 4,
     },
