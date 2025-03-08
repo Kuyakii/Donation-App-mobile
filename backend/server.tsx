@@ -24,6 +24,7 @@ app.get('/associations', async (req: Request, res: Response) => {
     try {
         const associations = await associationRepository.findAll();
         res.json(associations);
+
     } catch (error) {
         console.error('Erreur lors de la récupération des associations', error);
         res.status(500).send('Erreur serveur');
@@ -49,6 +50,7 @@ app.get('/associations/:id', async (req: Request, res: Response) => {
 
 app.post('/associations', async (req: Request, res: Response) => {
     const { nom, description,descriptionCourte,nomImage, localisation, idType } = req.body;
+
     try {
         const newAssociation = { nom, description,descriptionCourte,nomImage, localisation, idType };
         await associationRepository.create(newAssociation);
