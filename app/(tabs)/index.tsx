@@ -36,6 +36,23 @@ export default function Layout() {
                     {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
                                                         description={`Description asso ${num}`} imageName={undefined} />)}
                 </Section>
+                {/* Utilisez les icônes disponibles dans Feather ou adaptez-vous */}
+                <Section title="Associations maladie chroniques et rares" icon="thermometer" onSeeAllPress={undefined}>
+                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
+                                                        description={`Description asso ${num}`} imageName={undefined} />)}
+                </Section>
+                <Section title="Associations addictions" icon="package" onSeeAllPress={undefined}>
+                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
+                                                        description={`Description asso ${num}`} imageName={undefined} />)}
+                </Section>
+                <Section title="Associations handicap" icon="activity" onSeeAllPress={undefined}>
+                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
+                                                        description={`Description asso ${num}`} imageName={undefined} />)}
+                </Section>
+                <Section title="Associations cancer" icon="droplet" onSeeAllPress={undefined}>
+                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
+                                                        description={`Description asso ${num}`} imageName={undefined} />)}
+                </Section>
                 <Section title="Toutes les associations" icon="list" onSeeAllPress={() => setModalVisible(true)}>
                     {slicedAssociations.map((asso: IAssociation) => (
                         <AssociationItem key={asso.idAssociation} name={asso.nom} description={asso.descriptionCourte} imageName={asso.nomImage} />

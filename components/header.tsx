@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import {Feather} from '@expo/vector-icons';
+import {images} from "@/config";
 
 interface HeaderProps {
     title?: string
@@ -10,7 +11,10 @@ export default function Header({title}: HeaderProps) {
     return (
         <View style={styles.header}>
             <View style={styles.logoContainer}>
-                <Text style={styles.logoText}>Logo</Text>
+                <Image
+                    style={styles.logoImage}
+                    source={images["logo.png"]}
+                />
             </View>
             <TouchableOpacity style={styles.settingsButton}>
                 <Feather name="settings" size={36} color="black"/>
@@ -30,15 +34,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     logoContainer: {
-        width: 180,
-        height: 48,
-        backgroundColor: '#f2f2f2',
+        width: 200,
+        height: 70,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    logoText: {
-        fontSize: 18,
-        fontWeight: '500',
+    logoImage: {
+        width: 200,
+        height: 80,
+        margin: 12,
+        resizeMode: 'contain', // Ajuste l'image
+
     },
     settingsButton: {
         padding: 8,

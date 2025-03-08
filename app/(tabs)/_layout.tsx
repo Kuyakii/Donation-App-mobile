@@ -3,6 +3,8 @@ import { Tabs } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
+import {Image, StyleSheet} from "react-native";
+import {images} from "@/config";
 
 // Fonction pour générer les icônes de la barre de navigation
 // @ts-ignore
@@ -58,7 +60,8 @@ export default function TabLayout() {
                 name="index"
                 options={{
                     title: '',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+                    tabBarIcon: ({ color }) => <Image  style={styles.logoImage}
+                                                       source={images["logo-petit.png"]}/>,
                 }}
             />
             <Tabs.Screen
@@ -84,4 +87,14 @@ export default function TabLayout() {
             />
         </Tabs>
     );
+
 }
+const styles = StyleSheet.create({
+    logoImage: {
+        width: 80,
+        height: 40,
+        margin: 12,
+        resizeMode: 'contain', // Ajuste l'image
+
+    }
+});

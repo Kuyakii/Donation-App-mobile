@@ -16,7 +16,7 @@ export default function SearchBar() {
 const styles = StyleSheet.create({
     searchContainer: {
         paddingHorizontal: 16,
-        paddingBottom: 16,
+        margin: 16,
     },
     searchBar: {
         flexDirection: 'row',
