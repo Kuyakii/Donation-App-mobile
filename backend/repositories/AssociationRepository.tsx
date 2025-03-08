@@ -68,4 +68,30 @@ export class AssociationRepository {
             connection.release(); // Libérer la connexion
         }
     }
+
+    async addFavoriteAsso(newAssoFavorite: { idUtilisateur: any; idAssociation: any }) {
+        const connection = await this.db.getConnection();
+        try {
+            const { idUtilisateur, idAssociation } = newAssoFavorite;
+            await connection.query(
+                'INSERT INTO AssociationsFavorites (idUtilisateur, idAssociation) VALUES (?, ?)',
+                [idUtilisateur, idAssociation]
+            );
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
+
+    async deleteFavoriteAsso(assoFavorite: { idUtilisateur: any; idAssociation: any }) {
+        const connection = await this.db.getConnection();
+        try {
+            const { idUtilisateur, idAssociation } = assoFavorite;
+            await connection.query(
+                'DELETE FROM AssociationsFavorites WHERE idUtilisateur = ? AND idAssociation = ?',
+                [idUtilisateur, idAssociation]
+            );
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
 }
