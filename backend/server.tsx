@@ -144,3 +144,27 @@ app.post('/mdpOublie', async (req: Request, res: Response) => {
 app.listen(port,'0.0.0.0', () => {
     console.log(`Serveur backend en écoute sur http://localhost:${port}`);
 });
+
+app.post('/favorites', async (req, res) => {
+    const { idUtilisateur, idAssociation } = req.body;
+
+    try {
+        const newAssoFavorite = { idUtilisateur, idAssociation };
+        await associationRepository.addFavoriteAsso(newAssoFavorite);
+        res.status(201).json({ message: 'Ajouté aux favoris' });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de l'ajout en favori", error });
+    }
+});
+
+app.delete('/favorites', async (req, res) => {
+    const { idUtilisateur, idAssociation } = req.body;
+
+    try {
+        const assoFavorite = { idUtilisateur, idAssociation };
+        await associationRepository.deleteFavoriteAsso(assoFavorite);
+        res.status(200).json({ message: 'Supprimé des favoris' });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la suppression", error });
+    }
+});
