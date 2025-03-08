@@ -9,13 +9,17 @@ import {IUtilisateur} from "@/backend/interfaces/IUtilisateur";
 import {useNavigation} from "@react-navigation/native";
 import Header from "@/components/header";
 import BoutonAccueil from '@/components/BoutonAccueil';
+import {Picker} from '@react-native-picker/picker';
 
-
-// Composant principal
 const DonPage = () => {
     const { confirmPayment } = useStripe();
     const [montant, setMontant] = useState<string>('10');
     const [cardDetails, setCardDetails] = useState<any>(null);
+    const [isRecurrent, setIsRecurrent] = useState<boolean>(false);
+    const [startDate, setStartDate] = useState<string>('');
+    const [endDate, setEndDate] = useState<string>('');
+    const [frequency, setFrequency] = useState<string>('mois'); // Par défaut : mois
+
     const params = useLocalSearchParams();
     const { id } = params;
     const [association, setAssociation] = useState(null);
@@ -23,13 +27,8 @@ const DonPage = () => {
     const user : IUtilisateur | null = getUtilisateurConectee();
     const navigation = useNavigation();
 
-    console.log(user);
-    let idUser: number;
-    if (!user) {
-        idUser = 0;
-    }else{
-        idUser = user.idUtilisateur;
-    }
+    let idUser: number = user ? user.idUtilisateur : 0;
+
     useEffect(() => {
         const fetchAssociation = async () => {
             const assoc = await getAssociation(id);
@@ -38,6 +37,7 @@ const DonPage = () => {
         };
         fetchAssociation();
     }, [id]);
+
     if (loading) {
         return (
             <View style={styles.container}>
@@ -46,7 +46,7 @@ const DonPage = () => {
             </View>
         );
     }
-    console.log(association);
+
     const handlePayment = async () => {
         if (!cardDetails) {
             Alert.alert('Erreur', 'Veuillez remplir les détails de la carte');
@@ -54,21 +54,19 @@ const DonPage = () => {
         }
 
         try {
-            // Appeler le backend pour créer un PaymentIntent
             const paymentIntentResponse = await fetch(`${BASE_URL}/create-payment-intent`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    amount: parseFloat(montant) * 100, // Stripe attend le montant en centimes
+                    amount: parseFloat(montant) * 100,
                     currency: 'eur',
                 }),
             });
 
             const { clientSecret } = await paymentIntentResponse.json();
 
-            // Confirmer le paiement avec Stripe
             const { error, paymentIntent } = await confirmPayment(clientSecret, {
                 paymentMethodData: cardDetails , paymentMethodType: 'Card',
             });
@@ -76,16 +74,24 @@ const DonPage = () => {
             if (error) {
                 Alert.alert('Erreur de paiement', error.message);
             } else {
-                console.log(paymentIntent);
                 try {
                     const response = await fetch(`${BASE_URL}/dons`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ id, idUser, montant,  }),
+                        body: JSON.stringify({
+                            id,
+                            idUser,
+                            montant,
+                            typeDon: isRecurrent ? "recurrent" : "unique",
+                            ...(isRecurrent && {
+                                startDate,
+                                endDate,
+                                frequency,
+                            })
+                        }),
                     });
 
                     const data = await response.json();
-
                     if (!response.ok) throw new Error(data.message || "Erreur lors du don.");
 
                     Alert.alert('Succès', 'Don réussi !');
@@ -110,31 +116,65 @@ const DonPage = () => {
     };
 
     return (
-
         <View style={styles.container}>
-            <Header></Header>
-            <BoutonAccueil></BoutonAccueil>
+            <Header />
+            <BoutonAccueil />
             <ScrollView>
-            <Text style={styles.title}>Faire un don à {association.nom}</Text>
-            <AssociationItem name={association.nom} description={association.descriptionCourte} imageName={association.nomImage}></AssociationItem>
-            <Text style={styles.label}>Montant du don (en EUR)</Text>
-            <TextInput
-                style={styles.input}
-                keyboardType="numeric"
-                value={montant}
-                onChangeText={setMontant}
-                placeholder="10"
-            />
+                <Text style={styles.title}>Faire un don à {association.nom}</Text>
+                <AssociationItem name={association.nom} description={association.descriptionCourte} imageName={association.nomImage} />
+                <Text style={styles.label}>Montant du don (en EUR)</Text>
+                <TextInput
+                    style={styles.input}
+                    keyboardType="numeric"
+                    value={montant}
+                    onChangeText={setMontant}
+                    placeholder="10"
+                />
 
-            {/* Ici tu peux intégrer un composant de formulaire de carte Stripe */}
-            <CardField
-                postalCodeEnabled={true}
-                placeholders={{
-                    number: '4242 4242 4242 4242',
-                }}
-                onCardChange={(cardDetails: any) => setCardDetails(cardDetails)}
-                style={styles.cardField}
-            />
+                {/* Checkbox pour choisir entre don unique et récurrent */}
+                <View style={styles.checkboxContainer}>
+                    <Text style={styles.label}>Don récurrent :</Text>
+                    <Button title={isRecurrent ? "Oui" : "Non"} onPress={() => setIsRecurrent(!isRecurrent)} />
+                </View>
+
+                {/* Afficher les champs supplémentaires si le don est récurrent */}
+                {isRecurrent && (
+                    <>
+                        <Text style={styles.label}>Date de début :</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="YYYY-MM-DD"
+                            value={startDate}
+                            onChangeText={setStartDate}
+                        />
+
+                        <Text style={styles.label}>Date de fin :</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="YYYY-MM-DD"
+                            value={endDate}
+                            onChangeText={setEndDate}
+                        />
+
+                        <Text style={styles.label}>Fréquence :</Text>
+                        <Picker
+                            selectedValue={frequency}
+                            onValueChange={(itemValue) => setFrequency(itemValue)}
+                            style={styles.picker}
+                        >
+                            <Picker.Item label="Toutes les semaines" value="semaine" />
+                            <Picker.Item label="Tous les mois" value="mois" />
+                            <Picker.Item label="Tous les trimestres" value="trimestre" />
+                        </Picker>
+                    </>
+                )}
+
+                <CardField
+                    postalCodeEnabled={true}
+                    placeholders={{ number: '4242 4242 4242 4242' }}
+                    onCardChange={(cardDetails: any) => setCardDetails(cardDetails)}
+                    style={styles.cardField}
+                />
             </ScrollView>
             <Button title="Faire un don" onPress={handlePayment} />
         </View>
@@ -146,7 +186,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         padding: 20,
-        backgroundColor: '#f4f4f4', // Fond clair
+        backgroundColor: '#f4f4f4',
     },
     title: {
         fontSize: 24,
@@ -174,15 +214,21 @@ const styles = StyleSheet.create({
         height: 50,
         marginBottom: 20,
     },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    picker: {
+        height: 50,
+        width: '100%',
+        backgroundColor: '#fff',
+        borderRadius: 5,
+    }
 });
 
-// Composant avec StripeProvider
-const App = () => {
-    return (
-        <StripeProvider publishableKey="pk_test_51R0Q18IsFroIM4A9TamwLy8vz7Y3tmdjRcjx9g5MI6rl0chsWpn8XIZ28BPVSTr2hYNuhW8STuIzkhiK8co6sWan00DtGCvH6n">
-            <DonPage />
-        </StripeProvider>
-    );
-};
-
-export default App;
+export default () => (
+    <StripeProvider publishableKey="pk_test_51R0Q18IsFroIM4A9TamwLy8vz7Y3tmdjRcjx9g5MI6rl0chsWpn8XIZ28BPVSTr2hYNuhW8STuIzkhiK8co6sWan00DtGCvH6n">
+        <DonPage />
+    </StripeProvider>
+);

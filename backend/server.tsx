@@ -6,7 +6,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AssociationRepository } from './repositories/AssociationRepository';
 import { UtilisateurRepository } from './repositories/UtilisateurRepository';
-import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
+import {DonationRepository} from "./repositories/DonationRepository";
 
 
 const app = express();
@@ -19,6 +19,7 @@ app.use(express.json());
 // Instanciation des classes
 const associationRepository = new AssociationRepository();
 const userRepo = new UtilisateurRepository();
+const donsRepo = new DonationRepository();
 const JWT_SECRET = 'votre_secret_jwt'; // À remplacer par une clé sécurisée
 
 // Routes
@@ -146,11 +147,12 @@ app.post('/dons', async (req: Request, res: Response) => {
     console.log(id)
     console.log(idUser)
     console.log(montant)
-
+    console.log(typeDon);
+    console.log(req.body);
     id = Number(id);
     idUser = Number(idUser);
 
-    await userRepo.donate(id, idUser, montant, typeDon);
+    await donsRepo.donate(id, idUser, montant, typeDon);
     res.status(201).json({ message: 'Don réalisé avec succès.' });
 });
 const stripe = require('stripe')('sk_test_51R0Q18IsFroIM4A9oGqJkSFPR8IXesbB9k43TNCGafDJq2nTeWQuGieDiwrdQudTBfjSb55nGboOud4Lq9NrglOg00aVADzSkZ');
