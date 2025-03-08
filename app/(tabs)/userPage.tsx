@@ -1,5 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Button} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    ScrollView,
+    TouchableOpacity,
+    SafeAreaView,
+    Button,
+    Platform,
+    StatusBar
+} from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Header from '../../components/header';  // Import du Header
 import SearchBar from '../../components/SearchBar';  // Import du SearchBar
@@ -38,23 +48,23 @@ export default function UserProfileScreen() {
                 <View style={styles.actionsContainer}>
                     <TouchableOpacity style={styles.actionButton}>
                         <View style={styles.iconContainer}>
-                            <Feather name="user" size={24} color="black" />
+                            <Feather name="user" size={icon_size} color="black" />
+                            <Text style={styles.actionText}>Profil</Text>
                         </View>
-                        <Text style={styles.actionText}>Profil</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionButton}>
                         <View style={styles.iconContainer}>
-                            <Feather name="gift" size={24} color="black" />
+                            <Feather name="gift" size={icon_size} color="black" />
+                            <Text style={styles.actionText}>Dons</Text>
                         </View>
-                        <Text style={styles.actionText}>Dons</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionButton}>
                         <View style={styles.iconContainer}>
-                            <Feather name="star" size={24} color="#FFD700" />
+                            <Feather name="star" size={icon_size} color="#FFD700" />
+                            <Text style={styles.actionText}>Favoris</Text>
                         </View>
-                        <Text style={styles.actionText}>Favoris</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -67,7 +77,7 @@ export default function UserProfileScreen() {
                 {/* Section des Associations favorites */}
                 <Section title="Mes associations favorites" icon="star" onSeeAllPress={undefined}>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.favoritesList}>
-                        {[1, 2, 3].map(num => <FavoriteItem key={num} name={`Asso ${num}`} />)}
+                        {[1, 2, 3, 4].map(num => <FavoriteItem key={num} name={`Asso ${num}`} />)}
                     </ScrollView>
                 </Section>
 
@@ -87,6 +97,7 @@ export default function UserProfileScreen() {
     );
 }
 
+const icon_size = 30;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -104,26 +115,27 @@ const styles = StyleSheet.create({
     actionsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 20,
+        marginBottom: 25,
     },
     actionButton: {
         alignItems: 'center',
         width: '30%',
     },
     iconContainer: {
-        width: 70,
-        height: 70,
+        width: 80,
+        paddingVertical: 16,
         borderRadius: 8,
-        borderWidth: 1,
-        borderColor: '#ddd',
+        borderWidth: 0.5,
+        borderColor: 'black',
+        backgroundColor: '#EADEF4',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 5,
     },
     actionText: {
         fontSize: 14,
     },
     favoritesList: {
-        paddingRight: 16,
+        width: '100%',
+        justifyContent: 'space-between',
     },
 });

@@ -20,15 +20,16 @@ export default function  DonationCard (){
 
 const styles = StyleSheet.create({
     donationCard: {
-        borderWidth: 1,
-        borderColor: '#ddd',
+        borderWidth: 0.5,
+        borderColor: 'black',
+        backgroundColor: '#EADEF4',
         borderRadius: 12,
         padding: 16,
         marginBottom: 20,
     },
     donationTitle: {
         fontSize: 16,
-        fontWeight: '500',
+        fontWeight: 'bold',
         marginBottom: 16,
     },
     progressContainer: {
@@ -41,20 +42,23 @@ const styles = StyleSheet.create({
         height: 20,
         backgroundColor: '#f2f2f2',
         borderRadius: 10,
+        borderWidth: 1,
         overflow: 'hidden',
     },
     progressFill: {
         height: '100%',
         backgroundColor: '#7CCC6C',
         borderRadius: 10,
+        borderWidth: 0.5,
     },
     progressText: {
         marginLeft: 8,
         fontSize: 14,
+        fontWeight: 'bold',
     },
     badgesTitle: {
         fontSize: 16,
-        fontWeight: '500',
+        fontWeight: 'bold',
         marginBottom: 12,
     },
 });

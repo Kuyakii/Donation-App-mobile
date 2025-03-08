@@ -33,20 +33,22 @@ export default function TopAssociations() {
 const styles = StyleSheet.create({
     topAssociationsCard: {
         borderWidth: 1,
-        borderColor: '#ddd',
+        borderColor: 'black',
         borderRadius: 12,
         padding: 16,
+        backgroundColor: '#EADEF4',
         marginBottom: 20,
     },
     topAssociationsTitle: {
         fontSize: 18,
-        fontWeight: '500',
+        fontWeight: 'bold',
         marginBottom: 8,
     },
     topAssociationsSubtitle: {
         fontSize: 14,
         color: '#666',
         marginBottom: 16,
+        fontWeight: '500',
     },
     associationItem: {
         flexDirection: 'row',
@@ -59,8 +61,8 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     associationLogo: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         backgroundColor: '#f2f2f2',
         marginRight: 16,
     },
