@@ -13,9 +13,8 @@ export default function Header({title}: HeaderProps) {
                 <Text style={styles.logoText}>Logo</Text>
             </View>
             <TouchableOpacity style={styles.settingsButton}>
-                <Feather name="settings" size={24} color="black"/>
+                <Feather name="settings" size={36} color="black"/>
             </TouchableOpacity>
-
         </View>
     );
 }
@@ -23,11 +22,12 @@ export default function Header({title}: HeaderProps) {
 const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 50,
-        marginBottom: 12,
-        marginHorizontal: 10,
+        width: '100%',
+        marginTop: 40,
+        marginBottom: 20,
+        paddingHorizontal: 10,
     },
     logoContainer: {
         width: 180,
@@ -35,9 +35,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#f2f2f2',
         alignItems: 'center',
         justifyContent: 'center',
-        position: 'absolute',
-        left: 95, //pour centrer
-
     },
     logoText: {
         fontSize: 18,
@@ -45,6 +42,8 @@ const styles = StyleSheet.create({
     },
     settingsButton: {
         padding: 8,
+        right: 0,
+        position: 'absolute',
     },
     placeholder: {
         width: 40, // La même taille que le bouton de paramètres

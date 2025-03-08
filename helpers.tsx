@@ -82,7 +82,8 @@ export function getAssociation(idAssociation: any){
     const [association, setAssociation] = useState([]); // Stocke toutes les associations
     useEffect(() => {
         fetchAssociation();
-    }, []);
+    }, [idAssociation]);
+
     const fetchAssociation = async () => {
         try {
             const response = await fetch(`${BASE_URL}/associations/${idAssociation}`);

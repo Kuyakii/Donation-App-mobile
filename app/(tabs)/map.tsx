@@ -87,7 +87,9 @@ export default function MapScreen() {
                                 router.push({
                                     pathname: "/detailsAssos",
                                     params: { id: selectedAssociation.idAssociation},
-                                });}}/>
+                                });
+                                setModalVisible(false);
+                            }}/>
                             <View style={{marginBottom: 7,}}></View>
                             <Button title="Fermer" onPress={() => setModalVisible(false)} />
                         </View>
