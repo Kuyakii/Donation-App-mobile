@@ -21,6 +21,8 @@ const DonPage = () => {
     const [association, setAssociation] = useState(null);
     const [loading, setLoading] = useState<boolean>(true);
     const user : IUtilisateur | null = getUtilisateurConectee();
+    const navigation = useNavigation();
+
     console.log(user);
     let idUser: number;
     if (!user) {
@@ -74,7 +76,6 @@ const DonPage = () => {
             if (error) {
                 Alert.alert('Erreur de paiement', error.message);
             } else {
-                Alert.alert('Succès', 'Paiement réussi!');
                 console.log(paymentIntent);
                 try {
                     const response = await fetch(`${BASE_URL}/dons`, {
@@ -88,10 +89,14 @@ const DonPage = () => {
                     if (!response.ok) throw new Error(data.message || "Erreur lors du don.");
 
                     Alert.alert('Succès', 'Don réussi !');
-                    // @ts-ignore
-                    useNavigation().navigate('(tabs)', {
-                        screen: 'index',
-                    });
+                    try {
+                        // @ts-ignore
+                        navigation.navigate('(tabs)', { screen: 'index' });
+                    } catch (error) {
+                        console.error("Erreur de navigation:", error);
+                        // @ts-ignore
+                        Alert.alert('Erreur', error.message || "Problème lors de la navigation");
+                    }
 
                 } catch (error) {
                     // @ts-ignore
