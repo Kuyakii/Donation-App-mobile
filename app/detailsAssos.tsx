@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Platform, StatusBar } from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, StyleSheet, Platform, StatusBar, Alert} from 'react-native';
 import Header from '@/components/header';
 import { useLocalSearchParams } from 'expo-router';
 import { router } from 'expo-router';
 import BoutonAccueil from "@/components/BoutonAccueil";
 import DetailAssociation from "@/components/DetailAssociation";
 import { getAssociation } from "@/helpers";
+import * as Location from "expo-location";
+import {IAssociation} from "@/backend/interfaces/IAssociation";
 
 export default function DetailsAssos() {
     const params = useLocalSearchParams();
     const { id } = params;
 
-    const [association, setAssociation] = useState(null);  // Stocker l'association dans le state
+    const [association, setAssociation] = useState<IAssociation | null>(null);  // Stocker l'association dans le state
 
     useEffect(() => {
         // Récupérer l'association de manière asynchrone
@@ -29,7 +31,7 @@ export default function DetailsAssos() {
     // Fonction pour gérer la navigation vers la page des dons
     const navigateToDons = () => {
         router.push({
-            pathname: "/(tabs)/dons",
+            pathname: "/dons",
             params: { id: id },
         });
     };

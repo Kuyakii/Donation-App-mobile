@@ -45,15 +45,19 @@ export default function DetailAssociation({ nom, description, localisation, desc
                 <MapView
                     style={styles.map}
                     initialRegion={{
+                        /* @ts-ignore */
                         latitude: coordinates.latitude,
+                        /* @ts-ignore */
                         longitude: coordinates.longitude,
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
+                        latitudeDelta: 0.05,
+                        longitudeDelta: 0.05,
                     }}
                 >
                     <Marker
                         coordinate={{
+                            /* @ts-ignore */
                             latitude: coordinates.latitude,
+                            /* @ts-ignore */
                             longitude: coordinates.longitude,
                         }}
                         title={nom}

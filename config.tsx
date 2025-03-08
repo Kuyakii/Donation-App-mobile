@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://192.168.1.27:3000'; //à changer
+export const BASE_URL = 'http://192.168.1.90:3000'; //à changer
 export const images = {
     "AEJS.png": require("@/assets/images/AEJS.png"),
     "ENDOFRANCE.png": require("@/assets/images/ENDOFRANCE.png"),
@@ -10,34 +10,5 @@ export const images = {
     "RES-logo.jpg": require("@/assets/images/RES-logo.jpg"),
     "ARSLA-logo.jpg": require("@/assets/images/ARSLA-logo.jpg"),
     "AFS-logo.jpg": require("@/assets/images/AFS-logo.jpg"),
-    "addiction_alcool_vie_libre.png": require("@/assets/images/addiction_alcool_vie_libre.png"),
-    "adepa.jpg": require("@/assets/images/adepa.png"),
-    "advocacy.png": require("@/assets/images/advocacy.png"),
-    "apajh.png": require("@/assets/images/apajh.png"),
-    "apf.png": require("@/assets/images/apf.png"),
-    "argos2001.png": require("@/assets/images/argos2001.png"),
-    "croix_bleue.png": require("@/assets/images/croix_bleue.png"),
-    "efappe.png": require("@/assets/images/efappe.png"),
-    "fede_amis_de_la_sante.png": require("@/assets/images/fede_amis_de_la_sante.png"),
-    "fnapsy.png": require("@/assets/images/fnapsy.png"),
-    "france_dep.png": require("@/assets/images/france_dep.png"),
-    "logo.png": require("@/assets/images/logo.png"),
-    "schizo-oui.png": require("@/assets/images/schizo-oui.png"),
-    "unafam.png": require("@/assets/images/unafam.png"),
-    "unapei.png": require("@/assets/images/unapei.png"),
-    "logo-petit.png": require("@/assets/images/logo-petit.png"),
-
-
-
-
-
-
-
-
-
-
-
-
-
 };
 

@@ -3,6 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {BASE_URL} from "@/config";
+import {Alert} from "react-native";
 
 export function getUtilisateurConectee() {
     const navigation = useNavigation();
@@ -99,3 +100,27 @@ export const getAssociation = async (idAssociation: string | number | string[]) 
     };
     return association;*/ return data;
 }
+export function estConnecté() {
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+    useEffect(() => {
+        const checkUserLogin = async () => {
+            try {
+                const storedToken = await AsyncStorage.getItem('token');
+                if (storedToken) {
+                    setIsLoggedIn(true);
+                } else {
+                    setIsLoggedIn(false);
+                }
+            } catch (error) {
+                console.error("Erreur lors de la vérification de la connexion :", error);
+                setIsLoggedIn(false);
+            }
+        };
+
+        checkUserLogin(); // Vérification du token lors du montage du composant
+    }, []); // Ce useEffect ne se déclenche qu'une seule fois à l'initialisation du composant
+
+    return isLoggedIn;
+}
+

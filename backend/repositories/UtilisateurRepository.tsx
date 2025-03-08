@@ -53,4 +53,17 @@ export class UtilisateurRepository {
             connection.release();
         }
     }
+
+    async donate(idAssos: any, idUtilisateur: any, montant: any, typeDon: any ) {
+        const connection = await this.db.getConnection();
+        try {
+            await connection.query(
+                'INSERT INTO don (montant, idAssociation, idUtilisateur) VALUES (?, ?, ?)',
+                [montant, idAssos, idUtilisateur]
+            );
+
+        } finally {
+            connection.release();
+        }
+    }
 }
