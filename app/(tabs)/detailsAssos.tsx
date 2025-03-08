@@ -6,6 +6,9 @@ import { router } from 'expo-router';
 import BoutonAccueil from "@/components/BoutonAccueil";
 import DetailAssociation from "@/components/DetailAssociation";
 import { getAssociation } from "@/helpers";
+import BoutonDeconnexion from "@/components/BoutonDeconnexion";
+import BoutonDonate from "@/components/BoutonDonate";
+import BoutonFavorite from "@/components/BoutonFavorite";
 
 export default function DetailsAssos() {
     const params = useLocalSearchParams();
@@ -39,10 +42,11 @@ export default function DetailsAssos() {
             <StatusBar barStyle="dark-content" />
             <Header />
             <BoutonAccueil />
-            {/* Bouton "Donner" */}
-            <TouchableOpacity style={styles.donnerButton} onPress={navigateToDons}>
-                <Text style={styles.donnerButtonText}>Faire un Don</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonsContainer}>
+                <BoutonDonate />
+                <BoutonFavorite />
+            </View>
+
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                 <DetailAssociation
                     nom={association.nom}
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         alignItems: 'center',
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        paddingBottom: 50,
     },
     contentContainer: {
         flex: 1,
@@ -69,19 +73,7 @@ const styles = StyleSheet.create({
     scrollContent: {
         paddingBottom: 20,
     },
-    donnerButton: {
-        backgroundColor: '#4CAF50', // Couleur verte
-        paddingVertical: 15,
-        marginHorizontal: 20,
-        marginBottom: 20,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 20,
-    },
-    donnerButtonText: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
+    buttonsContainer: {
+        flexDirection: 'row',
+    }
 });

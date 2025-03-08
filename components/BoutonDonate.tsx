@@ -3,7 +3,7 @@ import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {router} from "expo-router";
 
-const BoutonAccueil= () => {
+const BoutonDonate= () => {
     const navigation = useNavigation();
     const redirect =  () => {
             router.replace('/(tabs)');
@@ -12,29 +12,23 @@ const BoutonAccueil= () => {
     return (
         <View>
             <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText} onPress={redirect}>Retour</Text>
+                <Text style={styles.buttonText} onPress={undefined}>Faire un Don</Text>
             </TouchableOpacity>
         </View>
     );
 };
 const styles = StyleSheet.create({
     button: {
-        height: 40,
-        width: 100,
-        backgroundColor: '#2563EB',
-        borderRadius: 12,
-        justifyContent: 'center',
+        backgroundColor: '#4CAF50', // Couleur verte
+        padding: 15,
+        borderRadius: 10,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.6,
-        shadowRadius: 5,
-        elevation: 3
+        justifyContent: 'center',
     },
     buttonText: {
-        color: '#FFF',
-        fontSize: 16,
+        color: 'white',
+        fontSize: 18,
         fontWeight: 'bold',
     },
 });
-export default BoutonAccueil;
+export default BoutonDonate;
