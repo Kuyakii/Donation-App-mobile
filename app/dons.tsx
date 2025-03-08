@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
-import {CardField, StripeProvider, useStripe} from '@stripe/stripe-react-native';
+import React, {useEffect, useState} from 'react';
+import {View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator} from 'react-native';
 import {BASE_URL} from "@/config";
+import {useLocalSearchParams} from "expo-router";
+import {getAssociation} from "@/helpers";
+import AssociationItem from "@/components/AssociationItem";
+import {CardField, StripeProvider, useStripe} from "@stripe/stripe-react-native";
 
 
 // Composant principal
@@ -9,7 +12,27 @@ const DonPage = () => {
     const { confirmPayment } = useStripe();
     const [montant, setMontant] = useState<string>('10');
     const [cardDetails, setCardDetails] = useState<any>(null);
-
+    const params = useLocalSearchParams();
+    const { id } = params;
+    const [association, setAssociation] = useState(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    useEffect(() => {
+        const fetchAssociation = async () => {
+            const assoc = await getAssociation(id);
+            setAssociation(assoc);
+            setLoading(false);
+        };
+        fetchAssociation();
+    }, [id]);
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text>Chargement...</Text>
+            </View>
+        );
+    }
+    console.log(association);
     const handlePayment = async () => {
         if (!cardDetails) {
             Alert.alert('Erreur', 'Veuillez remplir les détails de la carte');
@@ -49,8 +72,10 @@ const DonPage = () => {
     };
 
     return (
+
         <View style={styles.container}>
-            <Text style={styles.title}>Faire un don</Text>
+            <Text style={styles.title}>Faire un don à {association.nom}</Text>
+            <AssociationItem name={association.nom} description={association.descriptionCourte} imageName={association.nomImage}></AssociationItem>
             <Text style={styles.label}>Montant du don (en EUR)</Text>
             <TextInput
                 style={styles.input}
@@ -66,7 +91,7 @@ const DonPage = () => {
                 placeholders={{
                     number: '4242 4242 4242 4242',
                 }}
-                onCardChange={(cardDetails) => setCardDetails(cardDetails)}
+                onCardChange={(cardDetails: any) => setCardDetails(cardDetails)}
                 style={styles.cardField}
             />
 
@@ -85,12 +110,13 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         textAlign: 'center',
-        marginBottom: 20,
+        marginBottom: 30,
         color: '#333',
     },
     label: {
         fontSize: 18,
         marginBottom: 10,
+        marginTop: 20,
         color: '#333',
     },
     input: {
