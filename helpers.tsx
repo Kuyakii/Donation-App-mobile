@@ -45,7 +45,7 @@ export function checkLogin(){
                 if (!storedToken) {
                     // Si pas de token, rediriger vers la page de connexion
                     // @ts-ignore
-                    navigation.navigate('/login');
+                    navigation.navigate('login');
                 } else {
                     setToken(storedToken); // Mettre à jour l'état avec le token
                 }

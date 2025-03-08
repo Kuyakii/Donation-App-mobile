@@ -6,6 +6,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AssociationRepository } from './repositories/AssociationRepository';
 import { UtilisateurRepository } from './repositories/UtilisateurRepository';
+import { StripeProvider, useStripe } from '@stripe/stripe-react-native';
+
 
 const app = express();
 const port = 3000;
@@ -145,6 +147,31 @@ app.post('/dons', async (req: Request, res: Response) => {
     await userRepo.donate(idAssos, idUtilisateur, montant, typeDon);
     res.status(201).json({ message: 'Don réalisé avec succès.' });
 });
+const stripe = require('stripe')('sk_test_51R0Q18IsFroIM4A9oGqJkSFPR8IXesbB9k43TNCGafDJq2nTeWQuGieDiwrdQudTBfjSb55nGboOud4Lq9NrglOg00aVADzSkZ');
+app.post('/create-payment-intent', async (req, res) => {
+    const { amount, currency } = req.body;
+
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount,
+            currency,
+            payment_method_types: ['card'],
+        });
+
+        res.send({
+            clientSecret: paymentIntent.client_secret,
+        });
+    } catch (error) {
+        // Vérification que l'erreur est bien une instance d'Error
+        if (error instanceof Error) {
+            res.status(500).send({ error: error.message });
+        } else {
+            res.status(500).send({ error: 'Une erreur inconnue est survenue.' });
+        }
+    }
+});
+
+
 
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
