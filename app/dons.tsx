@@ -1,10 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator} from 'react-native';
+import {View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, ScrollView} from 'react-native';
 import {BASE_URL} from "@/config";
 import {useLocalSearchParams} from "expo-router";
-import {getAssociation} from "@/helpers";
+import {getAssociation, getUtilisateurConectee} from "@/helpers";
 import AssociationItem from "@/components/AssociationItem";
 import {CardField, StripeProvider, useStripe} from "@stripe/stripe-react-native";
+import {IUtilisateur} from "@/backend/interfaces/IUtilisateur";
+import {useNavigation} from "@react-navigation/native";
+import Header from "@/components/header";
+import BoutonAccueil from '@/components/BoutonAccueil';
 
 
 // Composant principal
@@ -16,6 +20,14 @@ const DonPage = () => {
     const { id } = params;
     const [association, setAssociation] = useState(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const user : IUtilisateur | null = getUtilisateurConectee();
+    console.log(user);
+    let idUser: number;
+    if (!user) {
+        idUser = 0;
+    }else{
+        idUser = user.idUtilisateur;
+    }
     useEffect(() => {
         const fetchAssociation = async () => {
             const assoc = await getAssociation(id);
@@ -64,6 +76,27 @@ const DonPage = () => {
             } else {
                 Alert.alert('Succès', 'Paiement réussi!');
                 console.log(paymentIntent);
+                try {
+                    const response = await fetch(`${BASE_URL}/dons`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id, idUser, montant,  }),
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) throw new Error(data.message || "Erreur lors du don.");
+
+                    Alert.alert('Succès', 'Don réussi !');
+                    // @ts-ignore
+                    useNavigation().navigate('(tabs)', {
+                        screen: 'index',
+                    });
+
+                } catch (error) {
+                    // @ts-ignore
+                    Alert.alert('Erreur', error.message);
+                }
             }
         } catch (error) {
             console.error('Erreur lors du traitement du paiement', error);
@@ -74,6 +107,9 @@ const DonPage = () => {
     return (
 
         <View style={styles.container}>
+            <Header></Header>
+            <BoutonAccueil></BoutonAccueil>
+            <ScrollView>
             <Text style={styles.title}>Faire un don à {association.nom}</Text>
             <AssociationItem name={association.nom} description={association.descriptionCourte} imageName={association.nomImage}></AssociationItem>
             <Text style={styles.label}>Montant du don (en EUR)</Text>
@@ -94,7 +130,7 @@ const DonPage = () => {
                 onCardChange={(cardDetails: any) => setCardDetails(cardDetails)}
                 style={styles.cardField}
             />
-
+            </ScrollView>
             <Button title="Faire un don" onPress={handlePayment} />
         </View>
     );
