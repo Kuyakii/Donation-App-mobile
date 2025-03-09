@@ -44,12 +44,14 @@ CREATE TABLE Association(
 CREATE TABLE Don(
                     idDon INT,
                     montant DOUBLE,
+                    dateDon DATE,
                     idAssociation INT NOT NULL,
                     idUtilisateur INT NOT NULL,
                     PRIMARY KEY(idDon),
                     FOREIGN KEY(idAssociation) REFERENCES Association(idAssociation),
                     FOREIGN KEY(idUtilisateur) REFERENCES Citoyen(idUtilisateur)
 );
+
 
 CREATE TABLE Don_Recurrent(
                               idDon INT,
@@ -62,10 +64,10 @@ CREATE TABLE Don_Recurrent(
 
 CREATE TABLE Don_Unique(
                            idDon INT,
-                           dateDon DATE NOT NULL,
                            PRIMARY KEY(idDon),
                            FOREIGN KEY(idDon) REFERENCES Don(idDon)
 );
+
 
 CREATE TABLE Admin_association(
                                   idUtilisateur INT,

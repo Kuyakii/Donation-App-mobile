@@ -7,11 +7,11 @@ export class DonationRepository {
         this.db = new MariaDBConnection();
     }
 
-    async donate(idAssos: any, idUtilisateur: any, montant: any, typeDon: any) {
+    async donate(idAssos: any, idUtilisateur: any, montant: any, typeDon: any, startDate: any, endDate: any, frequency: any) {
         const connection = await this.db.getConnection();
         try {
             await connection.query(
-                'INSERT INTO don (montant, idAssociation, idUtilisateur) VALUES (?, ?, ?)',
+                'INSERT INTO don (montant, idAssociation, idUtilisateur, dateDon) VALUES (?, ?, ?, SYSDATE())',
                 [montant, idAssos, idUtilisateur]
             );
 
@@ -27,8 +27,13 @@ export class DonationRepository {
 
             if (typeDon === 'unique') {
                 await connection.query(
-                    'INSERT INTO don_unique (idDon, dateDon) VALUES (?, SYSDATE())',
+                    'INSERT INTO don_unique (idDon) VALUES (?)',
                     [idDon]
+                );
+            }else{
+                await connection.query(
+                    'INSERT INTO don_recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (?, ?, ?, ?)',
+                    [idDon, startDate, endDate, frequency]
                 );
             }
 

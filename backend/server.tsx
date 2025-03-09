@@ -143,7 +143,7 @@ app.post('/mdpOublie', async (req: Request, res: Response) => {
 
 // Route pour une donation
 app.post('/dons', async (req: Request, res: Response) => {
-    let { id, idUser, montant, typeDon } = req.body;
+    let { id, idUser, montant, typeDon, startDate, endDate, frequency } = req.body;
     console.log(id)
     console.log(idUser)
     console.log(montant)
@@ -152,7 +152,7 @@ app.post('/dons', async (req: Request, res: Response) => {
     id = Number(id);
     idUser = Number(idUser);
 
-    await donsRepo.donate(id, idUser, montant, typeDon);
+    await donsRepo.donate(id, idUser, montant, typeDon, startDate, endDate, frequency);
     res.status(201).json({ message: 'Don réalisé avec succès.' });
 });
 const stripe = require('stripe')('sk_test_51R0Q18IsFroIM4A9oGqJkSFPR8IXesbB9k43TNCGafDJq2nTeWQuGieDiwrdQudTBfjSb55nGboOud4Lq9NrglOg00aVADzSkZ');
