@@ -6,7 +6,10 @@ import { router } from "expo-router";
 const BoutonAccueil = () => {
     const navigation = useNavigation();
     const redirect = () => {
-        router.replace('/(tabs)');
+            // @ts-ignore
+            navigation.navigate('(tabs)', {
+                screen: 'index',
+        });
     };
 
     return (

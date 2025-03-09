@@ -171,9 +171,11 @@ const DonPage = () => {
 
                 <CardField
                     postalCodeEnabled={true}
-                    placeholders={{ number: '4242 4242 4242 4242' }}
-                    onCardChange={(cardDetails: any) => setCardDetails(cardDetails)}
                     style={styles.cardField}
+                    onCardChange={(cardDetails) => {
+                        console.log("Nouvelle carte détectée", cardDetails);
+                        setCardDetails(cardDetails);
+                    }}
                 />
             </ScrollView>
             <Button title="Faire un don" onPress={handlePayment} />
