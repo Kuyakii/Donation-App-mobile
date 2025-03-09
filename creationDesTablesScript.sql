@@ -90,6 +90,7 @@ ALTER TABLE TypeAssociation MODIFY COLUMN idType INT AUTO_INCREMENT;
 ALTER TABLE Association MODIFY COLUMN idAssociation INT AUTO_INCREMENT;
 ALTER TABLE Don MODIFY COLUMN idDon INT AUTO_INCREMENT;
 INSERT INTO Utilisateur(idUtilisateur,pseudonyme,email,password) VALUES (0, 'Admin', 'admin.admin@admin.fr', 'admin');
+update Utilisateur set idUtilisateur = 0 where idUtilisateur = 1;
 INSERT into Admin_application(idUtilisateur ) VALUES (0);
 INSERT into Citoyen(idUtilisateur ) VALUES (0);
 
