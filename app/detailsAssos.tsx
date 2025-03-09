@@ -8,6 +8,7 @@ import DetailAssociation from "@/components/DetailAssociation";
 import { getAssociation } from "@/helpers";
 import * as Location from "expo-location";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
+import Colors from "@/constants/Colors";
 
 export default function DetailsAssos() {
     const params = useLocalSearchParams();
@@ -41,11 +42,9 @@ export default function DetailsAssos() {
             <StatusBar barStyle="dark-content" />
             <Header />
             <BoutonAccueil />
-            {/* Bouton "Donner" */}
-            <TouchableOpacity style={styles.donnerButton} onPress={navigateToDons}>
-                <Text style={styles.donnerButtonText}>Faire un Don</Text>
-            </TouchableOpacity>
+
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+
                 <DetailAssociation
                     nom={association.nom}
                     description={association.description}
@@ -54,6 +53,10 @@ export default function DetailsAssos() {
                     nomImage={association.nomImage}
                 />
             </ScrollView>
+            {/* Bouton "Donner" */}
+            <TouchableOpacity style={styles.donnerButton} onPress={navigateToDons}>
+                <Text style={styles.donnerButtonText}>Faire un Don</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -70,11 +73,11 @@ const styles = StyleSheet.create({
     scrollContent: {
         paddingBottom: 20,
     },
+
     donnerButton: {
-        backgroundColor: '#4CAF50', // Couleur verte
+        backgroundColor: Colors.primary_dark.background,
         paddingVertical: 15,
-        marginHorizontal: 20,
-        marginBottom: 20,
+        margin : 30,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',

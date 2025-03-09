@@ -93,6 +93,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         resizeMode :'contain'
     },
+    titreSection : {
+        flexDirection: 'row',
+        fontSize : 20,
+        fontWeight: 'bold',
+        padding : 10,
+    },
     shortDescription: {
         fontSize: 16,
         fontStyle: 'italic',
@@ -103,7 +109,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 24,
         textAlign: 'justify',
-        marginBottom: 20,
+        marginVertical: 20,
     },
     map: {
         width: Dimensions.get('window').width - 40,

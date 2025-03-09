@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import {View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import BoutonAccueil from "@/components/BoutonAccueil";
-import {BASE_URL} from "@/config";
+import { BASE_URL } from "@/config";
+import Header from "@/components/header";
+import Colors from "@/constants/Colors";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -12,13 +14,14 @@ const LoginScreen = () => {
     const [password, setPassword] = useState('');
     const [re_password, setRePassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const handleRegister= async () => {
-        if (!email || !password || !pseudonyme || !re_password ) {
+    const handleRegister = async () => {
+        if (!email || !password || !pseudonyme || !re_password) {
             Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
             return;
         }
-        if (password !== re_password ) {
+        if (password !== re_password) {
             Alert.alert('Erreur', 'Les mots de passe sont différents.');
             return;
         }
@@ -38,8 +41,7 @@ const LoginScreen = () => {
 
             Alert.alert('Succès', 'Inscription réussie !');
             // @ts-ignore
-            navigation.navigate('login'
-            );
+            navigation.navigate('login');
         } catch (error) {
             // @ts-ignore
             Alert.alert('Erreur', error.message);
@@ -50,9 +52,10 @@ const LoginScreen = () => {
 
     return (
         <View style={styles.container}>
+            <Header />
+            <BoutonAccueil />
             <ScrollView contentContainerStyle={styles.scroll}>
                 <Text style={styles.title}>Inscription</Text>
-                <BoutonAccueil />
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -97,7 +100,40 @@ const LoginScreen = () => {
                         <Text style={styles.buttonText}>S'inscrire</Text>
                     )}
                 </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                    <Text style={styles.rgpdLinkText}>
+                        En vous inscrivant, vous acceptez notre politique de confidentialité.
+                    </Text>
+                </TouchableOpacity>
             </ScrollView>
+
+            {/* Modal for RGPD Text */}
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                transparent={true}
+                onRequestClose={() => setModalVisible(false)}
+            >
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalText}>
+                            En vous inscrivant, vous acceptez que nous recueillions et traitions vos données personnelles, telles que votre nom, adresse e-mail, et autres informations nécessaires à la création de votre compte. Ces données sont utilisées uniquement pour la gestion de votre compte et la fourniture de nos services.
+                            {'\n\n'}
+                            Nous nous engageons à protéger vos informations personnelles conformément au Règlement Général sur la Protection des Données (RGPD). Vos données ne seront jamais partagées avec des tiers sans votre consentement, à moins que cela ne soit requis par la loi.
+                            {'\n\n'}
+                            Vous avez le droit d'accéder à vos données, de les rectifier, de les supprimer, ou de vous opposer à leur traitement, conformément à la réglementation en vigueur. Pour exercer vos droits ou pour toute question concernant la protection de vos données, vous pouvez nous contacter à contact@soteria.fr.
+                            {'\n\n'}
+                            Pour plus d'informations, consultez notre{' '}
+                            <Text style={styles.linkText}>Politique de Confidentialité</Text>.
+                        </Text>
+
+                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                            <Text style={styles.closeButtonText}>Fermer</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -110,7 +146,6 @@ const styles = StyleSheet.create({
     },
     scroll: {
         flexGrow: 1,
-        justifyContent: 'center',
         alignItems: 'center',
     },
     title: {
@@ -130,14 +165,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.6,
+        shadowOpacity: 0.1,
         shadowRadius: 4,
-        elevation: 3,
+        elevation: 2,
     },
     button: {
         height: 50,
         width: '100%',
-        backgroundColor: '#2563EB',
+        backgroundColor: Colors.primary_dark.background,
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
@@ -155,6 +190,50 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    rgpdLinkText: {
+        fontSize: 12,
+        color: Colors.primary_dark.background,
+        textAlign: 'center',
+        textDecorationLine: 'underline',
+        marginTop: 20,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        width: '80%',
+        padding: 20,
+        backgroundColor: '#FFF',
+        borderRadius: 12,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    modalText: {
+        fontSize: 16,
+        color: '#333',
+        lineHeight: 22,
+        marginBottom: 20,
+    },
+    closeButton: {
+        backgroundColor: Colors.primary_dark.background,
+        paddingVertical: 10,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    closeButtonText: {
+        color: '#FFF',
+        fontSize: 16,
+    },
+    linkText: {
+        color: Colors.primary_dark.background,
+        textDecorationLine: 'underline',
     },
 });
 

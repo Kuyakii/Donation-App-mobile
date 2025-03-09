@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import {images} from "@/config";
+import { images } from "@/config";
 
 // @ts-ignore
 export default function AssociationItem({ name, description, imageName }) {
@@ -13,7 +13,9 @@ export default function AssociationItem({ name, description, imageName }) {
             />
             <View style={styles.associationInfo}>
                 <Text style={styles.associationName}>{name}</Text>
-                <Text style={styles.associationDescription}>{description}</Text>
+                <Text style={styles.associationDescription} numberOfLines={2}>
+                    {description}
+                </Text>
             </View>
         </View>
     );
@@ -24,15 +26,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 10,
+        marginBottom: 15, // Ajoutez de l'espace entre les éléments de la liste
     },
     associationImage: {
         width: 120,
         height: 90,
         marginRight: 12,
-        resizeMode: 'contain', // Ajuste l'image
+        resizeMode: 'contain', // Ajuste l'image pour qu'elle s'adapte à la taille donnée
     },
     associationInfo: {
-        justifyContent: 'center',
+        flex: 1, // Permet à la description de prendre toute la largeur restante
     },
     associationName: {
         fontSize: 16,
@@ -42,5 +45,6 @@ const styles = StyleSheet.create({
     associationDescription: {
         fontSize: 14,
         color: '#666',
+        flexWrap: 'wrap', // Permet au texte de passer à la ligne suivante s'il est trop long
     },
 });

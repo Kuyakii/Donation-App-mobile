@@ -16,7 +16,7 @@ const BoutonAccueil = () => {
     return (
         <View>
             <TouchableOpacity style={styles.button} onPress={redirect}>
-                <Text style={styles.buttonText}>Retour</Text>
+                <Text style={styles.buttonText}>‹</Text>
             </TouchableOpacity>
         </View>
     );
@@ -24,13 +24,8 @@ const BoutonAccueil = () => {
 
 const styles = StyleSheet.create({
     button: {
-        height: 40,
-        width: 100,
-        backgroundColor: Colors.primary_dark.background,
-        borderRadius: 12,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 30,
+        height: 60,
+        width: 30,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.6,
@@ -38,8 +33,8 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     buttonText: {
-        color: '#FFF',
-        fontSize: 16,
+        color: Colors.primary_dark.background,
+        fontSize: 45,
         fontWeight: 'bold',
         textAlign: 'center', // Assure le centrage du texte
     },

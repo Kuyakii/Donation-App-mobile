@@ -53,9 +53,10 @@ const LoginScreen = () => {
 
         <View style={styles.container}>
             <Header/>
+            <BoutonAccueil />
             <ScrollView contentContainerStyle={styles.scroll}>
                 <Text style={styles.title}>Connexion</Text>
-                <BoutonAccueil />
+
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
@@ -93,7 +94,7 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 15,
+        paddingHorizontal: 20,
         backgroundColor: '#F9FAFB',
     },
     scroll: {
