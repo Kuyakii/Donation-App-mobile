@@ -19,7 +19,7 @@ AVEC : mysql -u root -p \
 //si l'invite de commande ne trouve pas MySQL, ajouter ça aux var d'env (PAth) : C:\Program Files\MariaDB 11.7\bin \
 PUIS : CREATE DATABASE donation_app_dev; \
 ENFIN : USE donation_app_dev; 
-### Créer les table avec le script (sur Trello : https://trello.com/c/P7fmOcc3)
+### Créer les table avec le script disponible dans ./creationDesTablesScript.sql (mtn versionné)
 ## Pas oublier d'aussi changer ./backend/config
 Mettre à jour les identifiants de connexion à la BDD : surtout user et password. \
 #### Pour ajouter une association :
