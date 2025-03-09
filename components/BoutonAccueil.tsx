@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { router } from "expo-router";
+import Colors from "@/constants/Colors";
 
 const BoutonAccueil = () => {
     const navigation = useNavigation();
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     button: {
         height: 40,
         width: 100,
-        backgroundColor: '#2563EB',
+        backgroundColor: Colors.primary_dark.background,
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',

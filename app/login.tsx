@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import BoutonAccueil from '@/components/BoutonAccueil';
 import BoutonInscription from '@/components/BoutonInscription';
 import { BASE_URL } from '@/config';
+import Colors from "@/constants/Colors";
+import Header from "@/components/header";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -48,7 +50,9 @@ const LoginScreen = () => {
     };
 
     return (
+
         <View style={styles.container}>
+            <Header/>
             <ScrollView contentContainerStyle={styles.scroll}>
                 <Text style={styles.title}>Connexion</Text>
                 <BoutonAccueil />
@@ -89,12 +93,12 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        padding: 15,
         backgroundColor: '#F9FAFB',
     },
     scroll: {
         flexGrow: 1,
-        justifyContent: 'center',
+        paddingTop: 40,
         alignItems: 'center',
     },
     title: {
@@ -122,7 +126,7 @@ const styles = StyleSheet.create({
     button: {
         height: 50,
         width: '100%',
-        backgroundColor: '#2563EB',
+        backgroundColor:  Colors.primary_dark.background,
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
