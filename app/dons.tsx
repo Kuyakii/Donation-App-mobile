@@ -1,42 +1,81 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, ScrollView} from 'react-native';
-import {BASE_URL} from "@/config";
-import {useLocalSearchParams} from "expo-router";
-import {getAssociation, getUtilisateurConectee} from "@/helpers";
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import { BASE_URL } from "@/config";
+import { useLocalSearchParams, router } from "expo-router";
+import { getAssociation, getUtilisateurConectee } from "@/helpers";
 import AssociationItem from "@/components/AssociationItem";
-import {CardField, StripeProvider, useStripe} from "@stripe/stripe-react-native";
-import {IUtilisateur} from "@/backend/interfaces/IUtilisateur";
-import {useNavigation} from "@react-navigation/native";
+import { CardField, StripeProvider, useStripe } from "@stripe/stripe-react-native";
+import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import Header from "@/components/header";
 import BoutonAccueil from '@/components/BoutonAccueil';
-import {Picker} from '@react-native-picker/picker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const DonPage = () => {
     const { confirmPayment } = useStripe();
     const [montant, setMontant] = useState<string>('10');
+    const [montantCustom, setMontantCustom] = useState<boolean>(false);
     const [cardDetails, setCardDetails] = useState<any>(null);
     const [isRecurrent, setIsRecurrent] = useState<boolean>(false);
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
-    const [frequency, setFrequency] = useState<string>('mois'); // Par défaut : mois
+    const [frequency, setFrequency] = useState<string>('mois');
+    const [showCardModal, setShowCardModal] = useState<boolean>(false);
+    const [isStartDatePickerVisible, setStartDatePickerVisible] = useState(false);
+    const [isEndDatePickerVisible, setEndDatePickerVisible] = useState(false);
+    const [processingPayment, setProcessingPayment] = useState<boolean>(false);
 
     const params = useLocalSearchParams();
     const { id } = params;
     const [association, setAssociation] = useState(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const user : IUtilisateur | null = getUtilisateurConectee();
-    const navigation = useNavigation();
+    const user: IUtilisateur | null = getUtilisateurConectee();
 
     let idUser: number = user ? user.idUtilisateur : 0;
 
     useEffect(() => {
         const fetchAssociation = async () => {
-            const assoc = await getAssociation(id);
-            setAssociation(assoc);
-            setLoading(false);
+            try {
+                const assoc = await getAssociation(id);
+                setAssociation(assoc);
+                setLoading(false);
+            } catch (error) {
+                console.error("Erreur lors de la récupération de l'association:", error);
+                Alert.alert("Erreur", "Impossible de charger les données de l'association");
+                setLoading(false);
+            }
         };
         fetchAssociation();
     }, [id]);
+
+    const validateDate = (selectedDate: Date, isStartDate: boolean) => {
+        const today = new Date();
+        if (isStartDate) {
+            if (selectedDate < today) {
+                Alert.alert("Erreur", "La date de début doit être égale ou postérieure à aujourd'hui.");
+                return false;
+            }
+        } else {
+            if (selectedDate <= new Date(startDate)) {
+                Alert.alert("Erreur", "La date de fin doit être postérieure à la date de début.");
+                return false;
+            }
+        }
+        return true;
+    };
+
+    const handleStartDateChange = (date: Date) => {
+        if (validateDate(date, true)) {
+            setStartDate(date.toISOString().split('T')[0]);
+            setStartDatePickerVisible(false);
+        }
+    };
+
+    const handleEndDateChange = (date: Date) => {
+        if (validateDate(date, false)) {
+            setEndDate(date.toISOString().split('T')[0]);
+            setEndDatePickerVisible(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -47,40 +86,80 @@ const DonPage = () => {
         );
     }
 
+    const resetFormState = () => {
+        setMontant('10');
+        setMontantCustom(false);
+        setCardDetails(null);
+        setIsRecurrent(false);
+        setStartDate('');
+        setEndDate('');
+        setFrequency('mois');
+        setShowCardModal(false);
+        setProcessingPayment(false);
+    };
+
     const handlePayment = async () => {
-        if (!cardDetails) {
-            Alert.alert('Erreur', 'Veuillez remplir les détails de la carte');
-            return;
-        }
-        if(isRecurrent && (!user || idUser === 0)) {
-            Alert.alert('Erreur', 'Vous devez être connecté afin de réaliser un don récurrent !');
-            navigation.navigate('login');
-            return;
+        if (processingPayment) {
+            return; // Éviter les soumissions multiples
         }
 
         try {
-            const paymentIntentResponse = await fetch(`${BASE_URL}/create-payment-intent`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    amount: parseFloat(montant) * 100,
-                    currency: 'eur',
-                }),
-            });
+            setProcessingPayment(true);
 
-            const { clientSecret } = await paymentIntentResponse.json();
+            if (!cardDetails) {
+                Alert.alert('Erreur', 'Veuillez remplir les détails de la carte');
+                setProcessingPayment(false);
+                return;
+            }
 
-            const { error, paymentIntent } = await confirmPayment(clientSecret, {
-                paymentMethodData: cardDetails , paymentMethodType: 'Card',
-            });
+            if (isRecurrent && (!user || idUser === 0)) {
+                Alert.alert('Erreur', 'Vous devez être connecté afin de réaliser un don récurrent !');
+                setShowCardModal(false);
+                setProcessingPayment(false);
+                router.push('/login');
+                return;
+            }
 
-            if (error) {
-                Alert.alert('Erreur de paiement', error.message);
-            } else {
+            // Création de l'intent de paiement
+            console.log("Début de la création de l'intent de paiement");
+
+            try {
+                const paymentIntentResponse = await fetch(`${BASE_URL}/create-payment-intent`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount: parseFloat(montant) * 100, currency: 'eur' }),
+                });
+
+                if (!paymentIntentResponse.ok) {
+                    const errorText = await paymentIntentResponse.text();
+                    console.error("Erreur de réponse du serveur (create-payment-intent):", errorText);
+                    throw new Error(`Erreur lors de la création de l'intent: ${errorText}`);
+                }
+
+                const responseData = await paymentIntentResponse.json();
+                const { clientSecret } = responseData;
+                console.log("Intent créé avec succès");
+
+                // Confirmation du paiement avec Stripe
+                console.log("Début de la confirmation du paiement");
+                const { error, paymentIntent } = await confirmPayment(clientSecret, {
+                    paymentMethodData: cardDetails,
+                    paymentMethodType: 'Card',
+                });
+
+                if (error) {
+                    console.error("Erreur de confirmation de paiement:", error);
+                    Alert.alert('Erreur de paiement', error.message);
+                    setProcessingPayment(false);
+                    return;
+                }
+
+                console.log("Paiement confirmé avec succès");
+
+                // Enregistrement du don
+                console.log("Début de l'enregistrement du don");
                 try {
-                    const response = await fetch(`${BASE_URL}/dons`, {
+                    const donResponse = await fetch(`${BASE_URL}/dons`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
@@ -88,35 +167,69 @@ const DonPage = () => {
                             idUser,
                             montant,
                             typeDon: isRecurrent ? "recurrent" : "unique",
-                            ...(isRecurrent && {
-                                startDate,
-                                endDate,
-                                frequency,
-                            })
+                            ...(isRecurrent && { startDate, endDate, frequency })
                         }),
                     });
 
-                    const data = await response.json();
-                    if (!response.ok) throw new Error(data.message || "Erreur lors du don.");
+                    const responseText = await donResponse.text();
+                    console.log("Réponse brute du serveur (dons):", responseText);
 
-                    Alert.alert('Succès', 'Don réussi !');
+                    let data;
                     try {
-                        // @ts-ignore
-                        navigation.navigate('(tabs)', { screen: 'index' });
-                    } catch (error) {
-                        console.error("Erreur de navigation:", error);
-                        // @ts-ignore
-                        Alert.alert('Erreur', error.message || "Problème lors de la navigation");
+                        data = JSON.parse(responseText);
+                    } catch (parseError) {
+                        console.error("Erreur de parsing JSON:", parseError);
+                        throw new Error("La réponse du serveur n'est pas un JSON valide");
                     }
 
-                } catch (error) {
-                    // @ts-ignore
-                    Alert.alert('Erreur', error.message);
+                    if (!donResponse.ok) {
+                        throw new Error(data.message || "Erreur lors de l'enregistrement du don.");
+                    }
+
+                    console.log("Don enregistré avec succès");
+
+                    // Succès complet de l'opération
+                    Alert.alert('Succès', 'Don réussi !', [
+                        {
+                            text: 'OK',
+                            onPress: () => {
+                                resetFormState();
+                                setTimeout(() => {
+                                    try {
+                                        router.replace('/(tabs)/qrcode');
+                                    } catch (navError) {
+                                        console.error("Erreur de navigation:", navError);
+                                    }
+                                }, 500);
+                            }
+                        }
+                    ]);
+                } catch (donError) {
+                    console.error("Erreur lors de l'enregistrement du don:", donError);
+                    Alert.alert('Attention', "Le paiement a été effectué mais nous avons rencontré un problème lors de l'enregistrement du don. Veuillez contacter le support.");
+                    resetFormState();
                 }
+            } catch (stripeError) {
+                console.error("Erreur Stripe ou d'API:", stripeError);
+                // @ts-ignore
+                Alert.alert('Erreur', stripeError.message || "Une erreur est survenue lors du traitement du paiement.");
             }
-        } catch (error) {
-            console.error('Erreur lors du traitement du paiement', error);
-            Alert.alert('Erreur', 'Un problème est survenu. Veuillez réessayer.');
+        } catch (globalError) {
+            console.error("Erreur globale non gérée:", globalError);
+            Alert.alert('Erreur', 'Un problème inattendu est survenu. Veuillez réessayer.');
+        } finally {
+            setProcessingPayment(false);
+        }
+    };
+
+    const validateAndProceed = () => {
+        if (isRecurrent && (!startDate || !endDate || !frequency)) {
+            Alert.alert("Erreur", "Veuillez remplir tous les champs pour le don récurrent.");
+        } else if (isRecurrent && idUser === 0) {
+            Alert.alert("Erreur", "Vous devez être connecté afin de faire un don récurrent !");
+            router.push('/login');
+        } else {
+            setShowCardModal(true);
         }
     };
 
@@ -127,63 +240,92 @@ const DonPage = () => {
             <ScrollView>
                 <Text style={styles.title}>Faire un don à {association.nom}</Text>
                 <AssociationItem name={association.nom} description={association.descriptionCourte} imageName={association.nomImage} />
-                <Text style={styles.label}>Montant du don (en EUR)</Text>
-                <TextInput
-                    style={styles.input}
-                    keyboardType="numeric"
-                    value={montant}
-                    onChangeText={setMontant}
-                    placeholder="10"
-                />
 
-                {/* Checkbox pour choisir entre don unique et récurrent */}
+                <Text style={styles.label}>Montant du don (en EUR)</Text>
+                <View style={styles.buttonContainer}>
+                    {[6, 10, 20, 50].map((value) => (
+                        <TouchableOpacity key={value} style={styles.amountButton} onPress={() => { setMontant(value.toString()); setMontantCustom(false); }}>
+                            <Text style={styles.buttonText}>{value} €</Text>
+                        </TouchableOpacity>
+                    ))}
+                    <TouchableOpacity style={styles.amountButton} onPress={() => setMontantCustom(true)}>
+                        <Text style={styles.buttonText}>Autre</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {montantCustom && (
+                    <TextInput
+                        style={styles.input}
+                        keyboardType="numeric"
+                        value={montant}
+                        onChangeText={setMontant}
+                        placeholder="Montant personnalisé"
+                    />
+                )}
+
                 <View style={styles.checkboxContainer}>
                     <Text style={styles.label}>Don récurrent :</Text>
                     <Button title={isRecurrent ? "Oui" : "Non"} onPress={() => setIsRecurrent(!isRecurrent)} />
                 </View>
 
-                {/* Afficher les champs supplémentaires si le don est récurrent */}
                 {isRecurrent && (
                     <>
                         <Text style={styles.label}>Date de début :</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="YYYY-MM-DD"
-                            value={startDate}
-                            onChangeText={setStartDate}
-                        />
+                        <TouchableOpacity onPress={() => setStartDatePickerVisible(true)}>
+                            <TextInput style={styles.input} value={startDate} placeholder="Sélectionnez une date" editable={false} />
+                        </TouchableOpacity>
 
                         <Text style={styles.label}>Date de fin :</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="YYYY-MM-DD"
-                            value={endDate}
-                            onChangeText={setEndDate}
-                        />
+                        <TouchableOpacity onPress={() => setEndDatePickerVisible(true)}>
+                            <TextInput style={styles.input} value={endDate} placeholder="Sélectionnez une date" editable={false} />
+                        </TouchableOpacity>
 
                         <Text style={styles.label}>Fréquence :</Text>
-                        <Picker
-                            selectedValue={frequency}
-                            onValueChange={(itemValue) => setFrequency(itemValue)}
-                            style={styles.picker}
-                        >
-                            <Picker.Item label="Toutes les semaines" value="semaine" />
-                            <Picker.Item label="Tous les mois" value="mois" />
-                            <Picker.Item label="Tous les trimestres" value="trimestre" />
-                        </Picker>
+                        <View style={styles.buttonContainer}>
+                            {["semaine", "mois", "trimestre"].map((freq) => (
+                                <TouchableOpacity key={freq} style={styles.amountButton} onPress={() => setFrequency(freq)}>
+                                    <Text style={styles.buttonText}>{freq}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
                     </>
                 )}
 
-                <CardField
-                    postalCodeEnabled={true}
-                    style={styles.cardField}
-                    onCardChange={(cardDetails) => {
-                        console.log("Nouvelle carte détectée", cardDetails);
-                        setCardDetails(cardDetails);
-                    }}
-                />
+                <Button title="Faire un don" onPress={validateAndProceed} />
             </ScrollView>
-            <Button title="Faire un don" onPress={handlePayment} />
+
+            <Modal visible={showCardModal} animationType="slide">
+                <View style={styles.modalContainer}>
+                    <Text style={styles.label}>Entrez les informations de votre carte</Text>
+                    <CardField postalCodeEnabled={true} style={styles.cardField} onCardChange={setCardDetails} />
+                    <Button
+                        title={processingPayment ? "Traitement en cours..." : "Confirmer le paiement"}
+                        onPress={handlePayment}
+                        disabled={processingPayment}
+                    />
+                    <Button
+                        title="Annuler"
+                        onPress={() => setShowCardModal(false)}
+                        disabled={processingPayment}
+                    />
+                    {processingPayment && (
+                        <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 20}} />
+                    )}
+                </View>
+            </Modal>
+
+            <DateTimePickerModal
+                isVisible={isStartDatePickerVisible}
+                mode="date"
+                onConfirm={handleStartDateChange}
+                onCancel={() => setStartDatePickerVisible(false)}
+            />
+            <DateTimePickerModal
+                isVisible={isEndDatePickerVisible}
+                mode="date"
+                onConfirm={handleEndDateChange}
+                onCancel={() => setEndDatePickerVisible(false)}
+            />
         </View>
     );
 };
@@ -231,7 +373,11 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: '#fff',
         borderRadius: 5,
-    }
+    },
+    buttonContainer: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
+    amountButton: { backgroundColor: '#2563EB', padding: 10, borderRadius: 5 },
+    buttonText: { color: '#FFF', fontWeight: 'bold' },
+    modalContainer: { flex: 1, justifyContent: 'center', padding: 20 },
 });
 
 export default () => (
