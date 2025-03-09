@@ -52,6 +52,11 @@ const DonPage = () => {
             Alert.alert('Erreur', 'Veuillez remplir les détails de la carte');
             return;
         }
+        if(isRecurrent && (!user || idUser === 0)) {
+            Alert.alert('Erreur', 'Vous devez être connecté afin de réaliser un don récurrent !');
+            navigation.navigate('login');
+            return;
+        }
 
         try {
             const paymentIntentResponse = await fetch(`${BASE_URL}/create-payment-intent`, {
