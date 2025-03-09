@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         width: 120,
         height: 90,
         marginRight: 12,
-        resizeMode: 'cover', // Ajuste l'image
+        resizeMode: 'contain', // Ajuste l'image
     },
     associationInfo: {
         justifyContent: 'center',
