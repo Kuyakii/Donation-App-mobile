@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, ScrollView, Modal, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { BASE_URL } from "@/config";
 import { useLocalSearchParams, router } from "expo-router";
 import { getAssociation, getUtilisateurConectee } from "@/helpers";
@@ -9,6 +9,7 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import Header from "@/components/header";
 import BoutonAccueil from '@/components/BoutonAccueil';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import {useNavigation} from "@react-navigation/native";
 
 const DonPage = () => {
     const { confirmPayment } = useStripe();
@@ -19,10 +20,12 @@ const DonPage = () => {
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
     const [frequency, setFrequency] = useState<string>('mois');
-    const [showCardModal, setShowCardModal] = useState<boolean>(false);
+    const [showCardForm, setShowCardForm] = useState<boolean>(false);
     const [isStartDatePickerVisible, setStartDatePickerVisible] = useState(false);
     const [isEndDatePickerVisible, setEndDatePickerVisible] = useState(false);
     const [processingPayment, setProcessingPayment] = useState<boolean>(false);
+    const navigation = useNavigation();
+    const scrollViewRef = useRef(null);
 
     const params = useLocalSearchParams();
     const { id } = params;
@@ -46,6 +49,16 @@ const DonPage = () => {
         };
         fetchAssociation();
     }, [id]);
+
+    // Lorsque le formulaire de carte apparaît, faire défiler jusqu'en bas
+    useEffect(() => {
+        if (showCardForm && scrollViewRef.current) {
+            // Petit délai pour s'assurer que le composant est rendu
+            setTimeout(() => {
+                scrollViewRef.current?.scrollToEnd({ animated: true });
+            }, 200);
+        }
+    }, [showCardForm]);
 
     const validateDate = (selectedDate: Date, isStartDate: boolean) => {
         const today = new Date();
@@ -94,7 +107,7 @@ const DonPage = () => {
         setStartDate('');
         setEndDate('');
         setFrequency('mois');
-        setShowCardModal(false);
+        setShowCardForm(false);
         setProcessingPayment(false);
     };
 
@@ -114,7 +127,7 @@ const DonPage = () => {
 
             if (isRecurrent && (!user || idUser === 0)) {
                 Alert.alert('Erreur', 'Vous devez être connecté afin de réaliser un don récurrent !');
-                setShowCardModal(false);
+                setShowCardForm(false);
                 setProcessingPayment(false);
                 router.push('/login');
                 return;
@@ -193,10 +206,13 @@ const DonPage = () => {
                         {
                             text: 'OK',
                             onPress: () => {
-                                resetFormState();
+                                //resetFormState();
                                 setTimeout(() => {
                                     try {
-                                        router.replace('/(tabs)/qrcode');
+                                        // @ts-ignore
+                                        navigation.navigate('(tabs)',{
+                                            screen:'index'
+                                        });
                                     } catch (navError) {
                                         console.error("Erreur de navigation:", navError);
                                     }
@@ -229,7 +245,7 @@ const DonPage = () => {
             Alert.alert("Erreur", "Vous devez être connecté afin de faire un don récurrent !");
             router.push('/login');
         } else {
-            setShowCardModal(true);
+            setShowCardForm(true);
         }
     };
 
@@ -237,7 +253,7 @@ const DonPage = () => {
         <View style={styles.container}>
             <Header />
             <BoutonAccueil />
-            <ScrollView>
+            <ScrollView ref={scrollViewRef}>
                 <Text style={styles.title}>Faire un don à {association.nom}</Text>
                 <AssociationItem name={association.nom} description={association.descriptionCourte} imageName={association.nomImage} />
 
@@ -271,13 +287,23 @@ const DonPage = () => {
                 {isRecurrent && (
                     <>
                         <Text style={styles.label}>Date de début :</Text>
-                        <TouchableOpacity onPress={() => setStartDatePickerVisible(true)}>
-                            <TextInput style={styles.input} value={startDate} placeholder="Sélectionnez une date" editable={false} />
+                        <TouchableOpacity
+                            style={styles.datePickerButton}
+                            onPress={() => setStartDatePickerVisible(true)}
+                        >
+                            <Text style={styles.datePickerText}>
+                                {startDate || "Sélectionnez une date"}
+                            </Text>
                         </TouchableOpacity>
 
                         <Text style={styles.label}>Date de fin :</Text>
-                        <TouchableOpacity onPress={() => setEndDatePickerVisible(true)}>
-                            <TextInput style={styles.input} value={endDate} placeholder="Sélectionnez une date" editable={false} />
+                        <TouchableOpacity
+                            style={styles.datePickerButton}
+                            onPress={() => setEndDatePickerVisible(true)}
+                        >
+                            <Text style={styles.datePickerText}>
+                                {endDate || "Sélectionnez une date"}
+                            </Text>
                         </TouchableOpacity>
 
                         <Text style={styles.label}>Fréquence :</Text>
@@ -291,28 +317,48 @@ const DonPage = () => {
                     </>
                 )}
 
-                <Button title="Faire un don" onPress={validateAndProceed} />
-            </ScrollView>
+                {!showCardForm ? (
+                    <Button title="Faire un don" onPress={validateAndProceed} />
+                ) : (
+                    <View style={styles.cardFormContainer}>
+                        <Text style={styles.cardFormTitle}>Informations de paiement</Text>
+                        <Text style={styles.cardFormSubtitle}>Vous allez faire un don de {montant} € {isRecurrent ? "récurrent" : "unique"}</Text>
 
-            <Modal visible={showCardModal} animationType="slide">
-                <View style={styles.modalContainer}>
-                    <Text style={styles.label}>Entrez les informations de votre carte</Text>
-                    <CardField postalCodeEnabled={true} style={styles.cardField} onCardChange={setCardDetails} />
-                    <Button
-                        title={processingPayment ? "Traitement en cours..." : "Confirmer le paiement"}
-                        onPress={handlePayment}
-                        disabled={processingPayment}
-                    />
-                    <Button
-                        title="Annuler"
-                        onPress={() => setShowCardModal(false)}
-                        disabled={processingPayment}
-                    />
-                    {processingPayment && (
-                        <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 20}} />
-                    )}
-                </View>
-            </Modal>
+                        <CardField
+                            postalCodeEnabled={true}
+                            style={styles.cardField}
+                            onCardChange={setCardDetails}
+                        />
+
+                        <View style={styles.cardFormButtons}>
+                            <TouchableOpacity
+                                style={styles.cancelButton}
+                                onPress={() => setShowCardForm(false)}
+                                disabled={processingPayment}
+                            >
+                                <Text style={styles.cancelButtonText}>Annuler</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={[styles.confirmButton, processingPayment && styles.disabledButton]}
+                                onPress={handlePayment}
+                                disabled={processingPayment}
+                            >
+                                <Text style={styles.confirmButtonText}>
+                                    {processingPayment ? "Traitement..." : "Confirmer le paiement"}
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+
+                        {processingPayment && (
+                            <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 20}} />
+                        )}
+                    </View>
+                )}
+
+                {/* Espace en bas pour s'assurer que le formulaire est visible après le défilement */}
+                {showCardForm && <View style={{height: 50}} />}
+            </ScrollView>
 
             <DateTimePickerModal
                 isVisible={isStartDatePickerVisible}
@@ -336,6 +382,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 20,
         backgroundColor: '#f4f4f4',
+        color: '#000000',
     },
     title: {
         fontSize: 24,
@@ -351,6 +398,7 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
+        width: '100%',
         borderColor: '#ccc',
         borderWidth: 1,
         marginBottom: 20,
@@ -361,7 +409,7 @@ const styles = StyleSheet.create({
     cardField: {
         width: '100%',
         height: 50,
-        marginBottom: 20,
+        marginVertical: 20,
     },
     checkboxContainer: {
         flexDirection: 'row',
@@ -374,10 +422,92 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 5,
     },
-    buttonContainer: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
-    amountButton: { backgroundColor: '#2563EB', padding: 10, borderRadius: 5 },
-    buttonText: { color: '#FFF', fontWeight: 'bold' },
-    modalContainer: { flex: 1, justifyContent: 'center', padding: 20 },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 20
+    },
+    amountButton: {
+        backgroundColor: '#2563EB',
+        padding: 10,
+        borderRadius: 5
+    },
+    buttonText: {
+        color: '#FFF',
+        fontWeight: 'bold'
+    },
+    datePickerButton: {
+        height: 40,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        marginBottom: 20,
+        paddingLeft: 10,
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        justifyContent: 'center',
+        width: '100%'
+    },
+    datePickerText: {
+        color: '#000',
+        fontSize: 16
+    },
+    cardFormContainer: {
+        marginTop: 30,
+        padding: 15,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    cardFormTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#333',
+        marginBottom: 10,
+    },
+    cardFormSubtitle: {
+        fontSize: 16,
+        color: '#666',
+        marginBottom: 15,
+    },
+    cardFormButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 10,
+    },
+    confirmButton: {
+        backgroundColor: '#2563EB',
+        padding: 15,
+        borderRadius: 5,
+        flex: 1,
+        marginLeft: 10,
+        alignItems: 'center',
+    },
+    confirmButtonText: {
+        color: '#FFF',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    cancelButton: {
+        backgroundColor: '#f4f4f4',
+        padding: 15,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        flex: 1,
+        marginRight: 10,
+        alignItems: 'center',
+    },
+    cancelButtonText: {
+        color: '#333',
+        fontSize: 16,
+    },
+    disabledButton: {
+        backgroundColor: '#93c5fd',
+    },
 });
 
 export default () => (
