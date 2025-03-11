@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platform, StatusBar, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {checkLogin, estConnecté, getUtilisateurConectee} from "@/helpers";
+import {checkLogin, estConnecte, getUtilisateurConectee} from "@/helpers";
 import {BASE_URL} from "@/config";
 
 // @ts-ignore

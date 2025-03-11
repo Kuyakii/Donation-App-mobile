@@ -1,18 +1,16 @@
 import React from 'react';
 import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import {router} from "expo-router";
 
 const BoutonAccueil= () => {
-    const navigation = useNavigation();
     const redirect =  () => {
             router.replace('/(tabs)');
     };
 
     return (
         <View>
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText} onPress={redirect}>Retour</Text>
+            <TouchableOpacity style={styles.button} onPress={redirect}>
+                <Text style={styles.buttonText} >Retour</Text>
             </TouchableOpacity>
         </View>
     );

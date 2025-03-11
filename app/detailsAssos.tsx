@@ -1,38 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Platform, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, StatusBar } from 'react-native';
 import Header from '@/components/header';
 import { useLocalSearchParams } from 'expo-router';
 import { router } from 'expo-router';
 import BoutonAccueil from "@/components/BoutonAccueil";
 import DetailAssociation from "@/components/DetailAssociation";
 import { getAssociation } from "@/helpers";
-import * as Location from "expo-location";
-import {IAssociation} from "@/backend/interfaces/IAssociation";
+import { getUtilisateurConnecte } from "@/helpers";
 import Colors from "@/constants/Colors";
+import BoutonFavorite from "@/components/BoutonFavorite";
 
 export default function DetailsAssos() {
-    const user = getUtilisateurConnectee()
+    const user = getUtilisateurConnecte()
     const userId = user?.idUtilisateur
 
     const params = useLocalSearchParams();
     const { id } = params;
 
-    const [association, setAssociation] = useState(null);  // Stocker l'association dans le state
+    const [association, setAssociation] = useState(null);
 
     useEffect(() => {
         // Récupérer l'association de manière asynchrone
         const fetchAssociation = async () => {
-            const assoc = await getAssociation(id);  // Si c'est une fonction asynchrone, attends le résultat
-            setAssociation(assoc);  // Mettre à jour l'état avec l'association récupérée
+            const assoc = await getAssociation(id);
+            setAssociation(assoc);
         };
+        fetchAssociation();
+    }, [id]);
 
-        fetchAssociation();  // Appeler la fonction pour récupérer l'association
+    if (!association) return <Text>Loading...</Text>;
 
-    }, [id]);  // Reprendre le fetch chaque fois que l'id change
-
-    if (!association) return <Text>Loading...</Text>;  // Afficher un message de chargement si l'association n'est pas encore disponible
-
-    // Fonction pour gérer la navigation vers la page des dons
     const navigateToDons = () => {
         router.push({
             pathname: "/dons",
@@ -55,10 +52,15 @@ export default function DetailsAssos() {
 
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                 <DetailAssociation
+                    // @ts-ignore
                     nom={association.nom}
+                    // @ts-ignore
                     description={association.description}
+                    // @ts-ignore
                     localisation={association.localisation}
+                    // @ts-ignore
                     descriptionCourte={association.descriptionCourte}
+                    // @ts-ignore
                     nomImage={association.nomImage}
                 />
             </ScrollView>
@@ -95,4 +97,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    buttonsContainer: {
+        flexDirection: 'row',
+    }
 });

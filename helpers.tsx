@@ -5,7 +5,7 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {BASE_URL} from "@/config";
 import {Alert} from "react-native";
 
-export function getUtilisateurConnectee() {
+export function getUtilisateurConnecte() {
     const navigation = useNavigation();
     const [user, setUser] = useState<IUtilisateur | null>(null);
 
@@ -100,7 +100,7 @@ export const getAssociation = async (idAssociation: string | number | string[]) 
     };
     return association;*/ return data;
 }
-export function estConnecté() {
+export function estConnecte() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     useEffect(() => {

@@ -5,20 +5,19 @@ import SearchBar from '../../components/SearchBar';
 import Section from '../../components/Section';
 import AssociationItem from '../../components/AssociationItem';
 import { IAssociation } from "@/backend/interfaces/IAssociation";
-import { estConnecté, getAllAssociation } from "@/helpers";
+import { estConnecte, getAllAssociation } from "@/helpers";
 import AssociationListModal from "@/components/AssociationListModal";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import {FavoriteProvider} from "@/context/FavoriteContext";
 
 export default function Layout() {
     const associations = getAllAssociation();
     const slicedAssociations = associations.slice(0, 3);
     const [modalVisible, setModalVisible] = useState(false);
     const [token, setToken] = useState<string | null>(null);
-
     // Vérification de l'état de connexion
-    const estConnecte = estConnecté();
-    console.log(estConnecte);
+    const userConnected = estConnecte();
+    console.log(userConnected);
 
     return (
         <View style={styles.container}>
@@ -28,8 +27,10 @@ export default function Layout() {
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
                 {/* Section des associations favorites - visible uniquement si l'utilisateur est connecté */}
-                {estConnecte ? (
-                    <AssociationFavoriteList />
+                {userConnected ? (
+                    <FavoriteProvider>
+                        <AssociationFavoriteList />
+                    </FavoriteProvider>
                 ) : (
                     <View style={styles.banner}>
                         <Text style={styles.bannerText}>

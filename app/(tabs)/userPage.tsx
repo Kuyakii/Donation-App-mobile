@@ -22,13 +22,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Navigation} from "lucide-react";
 import {useNavigation} from "@react-navigation/native";
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
-import {checkLogin, getUtilisateurConnectee} from "@/helpers";
+import {checkLogin, getUtilisateurConnecte} from "@/helpers";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";  // Import de composants spécifiques au profil
 
 export default function UserProfileScreen() {
 
     checkLogin();
-    const user = getUtilisateurConnectee();
+    const user = getUtilisateurConnecte();
     let Pseudo;
     let email
     if(user){

@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import AssociationItem from './AssociationItem';
-import {useNavigation} from "@react-navigation/native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useRouter} from "expo-router";
 import Colors from "@/constants/Colors";
 
@@ -39,7 +37,7 @@ export default function AssociationListModal({ visible, onClose, associations })
                         )}
                     />
 
-                    {/* Bouton pour fermer la modal */}
+                    {/* Bouton pour fermer le modal */}
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                         <Text style={styles.closeButtonText}>Fermer</Text>
                     </TouchableOpacity>
@@ -52,13 +50,13 @@ export default function AssociationListModal({ visible, onClose, associations })
 const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
-        justifyContent: 'flex-end', // Assure que la modal soit en bas de l'écran ou centré
+        justifyContent: 'flex-end',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
         backgroundColor: 'white',
-        width: '100%', // La modal prend toute la largeur de l'écran
-        height: '90%', // Prend 90% de la hauteur de l'écran
+        width: '100%',
+        height: '90%',
         padding: 20,
         borderRadius: 10,
     },

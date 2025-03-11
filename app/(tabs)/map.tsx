@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, Platform, StatusBar, Alert, Modal, Button, Image} from 'react-native';
-import MapView, {Callout, Marker} from 'react-native-maps';
+import {View, Text, StyleSheet, Alert, Modal, Button, Image} from 'react-native';
+import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
-import Header from '../../components/header';
-import {BASE_URL, images} from '@/config';
+import { images} from '@/config';
 import {useRouter} from "expo-router";
 import {getAllAssociation} from "@/helpers";
 import {IAssociation} from "@/backend/interfaces/IAssociation";

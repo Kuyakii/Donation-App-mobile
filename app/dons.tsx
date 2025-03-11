@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, ActivityIndicator, ScrollView, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import {BASE_URL, images} from "@/config";
 import { useLocalSearchParams, router } from "expo-router";
-import { getAssociation, getUtilisateurConectee } from "@/helpers";
+import { getAssociation, getUtilisateurConnecte } from "@/helpers";
 import { CardField, StripeProvider, useStripe } from "@stripe/stripe-react-native";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -30,7 +30,7 @@ const DonPage = () => {
     const { id } = params;
     const [association, setAssociation] = useState(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const user: IUtilisateur | null = getUtilisateurConectee();
+    const user: IUtilisateur | null = getUtilisateurConnecte();
 
     let idUser: number = user ? user.idUtilisateur : 0;
 
@@ -52,6 +52,7 @@ const DonPage = () => {
     useEffect(() => {
         if (showCardForm && scrollViewRef.current) {
             setTimeout(() => {
+                // @ts-ignore
                 scrollViewRef.current?.scrollToEnd({ animated: true });
             }, 200);
         }
