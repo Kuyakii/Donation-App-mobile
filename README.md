@@ -66,6 +66,31 @@ La map est quasiment complète, Marker qui fait ouvrir une View avec Description
 ## ajoutNewAssos
 Ajout de nouvelles associations assez pour pouvoir faire des statistiques avec, nouvelle version du script SQL sur trello
 
+## pageDons
+### L'objectif était de permettre aux utilisateurs de faire des dons à des associations directement depuis l'application en utilisant Stripe pour gérer les paiements. Voici un résumé rapide de ce qui a été implémenté :
+
+#### Utilisation de Stripe pour les paiements :
+
+Nous avons intégré Stripe pour permettre de traiter les paiements via carte bancaire. Lorsqu'un utilisateur souhaite effectuer un don, il entre les informations de sa carte et valide le paiement via Stripe.
+Nous avons utilisé l'API create-payment-intent pour générer un "client secret" nécessaire à la confirmation du paiement avec confirmPayment.
+Si le paiement est validé, un don est enregistré dans la base de données, avec des informations sur le montant et le type (unique ou récurrent).
+#### Distinction entre don unique et récurrent :
+
+Les utilisateurs peuvent choisir de faire un don unique ou un don récurrent.
+Pour un don récurrent, plusieurs informations sont demandées, comme la date de début, la date de fin, et la fréquence (semaine, mois, trimestre).
+Pour valider un don récurrent, le système vérifie que la date de début est égale ou antérieure à aujourd'hui et que la date de fin est supérieure à la date de début.
+#### Interaction avec le serveur :
+
+Lorsqu'un utilisateur soumet un don, une requête POST est envoyée au backend pour enregistrer les informations du don dans la base de données. Le backend gère également la logique pour distinguer un don récurrent ou unique.
+Le serveur backend récupère les informations de l'utilisateur connecté pour s'assurer que seul un utilisateur authentifié peut réaliser un don récurrent.
+#### Modale pour saisir les informations de la carte :
+
+Lorsqu'un utilisateur choisit de faire un don, une modale est affichée pour permettre à l'utilisateur d'entrer ses informations de carte bancaire. Ces informations sont capturées à l'aide du composant CardField de Stripe.
+Validation dynamique des dates pour les dons récurrents :
+
+Pour les dons récurrents, les utilisateurs sont invités à sélectionner une date de début et une date de fin via un champ de texte. La logique permet de s'assurer que la date de début n'est pas dans le futur et que la date de fin est après la date de début.
+#### Important, les dons unique anonyme sont reliés à l'invité 0, admin, il faut donc le créer
+
 ## favoriteAsso
 
 Ajout de la fonctionnalité ajout dans la liste de favoris une association, un boutojn qui s'actualise dans détailAssos 'star", puis qui ajoute dynamiquement dans AssociationListFavorite de l'index et userPage, BD fonctionne correctement, tout fonctionne
@@ -81,5 +106,6 @@ POST /mdpOublie : pour changer de password avec en body : email et password => n
 POST /favorites : Associe une association à un utilisateur pour la liste des favorites
 DELETE /favorites : Supprime un couple (utilisateur/association) des associations favorites 
 GET /favorites/:id : Récupère toutes les associations favorites d'un utilisiateur par son userID.
-
+POST /dons : pour faire un don avec en body :  id (idAssos) , idUser, montant, typeDon, startDate, endDate, frequency (avec les params en fonction de si c'est un don unique ou récurrent)
+POST /create-payment-intent : pour paiement avec stripe : générer un "client secret" nécessaire à la confirmation du paiement avec confirmPayment
 Ces routes permettent de gérer les données de l’application via des requêtes HTTP (GET, POST, PUT).

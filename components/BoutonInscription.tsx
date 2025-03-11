@@ -3,6 +3,7 @@ import {View, Button, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import {router} from "expo-router";
+import Colors from "@/constants/Colors";
 
 const BoutonInscription= () => {
     const navigation = useNavigation();
@@ -23,19 +24,14 @@ const BoutonInscription= () => {
 const styles = StyleSheet.create({
     button: {
         height: 40,
-        backgroundColor: '#2563EB',
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
         paddingHorizontal: 20,
-        shadowOpacity: 0.6,
-        shadowRadius: 5,
         elevation: 3,
     },
     buttonText: {
-        color: '#FFF',
+        color: Colors.primary_dark.background,
         fontSize: 16,
         fontWeight: 'bold',
     },

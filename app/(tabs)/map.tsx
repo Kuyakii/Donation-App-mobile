@@ -5,15 +5,16 @@ import * as Location from 'expo-location';
 import Header from '../../components/header';
 import {BASE_URL, images} from '@/config';
 import {useRouter} from "expo-router";
+import {getAllAssociation} from "@/helpers";
+import {IAssociation} from "@/backend/interfaces/IAssociation";
 
 export default function MapScreen() {
     const [location, setLocation] = useState(null);
-    const [associations, setAssociations] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
-    const [selectedAssociation, setSelectedAssociation] = useState(null);
+    const [selectedAssociation, setSelectedAssociation] = useState<IAssociation | null>(null);
     const router = useRouter();
 
-    const handleMarkerPress = (asso) => {
+    const handleMarkerPress = (asso : IAssociation) => {
         setSelectedAssociation(asso);
         setModalVisible(true);
     };
@@ -29,6 +30,7 @@ export default function MapScreen() {
             // Récupération de la position actuelle de l'utilisateur
             let userLocation = await Location.getCurrentPositionAsync({});
             setLocation({
+                // @ts-ignore
                 latitude: userLocation.coords.latitude,
                 longitude: userLocation.coords.longitude,
                 latitudeDelta: 0.05,
@@ -36,31 +38,25 @@ export default function MapScreen() {
             });
 
             // Récupération des associations depuis l'API
-            fetchAssociations();
         })();
     }, []);
 
-    const fetchAssociations = async () => {
-        try {
-            const response = await fetch(`${BASE_URL}/associations`);
-            const data = await response.json();
-            setAssociations(data); // Supposant que "data" est un tableau d'associations avec latitude & longitude
-        } catch (error) {
-            console.error("Erreur lors de la récupération des associations :", error);
-        }
-    };
 
+    const associations = getAllAssociation();
+    // @ts-ignore
     return (
         <View style={styles.container}>
             <MapView
                 style={styles.map}
+                // @ts-ignore
                 initialRegion={location}
                 showsUserLocation={true}
                 followsUserLocation={true}
             >
-                {associations.map((asso, index) => (
+                {associations.map((asso : IAssociation, index) => (
                     <Marker
                         key={index}
+                        /* @ts-ignore */
                         coordinate={{ latitude: asso.localisation.y, longitude: asso.localisation.x }}
                         onPress={() => handleMarkerPress(asso)}  // Ouverture de la modale sur le clic
                     />
@@ -79,6 +75,7 @@ export default function MapScreen() {
                         <View style={styles.modalContent}>
                             <View style={styles.modalHeader}>
                                 <Text style={styles.modalTitle}>{selectedAssociation.nom}</Text>
+                                {/* @ts-ignore */}
                                 <Image source={images[selectedAssociation.nomImage]} style={styles.image} />
                             </View>
 

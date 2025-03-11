@@ -3,8 +3,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {BASE_URL} from "@/config";
+import {Alert} from "react-native";
 
-export function getUtilisateurConnectee() {
+export function getUtilisateurConectee() {
     const navigation = useNavigation();
     const [user, setUser] = useState<IUtilisateur | null>(null);
 
@@ -88,8 +89,10 @@ export const getAssociation = async (idAssociation: string | number | string[]) 
         try {*/
             const response = await fetch(`${BASE_URL}/associations/${idAssociation}`);
             const text = await response.text(); // On récupère la réponse en texte brut
+            console.log("Réponse brute de l'API :", text); // Ajoute ce log
 
             const data = JSON.parse(text); // Essaie de parser en JSON
+            console.log("Données parsées :", data);
            /* setAssociation(data);
         } catch (error) {
             console.error("Erreur lors de la récupération de l'associations", error);
@@ -97,6 +100,30 @@ export const getAssociation = async (idAssociation: string | number | string[]) 
     };
     return association;*/ return data;
 }
+export function estConnecté() {
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+    useEffect(() => {
+        const checkUserLogin = async () => {
+            try {
+                const storedToken = await AsyncStorage.getItem('token');
+                if (storedToken) {
+                    setIsLoggedIn(true);
+                } else {
+                    setIsLoggedIn(false);
+                }
+            } catch (error) {
+                console.error("Erreur lors de la vérification de la connexion :", error);
+                setIsLoggedIn(false);
+            }
+        };
+
+        checkUserLogin(); // Vérification du token lors du montage du composant
+    }, []); // Ce useEffect ne se déclenche qu'une seule fois à l'initialisation du composant
+
+    return isLoggedIn;
+}
+
 
 export async function checkFavorite(idUtilisateur: number, idAssociation: number) {
     try {

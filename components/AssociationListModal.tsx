@@ -4,6 +4,7 @@ import AssociationItem from './AssociationItem';
 import {useNavigation} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useRouter} from "expo-router";
+import Colors from "@/constants/Colors";
 
 // @ts-ignore
 export default function AssociationListModal({ visible, onClose, associations }) {
@@ -12,7 +13,7 @@ export default function AssociationListModal({ visible, onClose, associations })
     const handleNavigate = (idAssos: number) => {
         onClose();
         router.replace({
-            pathname: "(tabs)/detailsAssos",
+            pathname: "/detailsAssos",
             params: { id: idAssos},
         });
     };
@@ -68,13 +69,13 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         marginTop: 10,
-        backgroundColor: '#f2f2f2',
+        backgroundColor: Colors.primary_dark.background,
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
     },
     closeButtonText: {
-        color: '#333',
+        color : Colors.primary_dark.text,
         fontSize: 16,
     },
 });

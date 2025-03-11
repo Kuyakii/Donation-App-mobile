@@ -45,15 +45,19 @@ export default function DetailAssociation({ nom, description, localisation, desc
                 <MapView
                     style={styles.map}
                     initialRegion={{
+                        /* @ts-ignore */
                         latitude: coordinates.latitude,
+                        /* @ts-ignore */
                         longitude: coordinates.longitude,
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
+                        latitudeDelta: 0.05,
+                        longitudeDelta: 0.05,
                     }}
                 >
                     <Marker
                         coordinate={{
+                            /* @ts-ignore */
                             latitude: coordinates.latitude,
+                            /* @ts-ignore */
                             longitude: coordinates.longitude,
                         }}
                         title={nom}
@@ -89,6 +93,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         resizeMode :'contain'
     },
+    titreSection : {
+        flexDirection: 'row',
+        fontSize : 20,
+        fontWeight: 'bold',
+        padding : 10,
+    },
     shortDescription: {
         fontSize: 16,
         fontStyle: 'italic',
@@ -99,7 +109,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         lineHeight: 24,
         textAlign: 'justify',
-        marginBottom: 20,
+        marginVertical: 20,
     },
     map: {
         width: Dimensions.get('window').width - 40,

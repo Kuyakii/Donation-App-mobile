@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://192.168.1.134:3000'; //à changer
+export const BASE_URL = 'http://192.168.1.90:3000'; //à changer
 export const images = {
     "AEJS.png": require("@/assets/images/AEJS.png"),
     "ENDOFRANCE.png": require("@/assets/images/ENDOFRANCE.png"),
@@ -26,18 +26,5 @@ export const images = {
     "unafam.png": require("@/assets/images/unafam.png"),
     "unapei.png": require("@/assets/images/unapei.png"),
     "logo-petit.png": require("@/assets/images/logo-petit.png"),
-
-
-
-
-
-
-
-
-
-
-
-
-
 };
 

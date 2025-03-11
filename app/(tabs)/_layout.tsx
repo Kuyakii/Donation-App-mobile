@@ -50,7 +50,7 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="dons"
+                name="questionnaire"
                 options={{
                     title: '',
                     tabBarIcon: ({ color }) => <TabBarIcon name="credit-card" color={color} />,
@@ -76,13 +76,6 @@ export default function TabLayout() {
                 options={{
                     title: '',
                     tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
-                }}
-            />
-            <Tabs.Screen
-                name="detailsAssos"
-                options={{
-                    title: '',
-                    href: null,  // Cache la tab bar pour cet écran
                 }}
             />
         </Tabs>

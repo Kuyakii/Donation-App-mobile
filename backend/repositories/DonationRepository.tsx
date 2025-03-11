@@ -1,0 +1,50 @@
+import { MariaDBConnection } from '../database/MariaDBConnection';
+
+export class DonationRepository {
+    private db: MariaDBConnection;
+
+    constructor() {
+        this.db = new MariaDBConnection();
+    }
+
+    async donate(idAssos: any, idUtilisateur: any, montant: any, typeDon: any, startDate: any, endDate: any, frequency: any) {
+        const connection = await this.db.getConnection();
+        try {
+            await connection.query(
+                'INSERT INTO don (montant, idAssociation, idUtilisateur, dateDon) VALUES (?, ?, ?, SYSDATE())',
+                [montant, idAssos, idUtilisateur]
+            );
+
+            const [rows]: any = await connection.query(
+                'SELECT MAX(idDon) AS idDon FROM don WHERE montant = ? AND idAssociation = ? AND idUtilisateur = ?',
+                [montant, idAssos, idUtilisateur]
+            );
+
+            const idDon = rows[0]?.idDon;
+            if (!idDon) {
+                throw new Error("Erreur lors de la récupération de l'ID du don.");
+            }
+
+            if (typeDon === 'unique') {
+                await connection.query(
+                    'INSERT INTO don_unique (idDon) VALUES (?)',
+                    [idDon]
+                );
+            }else{
+                await connection.query(
+                    'INSERT INTO don_recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (?, ?, ?, ?)',
+                    [idDon, startDate, endDate, frequency]
+                );
+            }
+
+            console.log("Don enregistré avec succès !");
+
+        } catch (error) {
+            console.error("Erreur lors de l'insertion du don :", error);
+            throw error; // Relancer l'erreur pour gestion en amont
+
+        } finally {
+            connection.release();
+        }
+    }
+}

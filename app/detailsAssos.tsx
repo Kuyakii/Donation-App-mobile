@@ -5,9 +5,10 @@ import { useLocalSearchParams } from 'expo-router';
 import { router } from 'expo-router';
 import BoutonAccueil from "@/components/BoutonAccueil";
 import DetailAssociation from "@/components/DetailAssociation";
-import {getAssociation, getUtilisateurConnectee} from "@/helpers";
-import BoutonDonate from "@/components/BoutonDonate";
-import BoutonFavorite from "@/components/BoutonFavorite";
+import { getAssociation } from "@/helpers";
+import * as Location from "expo-location";
+import {IAssociation} from "@/backend/interfaces/IAssociation";
+import Colors from "@/constants/Colors";
 
 export default function DetailsAssos() {
     const user = getUtilisateurConnectee()
@@ -34,7 +35,7 @@ export default function DetailsAssos() {
     // Fonction pour gérer la navigation vers la page des dons
     const navigateToDons = () => {
         router.push({
-            pathname: "/(tabs)/dons",
+            pathname: "/dons",
             params: { id: id },
         });
     };
@@ -45,7 +46,10 @@ export default function DetailsAssos() {
             <Header />
             <BoutonAccueil />
             <View style={styles.buttonsContainer}>
-                <BoutonDonate />
+                {/* Bouton "Donner" */}
+                <TouchableOpacity style={styles.donnerButton} onPress={navigateToDons}>
+                    <Text style={styles.donnerButtonText}>Faire un Don</Text>
+                </TouchableOpacity>
                 <BoutonFavorite idAssociation={id} idUtilisateur={userId} />
             </View>
 
@@ -58,6 +62,7 @@ export default function DetailsAssos() {
                     nomImage={association.nomImage}
                 />
             </ScrollView>
+
         </View>
     );
 }
@@ -75,7 +80,19 @@ const styles = StyleSheet.create({
     scrollContent: {
         paddingBottom: 20,
     },
-    buttonsContainer: {
-        flexDirection: 'row',
-    }
+
+    donnerButton: {
+        backgroundColor: Colors.primary_dark.background,
+        paddingVertical: 15,
+        margin : 30,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+    donnerButtonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
 });

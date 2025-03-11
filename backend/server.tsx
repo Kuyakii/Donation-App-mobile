@@ -6,6 +6,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AssociationRepository } from './repositories/AssociationRepository';
 import { UtilisateurRepository } from './repositories/UtilisateurRepository';
+import {DonationRepository} from "./repositories/DonationRepository";
+
 
 const app = express();
 const port = 3000;
@@ -17,6 +19,7 @@ app.use(express.json());
 // Instanciation des classes
 const associationRepository = new AssociationRepository();
 const userRepo = new UtilisateurRepository();
+const donsRepo = new DonationRepository();
 const JWT_SECRET = 'votre_secret_jwt'; // À remplacer par une clé sécurisée
 
 // Routes
@@ -24,7 +27,6 @@ app.get('/associations', async (req: Request, res: Response) => {
     try {
         const associations = await associationRepository.findAll();
         res.json(associations);
-
     } catch (error) {
         console.error('Erreur lors de la récupération des associations', error);
         res.status(500).send('Erreur serveur');
@@ -32,11 +34,9 @@ app.get('/associations', async (req: Request, res: Response) => {
 });
 
 app.get('/associations/:id', async (req: Request, res: Response) => {
-
     const { id } = req.params;
     console.log("Params reçus :", req.params);
     console.log("ID reçu :", id);
-
     try {
         const association = await associationRepository.findById(Number(id));
         if (association) {
@@ -177,6 +177,43 @@ app.get('/favorites/:id', async (req: Request, res: Response) => {
     }
 });
 
+// Route pour une donation
+app.post('/dons', async (req: Request, res: Response) => {
+    let { id, idUser, montant, typeDon, startDate, endDate, frequency } = req.body;
+    console.log(id)
+    console.log(idUser)
+    console.log(montant)
+    console.log(typeDon);
+    console.log(req.body);
+    id = Number(id);
+    idUser = Number(idUser);
+
+    await donsRepo.donate(id, idUser, montant, typeDon, startDate, endDate, frequency);
+    res.status(201).json({ message: 'Don réalisé avec succès.' });
+});
+const stripe = require('stripe')('sk_test_51R0Q18IsFroIM4A9oGqJkSFPR8IXesbB9k43TNCGafDJq2nTeWQuGieDiwrdQudTBfjSb55nGboOud4Lq9NrglOg00aVADzSkZ');
+app.post('/create-payment-intent', async (req, res) => {
+    const { amount, currency } = req.body;
+
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount,
+            currency,
+            payment_method_types: ['card'],
+        });
+
+        res.send({
+            clientSecret: paymentIntent.client_secret,
+        });
+    } catch (error) {
+        // Vérification que l'erreur est bien une instance d'Error
+        if (error instanceof Error) {
+            res.status(500).send({ error: error.message });
+        } else {
+            res.status(500).send({ error: 'Une erreur inconnue est survenue.' });
+        }
+    }
+});
 
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
