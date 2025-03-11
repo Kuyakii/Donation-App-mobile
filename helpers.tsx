@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {BASE_URL} from "@/config";
 
-export function getUtilisateurConectee() {
+export function getUtilisateurConnectee() {
     const navigation = useNavigation();
     const [user, setUser] = useState<IUtilisateur | null>(null);
 
@@ -88,14 +88,24 @@ export const getAssociation = async (idAssociation: string | number | string[]) 
         try {*/
             const response = await fetch(`${BASE_URL}/associations/${idAssociation}`);
             const text = await response.text(); // On récupère la réponse en texte brut
-            console.log("Réponse brute de l'API :", text); // Ajoute ce log
 
             const data = JSON.parse(text); // Essaie de parser en JSON
-            console.log("Données parsées :", data);
            /* setAssociation(data);
         } catch (error) {
             console.error("Erreur lors de la récupération de l'associations", error);
         }
     };
     return association;*/ return data;
+}
+
+export async function checkFavorite(idUtilisateur: number, idAssociation: number) {
+    try {
+        const response = await fetch(`${BASE_URL}/favorites/${idUtilisateur}`);
+        if (!response.ok) throw new Error('Erreur lors de la récupération des favoris.');
+        const favorites = await response.json();
+        return favorites.some((asso: any) => Number(asso.idAssociation) === Number(idAssociation));
+    } catch (error) {
+        console.error('Erreur checkFavorite:', error);
+        return false;
+    }
 }
