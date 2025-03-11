@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     favoriteItem: {
         alignItems: 'center',
         width: 64,
+        marginRight: 25,
     },
     favoriteImage: {
         width: 70,
