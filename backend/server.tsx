@@ -32,9 +32,11 @@ app.get('/associations', async (req: Request, res: Response) => {
 });
 
 app.get('/associations/:id', async (req: Request, res: Response) => {
+
     const { id } = req.params;
     console.log("Params reçus :", req.params);
     console.log("ID reçu :", id);
+
     try {
         const association = await associationRepository.findById(Number(id));
         if (association) {
@@ -50,7 +52,6 @@ app.get('/associations/:id', async (req: Request, res: Response) => {
 
 app.post('/associations', async (req: Request, res: Response) => {
     const { nom, description,descriptionCourte,nomImage, localisation, idType } = req.body;
-
     try {
         const newAssociation = { nom, description,descriptionCourte,nomImage, localisation, idType };
         await associationRepository.create(newAssociation);
@@ -140,14 +141,9 @@ app.post('/mdpOublie', async (req: Request, res: Response) => {
     res.json({ message: 'Mot de passe mis à jour avec succès.' });
 });
 
-// Lancer le serveur
-app.listen(port,'0.0.0.0', () => {
-    console.log(`Serveur backend en écoute sur http://localhost:${port}`);
-});
 
-app.post('/favorites', async (req, res) => {
+app.post('/favorites', async (req: Request, res: Response) => {
     const { idUtilisateur, idAssociation } = req.body;
-
     try {
         const newAssoFavorite = { idUtilisateur, idAssociation };
         await associationRepository.addFavoriteAsso(newAssoFavorite);
@@ -157,14 +153,32 @@ app.post('/favorites', async (req, res) => {
     }
 });
 
-app.delete('/favorites', async (req, res) => {
+app.delete('/favorites', async (req: Request, res: Response) => {
     const { idUtilisateur, idAssociation } = req.body;
 
     try {
         const assoFavorite = { idUtilisateur, idAssociation };
         await associationRepository.deleteFavoriteAsso(assoFavorite);
-        res.status(200).json({ message: 'Supprimé des favoris' });
+        res.status(201).json({ message: 'Supprimé des favoris' });
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la suppression", error });
     }
+});
+
+app.get('/favorites/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        const associationsFavorites = await associationRepository.findAllFavorites(Number(id));
+
+        res.status(201).json(associationsFavorites);
+    } catch (error) {
+        console.error("Erreur lors de la récupération des associations favorites :", error);
+        res.status(500).json({ message: "Erreur serveur", error });
+    }
+});
+
+
+// Lancer le serveur
+app.listen(port,'0.0.0.0', () => {
+    console.log(`Serveur backend en écoute sur http://localhost:${port}`);
 });
