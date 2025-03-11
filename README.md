@@ -65,6 +65,11 @@ La map est quasiment complète, Marker qui fait ouvrir une View avec Description
 
 ## ajoutNewAssos
 Ajout de nouvelles associations assez pour pouvoir faire des statistiques avec, nouvelle version du script SQL sur trello
+
+## favoriteAsso
+
+Ajout de la fonctionnalité ajout dans la liste de favoris une association, un boutojn qui s'actualise dans détailAssos 'star", puis qui ajoute dynamiquement dans AssociationListFavorite de l'index et userPage, BD fonctionne correctement, tout fonctionne
+
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \
@@ -73,5 +78,8 @@ PUT /associations/:id : Met à jour une association existante. \
 POST /register : inscription avec en body email, password et pseudo. \
 POST /login : connexion avec en body : email et password. \
 POST /mdpOublie : pour changer de password avec en body : email et password => non encore utilisée. \
+POST /favorites : Associe une association à un utilisateur pour la liste des favorites
+DELETE /favorites : Supprime un couple (utilisateur/association) des associations favorites 
+GET /favorites/:id : Récupère toutes les associations favorites d'un utilisiateur par son userID.
 
 Ces routes permettent de gérer les données de l’application via des requêtes HTTP (GET, POST, PUT).
