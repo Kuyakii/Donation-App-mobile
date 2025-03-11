@@ -23,7 +23,8 @@ import {Navigation} from "lucide-react";
 import {useNavigation} from "@react-navigation/native";
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
 import {checkLogin, getUtilisateurConnecte} from "@/helpers";
-import AssociationFavoriteList from "@/components/AssociationFavoriteList";  // Import de composants spécifiques au profil
+import AssociationFavoriteList from "@/components/AssociationFavoriteList";
+import {FavoriteProvider} from "@/context/FavoriteContext";  // Import de composants spécifiques au profil
 
 export default function UserProfileScreen() {
 
@@ -76,7 +77,9 @@ export default function UserProfileScreen() {
                 <TopAssociations />
 
                 {/* Section des Associations favorites */}
-                <AssociationFavoriteList />
+                <FavoriteProvider>
+                    <AssociationFavoriteList />
+                </FavoriteProvider>
 
                 {/* Section des Associations populaires */}
                 <Section title="Associations populaire" icon="trending-up" onSeeAllPress={undefined}>
@@ -131,8 +134,5 @@ const styles = StyleSheet.create({
     actionText: {
         fontSize: 14,
     },
-    favoritesList: {
-        width: '100%',
-        justifyContent: 'space-between',
-    },
+
 });
