@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { BASE_URL } from '@/config';
-import { checkFavorite } from "@/helpers"; // Fonction qui vérifie si l'association est déjà en favori
+import { checkFavorite } from "@/helpers";
 
 // @ts-ignore
 const BoutonFavorite = ({ idAssociation, idUtilisateur }) => {
@@ -12,14 +12,12 @@ const BoutonFavorite = ({ idAssociation, idUtilisateur }) => {
         const fetchFavoriteStatus = async () => {
             if (!idUtilisateur) return;
             const favorite = await checkFavorite(idUtilisateur, idAssociation);
-            console.log('Favorite', favorite);
-            setIsFavorite(favorite); // Met à jour isFavorite
+            setIsFavorite(favorite);
         };
 
         fetchFavoriteStatus();
-    }, [idUtilisateur, idAssociation]); // Se déclenche lorsque idUtilisateur ou idAssociation change
+    }, [idUtilisateur, idAssociation]);
 
-    // Fonction pour ajouter/supprimer des favoris
     const toggleFavorite = async () => {
         try {
             if (!idUtilisateur) {
@@ -36,7 +34,7 @@ const BoutonFavorite = ({ idAssociation, idUtilisateur }) => {
 
             if (!response.ok) throw new Error('Erreur lors de la mise à jour des favoris.');
 
-            setIsFavorite(!isFavorite); // Inverse l'état après succès
+            setIsFavorite(!isFavorite);
 
         } catch (error) {
             // @ts-ignore

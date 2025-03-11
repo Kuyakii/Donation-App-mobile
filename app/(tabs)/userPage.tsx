@@ -22,7 +22,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Navigation} from "lucide-react";
 import {useNavigation} from "@react-navigation/native";
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
-import {checkLogin, getUtilisateurConnectee} from "@/helpers";  // Import de composants spécifiques au profil
+import {checkLogin, getUtilisateurConnectee} from "@/helpers";
+import AssociationFavoriteList from "@/components/AssociationFavoriteList";  // Import de composants spécifiques au profil
 
 export default function UserProfileScreen() {
 
@@ -75,11 +76,7 @@ export default function UserProfileScreen() {
                 <TopAssociations />
 
                 {/* Section des Associations favorites */}
-                <Section title="Mes associations favorites" icon="star" onSeeAllPress={undefined}>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.favoritesList}>
-                        {[1, 2, 3, 4].map(num => <FavoriteItem key={num} name={`Asso ${num}`} />)}
-                    </ScrollView>
-                </Section>
+                <AssociationFavoriteList />
 
                 {/* Section des Associations populaires */}
                 <Section title="Associations populaire" icon="trending-up" onSeeAllPress={undefined}>
