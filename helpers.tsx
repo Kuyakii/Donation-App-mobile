@@ -5,7 +5,7 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {BASE_URL} from "@/config";
 import {Alert} from "react-native";
 
-export function getUtilisateurConectee() {
+export function getUtilisateurConnectee() {
     const navigation = useNavigation();
     const [user, setUser] = useState<IUtilisateur | null>(null);
 

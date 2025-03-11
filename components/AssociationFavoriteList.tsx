@@ -20,7 +20,6 @@ export default function AssociationFavoriteList() {
 
     const fetchFavorites = async () => {
         try {
-
             if (!user) return;
 
             const response = await fetch(`${BASE_URL}/favorites/${userId}`);
@@ -64,8 +63,7 @@ export default function AssociationFavoriteList() {
 
 const styles = StyleSheet.create({
     favoritesList: {
-        width: '100%',
-        justifyContent: 'space-around',
+        marginLeft: 10,
     },
     noFavorites: {
         padding: 20,
