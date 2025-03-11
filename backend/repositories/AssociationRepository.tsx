@@ -69,7 +69,7 @@ export class AssociationRepository {
         }
     }
 
-    async addFavoriteAsso(newAssoFavorite: { idUtilisateur: any; idAssociation: any }) {
+    async addFavoriteAsso(newAssoFavorite: { idUtilisateur: number; idAssociation: number }) {
         const connection = await this.db.getConnection();
         try {
             const { idUtilisateur, idAssociation } = newAssoFavorite;

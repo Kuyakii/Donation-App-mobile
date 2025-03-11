@@ -39,9 +39,9 @@ export default function UserProfileScreen() {
     return (
         <SafeAreaView style={styles.container}>
             <Header />
-
             <SearchBar />
             <BoutonDeconnexion></BoutonDeconnexion>
+
             <ScrollView style={styles.scrollView}>
                 <Text style={styles.welcomeTitle}>Bonjour, {Pseudo}</Text>
 

@@ -1,11 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
+import {images} from "@/config";
 
 // @ts-ignore
-export default function FavoriteItem({ name }) {
+export default function FavoriteItem({ name, imageName }) {
     return (
         <View style={styles.favoriteItem}>
-            <View style={styles.favoriteImage}></View>
+            <Image
+                style={styles.favoriteImage}
+                // @ts-ignore
+                source={images[imageName]}
+            />
             <Text style={styles.favoriteText}>{name}</Text>
         </View>
     );
@@ -21,6 +26,8 @@ const styles = StyleSheet.create({
         height: 70,
         backgroundColor: '#f2f2f2',
         marginBottom: 4,
+        borderRadius: 4,
+        borderWidth: 1,
     },
     favoriteText: {
         fontSize: 12,

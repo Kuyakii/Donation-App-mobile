@@ -5,12 +5,14 @@ import { useLocalSearchParams } from 'expo-router';
 import { router } from 'expo-router';
 import BoutonAccueil from "@/components/BoutonAccueil";
 import DetailAssociation from "@/components/DetailAssociation";
-import { getAssociation } from "@/helpers";
-import BoutonDeconnexion from "@/components/BoutonDeconnexion";
+import {getAssociation, getUtilisateurConnectee} from "@/helpers";
 import BoutonDonate from "@/components/BoutonDonate";
 import BoutonFavorite from "@/components/BoutonFavorite";
 
 export default function DetailsAssos() {
+    const user = getUtilisateurConnectee()
+    const userId = user?.idUtilisateur
+
     const params = useLocalSearchParams();
     const { id } = params;
 
@@ -44,7 +46,7 @@ export default function DetailsAssos() {
             <BoutonAccueil />
             <View style={styles.buttonsContainer}>
                 <BoutonDonate />
-                <BoutonFavorite />
+                <BoutonFavorite idAssociation={id} idUtilisateur={userId} />
             </View>
 
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
