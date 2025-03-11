@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { BASE_URL } from '@/config'; // Assure-toi d'avoir l'URL de ton API
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { BASE_URL } from '@/config';
+import { checkFavorite } from "@/helpers"; // Fonction qui vérifie si l'association est déjà en favori
 
-const BoutonFavorite = ({ idAssociation }) => {
+// @ts-ignore
+const BoutonFavorite = ({ idAssociation, idUtilisateur }) => {
     const [isFavorite, setIsFavorite] = useState(false);
 
+    useEffect(() => {
+        const fetchFavoriteStatus = async () => {
+            if (!idUtilisateur) return;
+            const favorite = await checkFavorite(idUtilisateur, idAssociation);
+            console.log('Favorite', favorite);
+            setIsFavorite(favorite); // Met à jour isFavorite
+        };
+
+        fetchFavoriteStatus();
+    }, [idUtilisateur, idAssociation]); // Se déclenche lorsque idUtilisateur ou idAssociation change
+
+    // Fonction pour ajouter/supprimer des favoris
     const toggleFavorite = async () => {
         try {
-            const userId = await AsyncStorage.getItem('userId');
-            if (!userId) {
+            if (!idUtilisateur) {
                 Alert.alert("Erreur", "Utilisateur non connecté.");
                 return;
             }
@@ -19,13 +31,15 @@ const BoutonFavorite = ({ idAssociation }) => {
             const response = await fetch(`${BASE_URL}/favorites`, {
                 method: method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ idUtilisateur: userId, idAssociation }),
+                body: JSON.stringify({ idUtilisateur, idAssociation }),
             });
 
-            if (!response.ok) throw new Error("Erreur lors de l'ajout aux favoris.");
+            if (!response.ok) throw new Error('Erreur lors de la mise à jour des favoris.');
 
-            setIsFavorite(!isFavorite);
+            setIsFavorite(!isFavorite); // Inverse l'état après succès
+
         } catch (error) {
+            // @ts-ignore
             Alert.alert("Erreur", error.message);
         }
     };
