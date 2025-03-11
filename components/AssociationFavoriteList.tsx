@@ -1,40 +1,24 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import { Text, View, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
-import {useFocusEffect, useRouter} from "expo-router";
-import FavoriteItem from "@/components/FavoriteItem";
-import Section from "@/components/Section";
-import { getUtilisateurConnectee } from "@/helpers";
-import { BASE_URL } from "@/config";
+import { useFocusEffect } from 'expo-router';
+import FavoriteItem from '@/components/FavoriteItem';
+import Section from '@/components/Section';
+import { getUtilisateurConnecte } from '@/helpers';
+import { useFavorites } from '@/context/FavoriteContext';  // Utilisation du hook du contexte
 
-export default function AssociationFavoriteList() {
-    const [associationsFavorites, setAssociationsFavorites] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const user = getUtilisateurConnectee()
-    const userId = user?.idUtilisateur
+const AssociationFavoriteList: React.FC = () => {
+    const { associationsFavorites, loading, fetchFavorites } = useFavorites();  // Accéder au contexte
+    const user = getUtilisateurConnecte();
+    const userId = user?.idUtilisateur;
 
+    // Récupérer les favoris à chaque fois que le composant est monté ou que l'utilisateur change
     useFocusEffect(
-        useCallback(() => {
-            fetchFavorites();
-        }, [])
-    );
-
-    const fetchFavorites = async () => {
-        try {
-            if (!user) return;
-
-            const response = await fetch(`${BASE_URL}/favorites/${userId}`);
-            const data = await response.json();
-            if (response.ok) {
-                setAssociationsFavorites(data);
-            } else {
-                console.error("Erreur API :", data.message);
+        React.useCallback(() => {
+            if (userId) {
+                fetchFavorites(userId);
             }
-        } catch (error) {
-            console.error("Erreur récupération favoris :", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+        }, [userId, fetchFavorites])
+    );
 
     return (
         <Section title="Mes associations favorites" icon="star" onSeeAllPress={undefined}>
@@ -52,14 +36,14 @@ export default function AssociationFavoriteList() {
                         ))
                     ) : (
                         <View style={styles.noFavorites}>
-                            <Text>Aucune association favorite. </Text>
+                            <Text>Aucune association favorite.</Text>
                         </View>
                     )}
                 </ScrollView>
             )}
         </Section>
     );
-}
+};
 
 const styles = StyleSheet.create({
     favoritesList: {
@@ -70,3 +54,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 });
+
+export default AssociationFavoriteList;
