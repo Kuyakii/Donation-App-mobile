@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, StatusBar } from 'react-native';
+import {View, Text, TouchableOpacity, ScrollView, StyleSheet, Platform, StatusBar, Alert} from 'react-native';
 import Header from '@/components/header';
 import { useLocalSearchParams } from 'expo-router';
 import { router } from 'expo-router';
@@ -9,6 +9,7 @@ import { getAssociation } from "@/helpers";
 import { getUtilisateurConnecte } from "@/helpers";
 import Colors from "@/constants/Colors";
 import BoutonFavorite from "@/components/BoutonFavorite";
+import {IAssociation} from "@/backend/interfaces/IAssociation";
 
 export default function DetailsAssos() {
     const user = getUtilisateurConnecte()
@@ -17,7 +18,7 @@ export default function DetailsAssos() {
     const params = useLocalSearchParams();
     const { id } = params;
 
-    const [association, setAssociation] = useState(null);
+    const [association, setAssociation] = useState<IAssociation | null>(null);  // Stocker l'association dans le state
 
     useEffect(() => {
         // Récupérer l'association de manière asynchrone
@@ -42,29 +43,24 @@ export default function DetailsAssos() {
             <StatusBar barStyle="dark-content" />
             <Header />
             <BoutonAccueil />
+
+            <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+
+                <DetailAssociation
+                    nom={association.nom}
+                    description={association.description}
+                    localisation={association.localisation}
+                    descriptionCourte={association.descriptionCourte}
+                    nomImage={association.nomImage}
+                />
+            </ScrollView>
+            {/* Bouton "Donner" */}
             <View style={styles.buttonsContainer}>
-                {/* Bouton "Donner" */}
                 <TouchableOpacity style={styles.donnerButton} onPress={navigateToDons}>
                     <Text style={styles.donnerButtonText}>Faire un Don</Text>
                 </TouchableOpacity>
                 <BoutonFavorite idAssociation={id} idUtilisateur={userId} />
             </View>
-
-            <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                <DetailAssociation
-                    // @ts-ignore
-                    nom={association.nom}
-                    // @ts-ignore
-                    description={association.description}
-                    // @ts-ignore
-                    localisation={association.localisation}
-                    // @ts-ignore
-                    descriptionCourte={association.descriptionCourte}
-                    // @ts-ignore
-                    nomImage={association.nomImage}
-                />
-            </ScrollView>
-
         </View>
     );
 }
@@ -73,8 +69,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        alignItems: 'center',
-        paddingBottom: 50,
+        padding: 5,
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
     contentContainer: {
         flex: 1,
@@ -86,11 +82,11 @@ const styles = StyleSheet.create({
     donnerButton: {
         backgroundColor: Colors.primary_dark.background,
         paddingVertical: 15,
-        margin : 30,
+        paddingHorizontal: 40,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 20,
+        marginLeft: 45,
     },
     donnerButtonText: {
         color: 'white',
@@ -99,5 +95,8 @@ const styles = StyleSheet.create({
     },
     buttonsContainer: {
         flexDirection: 'row',
+        justifyContent: 'center',
+        padding: 20,
     }
+
 });
