@@ -1,3 +1,4 @@
+import React, {useEffect, useState} from 'react';
 import {
     View,
     Text,
@@ -5,6 +6,9 @@ import {
     ScrollView,
     TouchableOpacity,
     SafeAreaView,
+    Button,
+    Platform,
+    StatusBar
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Header from '../../components/header';
@@ -107,15 +111,15 @@ const styles = StyleSheet.create({
     actionsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 20,
+        marginBottom: 25,
     },
     actionButton: {
         alignItems: 'center',
         width: '30%',
     },
     iconContainer: {
-        width: 70,
-        height: 70,
+        width: 80,
+        height: 80,
         borderRadius: 8,
         borderWidth: 1,
         borderColor: '#ddd',
