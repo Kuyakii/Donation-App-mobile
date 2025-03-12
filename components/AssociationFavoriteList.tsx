@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { Text, View, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
-import { useFocusEffect } from 'expo-router';
+import {Text, View, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity} from 'react-native';
+import {useFocusEffect, useRouter} from 'expo-router';
 import FavoriteItem from '@/components/FavoriteItem';
 import Section from '@/components/Section';
 import { getUtilisateurConnecte } from '@/helpers';
@@ -10,7 +10,14 @@ const AssociationFavoriteList: React.FC = () => {
     const { associationsFavorites, loading, fetchFavorites } = useFavorites();  // Accéder au contexte
     const user = getUtilisateurConnecte();
     const userId = user?.idUtilisateur;
+    const router = useRouter();
 
+    const handleNavigate = (idAssos: number) => {
+        router.replace({
+            pathname: "/detailsAssos",
+            params: { id: idAssos},
+        });
+    };
     // Récupérer les favoris à chaque fois que le composant est monté ou que l'utilisateur change
     useFocusEffect(
         React.useCallback(() => {
@@ -28,11 +35,13 @@ const AssociationFavoriteList: React.FC = () => {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.favoritesList}>
                     {associationsFavorites.length > 0 ? (
                         associationsFavorites.map((asso) => (
-                            <FavoriteItem
-                                key={asso.idAssociation}
-                                name={asso.nom}
-                                imageName={asso.nomImage}
-                            />
+                            <TouchableOpacity onPress={() => handleNavigate(asso.idAssociation)}>
+                                <FavoriteItem
+                                    key={asso.idAssociation}
+                                    name={asso.nom}
+                                    imageName={asso.nomImage}
+                                />
+                            </TouchableOpacity>
                         ))
                     ) : (
                         <View style={styles.noFavorites}>

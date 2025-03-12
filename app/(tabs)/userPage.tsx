@@ -11,20 +11,16 @@ import {
     StatusBar
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import Header from '../../components/header';  // Import du Header
-import SearchBar from '../../components/SearchBar';  // Import du SearchBar
-import Section from '../../components/Section';  // Import de la Section
-import FavoriteItem from '../../components/FavoriteItem';  // Import de FavoriteItem
-import AssociationItem from '../../components/AssociationItem';  // Import de AssociationItem
-import DonationCard from '../../components/ProfileComponents/DonationCard';  // Import de composants spécifiques au profil
+import Header from '../../components/header';
+import SearchBar from '../../components/SearchBar';
+import Section from '../../components/Section';
+import AssociationItem from '../../components/AssociationItem';
+import DonationCard from '../../components/ProfileComponents/DonationCard';
 import TopAssociations from '../../components/ProfileComponents/TopAssociations';
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {Navigation} from "lucide-react";
-import {useNavigation} from "@react-navigation/native";
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
 import {checkLogin, getUtilisateurConnecte} from "@/helpers";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";
-import {FavoriteProvider} from "@/context/FavoriteContext";  // Import de composants spécifiques au profil
+import {FavoriteProvider} from "@/context/FavoriteContext";
 
 export default function UserProfileScreen() {
 
@@ -123,13 +119,13 @@ const styles = StyleSheet.create({
     },
     iconContainer: {
         width: 80,
-        paddingVertical: 16,
+        height: 80,
         borderRadius: 8,
-        borderWidth: 0.5,
-        borderColor: 'black',
-        backgroundColor: '#EADEF4',
+        borderWidth: 1,
+        borderColor: '#ddd',
         alignItems: 'center',
         justifyContent: 'center',
+        marginBottom: 5,
     },
     actionText: {
         fontSize: 14,

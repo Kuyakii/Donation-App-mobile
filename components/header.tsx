@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity, StyleSheet, Image, Platform, StatusBar} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import {Feather} from '@expo/vector-icons';
 import {images} from "@/config";
 
@@ -29,9 +29,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        backgroundColor: '#e3b5f8',
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-        paddingBottom: 20,
+        marginTop: 40,
+        marginBottom: 20,
+        paddingHorizontal: 10,
     },
     logoContainer: {
         width: 200,
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
         height: 80,
         margin: 12,
         resizeMode: 'contain', // Ajuste l'image
+
     },
     settingsButton: {
         padding: 8,
