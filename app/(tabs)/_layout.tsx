@@ -13,12 +13,11 @@ function TabBarIcon({ name, color }) {
 }
 
 export default function TabLayout() {
-    const colorScheme = useColorScheme();
 
     return (
         <Tabs
             screenOptions={{
-                tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+                tabBarActiveTintColor: Colors.primary_dark.background,
                 tabBarInactiveTintColor: 'gray',
                 tabBarStyle: {
                     backgroundColor: '#f2f2f2',

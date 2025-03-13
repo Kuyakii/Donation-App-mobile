@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Colors from "@/constants/Colors";
 
 export default function TopAssociations() {
     return (
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderRadius: 12,
         padding: 16,
-        backgroundColor: '#EADEF4',
+        backgroundColor: Colors.container_light.backgroundColor,
         marginBottom: 20,
     },
     topAssociationsTitle: {

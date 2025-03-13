@@ -45,7 +45,7 @@ const BoutonFavorite = ({ idAssociation, idUtilisateur }) => {
     return (
         <View>
             <TouchableOpacity style={styles.button} onPress={toggleFavorite}>
-                <Feather name={'star'} size={20} color={isFavorite ? "yellow" : "gray"} />
+                <Feather name={'star'} size={25} color={isFavorite ? "yellow" : "gray"} />
             </TouchableOpacity>
         </View>
     );
@@ -54,8 +54,6 @@ const BoutonFavorite = ({ idAssociation, idUtilisateur }) => {
 const styles = StyleSheet.create({
     button: {
         padding: 15,
-        borderRadius: 10,
-        borderWidth: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },

@@ -242,6 +242,7 @@ const DonPage = () => {
         }
     };
 
+    // @ts-ignore
     return (
         <SafeAreaView style={styles.safeArea}>
 
@@ -498,6 +499,9 @@ const styles = StyleSheet.create({
     assoName: {
         fontSize: 18,
         fontWeight: 'bold',
+        flex: 1,
+        flexShrink: 1,
+        flexWrap: 'wrap',
     },
     sectionTitle: {
         fontSize: 16,

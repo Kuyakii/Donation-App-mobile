@@ -21,6 +21,7 @@ import BoutonDeconnexion from "@/components/BoutonDeconnexion";
 import {checkLogin, getUtilisateurConnecte} from "@/helpers";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";
 import {FavoriteProvider} from "@/context/FavoriteContext";
+import Colors from "@/constants/Colors";
 
 export default function UserProfileScreen() {
 
@@ -35,12 +36,11 @@ export default function UserProfileScreen() {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <Header />
             <SearchBar />
-            <BoutonDeconnexion></BoutonDeconnexion>
 
-            <ScrollView style={styles.scrollView}>
+            <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
                 <Text style={styles.welcomeTitle}>Bonjour, {Pseudo}</Text>
 
                 <View style={styles.actionsContainer}>
@@ -77,19 +77,11 @@ export default function UserProfileScreen() {
                     <AssociationFavoriteList />
                 </FavoriteProvider>
 
-                {/* Section des Associations populaires */}
-                <Section title="Associations populaire" icon="trending-up" onSeeAllPress={undefined}>
-                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
-                                                        description={`Description asso ${num}`} imageName={undefined} />)}
-                </Section>
+                <BoutonDeconnexion></BoutonDeconnexion>
 
-                {/* Section des Associations santé mentale */}
-                <Section title="Associations santé mentale" icon="heart" onSeeAllPress={undefined}>
-                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`}
-                                                        description={`Description asso ${num}`} imageName={undefined} />)}
-                </Section>
             </ScrollView>
-        </SafeAreaView>
+
+        </View>
     );
 }
 
@@ -98,10 +90,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+
     },
     scrollView: {
         flex: 1,
         paddingHorizontal: 16,
+    },
+    scrollViewContent: {
+        paddingBottom: 100, // Espace en bas pour bien voir le bouton deconnexion
     },
     welcomeTitle: {
         fontSize: 24,
@@ -121,8 +117,9 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 8,
+        backgroundColor: Colors.container_light.backgroundColor,
         borderWidth: 1,
-        borderColor: '#ddd',
+        borderColor: 'black',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 5,

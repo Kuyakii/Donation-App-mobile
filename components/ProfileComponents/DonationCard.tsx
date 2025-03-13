@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import Colors from "@/constants/Colors";
 
 export default function  DonationCard (){
     return (
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     donationCard: {
         borderWidth: 0.5,
         borderColor: 'black',
-        backgroundColor: '#EADEF4',
+        backgroundColor: Colors.container_light.backgroundColor,
         borderRadius: 12,
         padding: 16,
         marginBottom: 20,

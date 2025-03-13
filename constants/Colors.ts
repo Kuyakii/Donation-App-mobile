@@ -24,9 +24,12 @@ export default {
     background: '#9e25d5',
   },
 
-  primary_light : {
+  primary_light: {
     text: '#fff',
-    background : '#E5B6FA'
+    background: '#E5B6FA'
 
+  },
+  container_light: {
+    backgroundColor: '#9E25D51A',
+  }
 }
-};
