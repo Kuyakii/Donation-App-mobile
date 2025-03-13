@@ -35,9 +35,8 @@ const AssociationFavoriteList: React.FC = () => {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.favoritesList}>
                     {associationsFavorites.length > 0 ? (
                         associationsFavorites.map((asso) => (
-                            <TouchableOpacity onPress={() => handleNavigate(asso.idAssociation)}>
+                            <TouchableOpacity key={asso.idAssociation} onPress={() => handleNavigate(asso.idAssociation)}>
                                 <FavoriteItem
-                                    key={asso.idAssociation}
                                     name={asso.nom}
                                     imageName={asso.nomImage}
                                 />

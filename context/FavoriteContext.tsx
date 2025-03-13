@@ -5,7 +5,7 @@ import {IAssociation} from "@/backend/interfaces/IAssociation";
 interface FavoriteContextType {
     associationsFavorites: Array<IAssociation>;
     loading: boolean;
-    fetchFavorites: (userId: string) => Promise<void>;
+    fetchFavorites: (userId: number) => Promise<void>;
     updateFavorites: (newFavorites: Array<any>) => void;
 }
 

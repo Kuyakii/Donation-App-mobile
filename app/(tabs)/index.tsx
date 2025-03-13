@@ -9,6 +9,7 @@ import { estConnecte, getAllAssociation } from "@/helpers";
 import AssociationListModal from "@/components/AssociationListModal";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";
 import {FavoriteProvider} from "@/context/FavoriteContext";
+import {useRouter} from "expo-router";
 
 export default function Layout() {
     const associations = getAllAssociation();
@@ -18,6 +19,15 @@ export default function Layout() {
     // Vérification de l'état de connexion
     const userConnected = estConnecte();
     console.log(userConnected);
+
+    const router = useRouter();
+
+    const handleNavigate = (idAssos: number) => {
+        router.replace({
+            pathname: "/detailsAssos",
+            params: { id: idAssos},
+        });
+    };
 
     return (
         <View style={styles.container}>
@@ -42,7 +52,9 @@ export default function Layout() {
                 {/* Section des associations disponibles */}
                 <Section title="Toutes les associations" icon="list" onSeeAllPress={() => setModalVisible(true)}>
                     {slicedAssociations.map((asso: IAssociation) => (
-                        <AssociationItem key={asso.idAssociation} name={asso.nom} description={asso.descriptionCourte} imageName={asso.nomImage} />
+                        <TouchableOpacity key={asso.idAssociation} onPress={() => handleNavigate(asso.idAssociation)}>
+                            <AssociationItem name={asso.nom} description={asso.descriptionCourte} imageName={asso.nomImage} />
+                        </TouchableOpacity>
                     ))}
                 </Section>
 

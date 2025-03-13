@@ -20,7 +20,7 @@ app.use(express.json());
 const associationRepository = new AssociationRepository();
 const userRepo = new UtilisateurRepository();
 const donsRepo = new DonationRepository();
-const JWT_SECRET = 'votre_secret_jwt'; // À remplacer par une clé sécurisée
+const JWT_SECRET = 'votre_secret_jwt';
 
 // Routes
 app.get('/associations', async (req: Request, res: Response) => {
