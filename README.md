@@ -95,6 +95,8 @@ Pour les dons récurrents, les utilisateurs sont invités à sélectionner une d
 
 Ajout de la fonctionnalité ajout dans la liste de favoris une association, un boutojn qui s'actualise dans détailAssos 'star", puis qui ajoute dynamiquement dans AssociationListFavorite de l'index et userPage, BD fonctionne correctement, tout fonctionne
 
+## qrCode
+Page qrCode fonctionnelle, avec un scanneur corner style et animé, un message s'affiche quand on scan avec le lien du QR Code.
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \

@@ -1,12 +1,12 @@
 import {Camera, CameraView, useCameraPermissions} from 'expo-camera';
-import { useState, useEffect } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {useState, useEffect, useRef} from 'react';
+import {Button, StyleSheet, Text, View, Animated, TouchableOpacity} from 'react-native';
 
 export default function QRCodeScanner() {
     const [permission, requestPermission] = useCameraPermissions();
     const [scanned, setScanned] = useState(false);
     const [scannedData, setScannedData] = useState<string | null>(null);
-
+    const lineAnimation = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         const getPermission = async () => {
@@ -18,6 +18,25 @@ export default function QRCodeScanner() {
         getPermission();
     }, []);
 
+    useEffect(() => {
+        if (!scanned) {
+            Animated.loop(
+                Animated.sequence([
+                    Animated.timing(lineAnimation, {
+                        toValue: 1,
+                        duration: 1500,
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(lineAnimation, {
+                        toValue: 0,
+                        duration: 1500,
+                        useNativeDriver: true,
+                    }),
+                ])
+            ).start();
+        }
+    }, [scanned]);
+
     if (!permission) {
         return <View />;
     }
@@ -25,7 +44,7 @@ export default function QRCodeScanner() {
     if (!permission.granted) {
         return (
             <View style={styles.container}>
-                <Text style={styles.message}>Nous avons besoin de votre permission pour activer la caméra</Text>
+                <Text style={styles.permissionMessage}>Nous avons besoin de votre permission pour activer la caméra</Text>
                 <Button onPress={requestPermission} title="Accorder la permission" />
             </View>
         );
@@ -45,14 +64,35 @@ export default function QRCodeScanner() {
                 style={styles.camera}
                 facing={'back'}
             >
-                {scanned ? (
-                    <View style={styles.resultContainer}>
-                        <Text style={styles.resultText}>QR Code Scanné:</Text>
-                        <Text style={styles.resultData}>{scannedData}</Text>
-                        <Button title="Scanner à nouveau" onPress={() => setScanned(false)} />
+                {!scanned && (
+                    <View style={styles.overlay}>
+                        <View style={styles.scanFrame}>
+                            <View style={[styles.corner, styles.topLeft]} />
+                            <View style={[styles.corner, styles.topRight]} />
+                            <View style={[styles.corner, styles.bottomLeft]} />
+                            <View style={[styles.corner, styles.bottomRight]} />
+
+                            <Animated.View style={[styles.scannerLine, {
+                                transform: [{
+                                    translateY: lineAnimation.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [0, 200],
+                                    }),},
+                                ],
+                            },]}
+                            />
+                        </View>
                     </View>
-                ) : (
-                    <View style={styles.overlay} />
+                )}
+
+                {scanned && (
+                    <View style={styles.resultContainer}>
+                        <Text style={styles.resultText}>QR Code Scanné :</Text>
+                        <Text style={styles.resultData}>{scannedData}</Text>
+                        <TouchableOpacity style={styles.rescanButton} onPress={() => setScanned(false)} >
+                            <Text style={styles.rescanButtonText}>Scanner à nouveau</Text>
+                        </TouchableOpacity>
+                    </View>
                 )}
 
             </CameraView>
@@ -65,21 +105,65 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
     },
-    message: {
+    permissionMessage: {
         textAlign: 'center',
         paddingBottom: 10,
     },
     camera: {
         flex: 1,
     },
-    resultContainer: {
+    overlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 200,
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    },
+    scanFrame: {
+        width: 250,
+        height: 250,
+        alignItems: 'center',
+        paddingTop: 25,
+    },
+    corner: {
         position: 'absolute',
-        top: 50,
-        left: 20,
-        right: 20,
+        width: 40, height: 40,
+        borderColor: 'white',
+    },
+    topLeft: {
+        top: 0, left: 0,
+        borderLeftWidth: 5, borderTopWidth: 5,
+        borderTopStartRadius: 15,
+    },
+    topRight: {
+        top: 0, right: 0,
+        borderRightWidth: 5, borderTopWidth: 5,
+        borderTopEndRadius: 15,
+    },
+    bottomLeft: {
+        bottom: 0, left: 0,
+        borderLeftWidth: 5, borderBottomWidth: 5,
+        borderBottomStartRadius: 15,
+    },
+    bottomRight: {
+        bottom: 0, right: 0,
+        borderRightWidth: 5, borderBottomWidth: 5,
+        borderBottomEndRadius: 15,
+    },
+    scannerLine: {
+        width: '80%',
+        height: 3,
+        backgroundColor: 'red',
+    },
+
+    text: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'white',
+    },
+    resultContainer: {
         padding: 20,
         backgroundColor: 'rgba(0, 0, 0, 0.6)',
-        borderRadius: 10,
         alignItems: 'center',
     },
     resultText: {
@@ -92,12 +176,14 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 20,
     },
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    rescanButton: {
+        backgroundColor: "#c16ce8",
+        padding: 12,
+        borderRadius: 10,
     },
+
+    rescanButtonText: {
+        color: 'white',
+    }
+
 });
