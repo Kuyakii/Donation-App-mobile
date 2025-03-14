@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
 import Header from '../../components/header';
 import SearchBar from '../../components/SearchBar';
@@ -10,6 +10,11 @@ import AssociationListModal from "@/components/AssociationListModal";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";
 import {FavoriteProvider} from "@/context/FavoriteContext";
 import {useRouter} from "expo-router";
+import * as SplashScreen from 'expo-splash-screen';
+
+// Empêche le splash screen de disparaître automatiquement
+SplashScreen.preventAutoHideAsync();
+
 
 export default function Layout() {
     const associations = getAllAssociation();
@@ -28,6 +33,36 @@ export default function Layout() {
             params: { id: idAssos},
         });
     };
+
+    const [appIsReady, setAppIsReady] = useState(false);
+
+    useEffect(() => {
+        async function prepare() {
+            try {
+                // Préparez les ressources ou effectuez des opérations asynchrones
+                // ...
+            } catch (e) {
+                console.warn(e);
+            } finally {
+                // Marquez l'application comme prête
+                setAppIsReady(true);
+            }
+        }
+
+        prepare();
+    }, []);
+
+    const onLayoutRootView = useCallback(async () => {
+        if (appIsReady) {
+            // Cela masque le splash screen une fois que l'application est prête
+            await SplashScreen.hideAsync();
+        }
+    }, [appIsReady]);
+
+    if (!appIsReady) {
+        return null;
+    }
+
 
     return (
         <View style={styles.container}>

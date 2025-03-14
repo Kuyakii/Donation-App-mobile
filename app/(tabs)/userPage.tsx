@@ -38,8 +38,6 @@ export default function UserProfileScreen() {
     return (
         <View style={styles.container}>
             <Header />
-            <SearchBar />
-
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
                 <Text style={styles.welcomeTitle}>Bonjour, {Pseudo}</Text>
 

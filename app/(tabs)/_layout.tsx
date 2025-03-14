@@ -17,6 +17,7 @@ export default function TabLayout() {
     return (
         <Tabs
             screenOptions={{
+                headerShown : false,
                 tabBarActiveTintColor: Colors.primary_dark.background,
                 tabBarInactiveTintColor: 'gray',
                 tabBarStyle: {
@@ -38,7 +39,6 @@ export default function TabLayout() {
                 tabBarItemStyle: {
                     paddingBottom: 5,
                 },
-                headerShown: false,
             }}
         >
             <Tabs.Screen

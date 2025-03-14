@@ -244,9 +244,9 @@ const DonPage = () => {
 
     // @ts-ignore
     return (
-        <SafeAreaView style={styles.safeArea}>
-
+        <>
             <Header/>
+            <SafeAreaView style={styles.safeArea}>
             <BoutonAccueil></BoutonAccueil>
             <ScrollView ref={scrollViewRef} style={styles.scrollView}>
                 <Text style={styles.title}>Faire un don</Text>
@@ -283,21 +283,30 @@ const DonPage = () => {
                 <View style={styles.amountContainer}>
                     <TouchableOpacity
                         style={[styles.amountButton, montant === '5' && styles.amountButtonSelected]}
-                        onPress={() => { setMontant('5'); setMontantCustom(false); }}
+                        onPress={() => {
+                            setMontant('5');
+                            setMontantCustom(false);
+                        }}
                     >
                         <Text style={styles.amountText}>5€</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.amountButton, montant === '10' && styles.amountButtonSelected]}
-                        onPress={() => { setMontant('10'); setMontantCustom(false); }}
+                        onPress={() => {
+                            setMontant('10');
+                            setMontantCustom(false);
+                        }}
                     >
                         <Text style={styles.amountText}>10€</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.amountButton, montant === '20' && styles.amountButtonSelected]}
-                        onPress={() => { setMontant('20'); setMontantCustom(false); }}
+                        onPress={() => {
+                            setMontant('20');
+                            setMontantCustom(false);
+                        }}
                     >
                         <Text style={styles.amountText}>20€</Text>
                     </TouchableOpacity>
@@ -316,8 +325,7 @@ const DonPage = () => {
                         keyboardType="numeric"
                         value={montant}
                         onChangeText={setMontant}
-                        placeholder="Montant personnalisé"
-                    />
+                        placeholder="Montant personnalisé"/>
                 )}
 
                 {isRecurrent && (
@@ -371,8 +379,7 @@ const DonPage = () => {
                         <CardField
                             postalCodeEnabled={true}
                             style={styles.stripeCardField}
-                            onCardChange={setCardDetails}
-                        />
+                            onCardChange={setCardDetails}/>
 
                         <View style={styles.cardFormButtons}>
                             <TouchableOpacity
@@ -395,29 +402,26 @@ const DonPage = () => {
                         </View>
 
                         {processingPayment && (
-                            <ActivityIndicator size="large" color="#9C27B0" style={{marginTop: 20}} />
+                            <ActivityIndicator size="large" color="#9C27B0" style={{marginTop: 20}}/>
                         )}
                     </View>
                 )}
 
-                <View style={{height: 60}} />
+                <View style={{height: 60}}/>
             </ScrollView>
-
 
 
             <DateTimePickerModal
                 isVisible={isStartDatePickerVisible}
                 mode="date"
                 onConfirm={handleStartDateChange}
-                onCancel={() => setStartDatePickerVisible(false)}
-            />
+                onCancel={() => setStartDatePickerVisible(false)}/>
             <DateTimePickerModal
                 isVisible={isEndDatePickerVisible}
                 mode="date"
                 onConfirm={handleEndDateChange}
-                onCancel={() => setEndDatePickerVisible(false)}
-            />
-        </SafeAreaView>
+                onCancel={() => setEndDatePickerVisible(false)}/>
+        </SafeAreaView></>
     );
 };
 
@@ -688,11 +692,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     associationImage: {
-    width: 120,
+        width: 120,
         height: 90,
         marginRight: 12,
         resizeMode: 'contain', // Ajuste l'image
-},
+    },
 });
 
 export default () => (

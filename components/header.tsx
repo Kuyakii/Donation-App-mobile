@@ -3,10 +3,16 @@ import {View, Text, TouchableOpacity, StyleSheet, Image, StatusBar} from 'react-
 import {Feather} from '@expo/vector-icons';
 import {images} from "@/config";
 import Colors from "@/constants/Colors";
+import {router, useRouter} from "expo-router";
 
 interface HeaderProps {
     title?: string
 }
+
+
+const redirect = () => {
+   router.push('/reglages');
+};
 
 export default function Header({title}: HeaderProps) {
     return (
@@ -20,7 +26,7 @@ export default function Header({title}: HeaderProps) {
                         source={images["logo.png"]}
                     />
                 </View>
-                <TouchableOpacity style={styles.settingsButton}>
+                <TouchableOpacity style={styles.settingsButton} onPress={redirect}>
                     <Feather name="settings" size={36} color="black"/>
                 </TouchableOpacity>
             </View>
