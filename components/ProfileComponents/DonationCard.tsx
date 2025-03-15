@@ -1,21 +1,27 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Colors from "@/constants/Colors";
-import {getSeuils} from "@/helpers";
+import {getBadgeColor, getSeuils} from "@/helpers";
 
 // @ts-ignore
 export default function  DonationCard ({montantDon}){
     const seuils = getSeuils();
     let max = seuils[0];
+    let indice = 0;
     for (let i = 0; i < seuils.length; i++) {
         if (seuils[i] >= Number(montantDon)) {
             max = seuils[i];
+            indice = i;
             break;
         }
     }
     const pourcentage = (montantDon/max)*100;
     const progressWidth = `${Math.min(pourcentage, 100)}%`; // Évite que ça dépasse 100%
-
+    const badges = seuils.slice(0, indice).map((seuil, i) => ({
+        id: i,
+        label: `Atteint ${seuil}€`,
+        color : getBadgeColor(seuil),
+    }));
     return (
         <View style={styles.donationCard}>
             <Text style={styles.donationTitle}>Vous avez déjà donné {montantDon}€ !</Text>
@@ -28,6 +34,13 @@ export default function  DonationCard ({montantDon}){
             </View>
 
             <Text style={styles.badgesTitle}>Vos badges :</Text>
+            <View style={styles.badgesContainer}>
+                {badges.map((badge) => (
+                    <Text key={badge.id} style={[styles.badge, { backgroundColor: badge.color }]}>
+                        🏆 {badge.label}
+                    </Text>
+                ))}
+            </View>
         </View>
     );
 };
@@ -74,5 +87,19 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 12,
+    },
+    badgesContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+    },
+    badge: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        backgroundColor: '#FFD700',
+        paddingVertical: 4,
+        paddingHorizontal: 8,
+        borderRadius: 8,
+        marginRight: 8,
     },
 });

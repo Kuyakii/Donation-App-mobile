@@ -155,9 +155,17 @@ export function getAllDons(){
 }
 
 export function getSeuils(){
-    let seuils = [];
-    for(let i = 0; i < 1000; i++) {
-        seuils.push(i*1000);
-    }
+    let seuils = [10, 20, 50, 100, 150, 300, 500, 1000, 5000, 10000];
+    /*for(let i = 10; i < 10000; i+= 50) {
+        seuils.push(i);
+    }*/
     return seuils;
 }
+
+export function getBadgeColor (seuil : number){
+    if (seuil < 100) return '#D3D3D3'; // Gris pour les petits montants
+    if (seuil < 500) return '#ADD8E6'; // Bleu clair
+    if (seuil < 1000) return '#32CD32'; // Vert
+    if (seuil < 5000) return '#FFA500'; // Orange
+    return '#FFD700'; // Or pour les gros montants
+};
