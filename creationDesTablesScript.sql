@@ -350,3 +350,13 @@ Depuis sa création l''Unafam concentre son action au profit de l''entourage des
         ST_GeomFromText('POINT(2.324297000000513 48.891858108347634)'),
         3
        );
+
+create view V_DONS (idDon, montant, dateDon, idAssociation, idUtilisateur, typeDon, date_Debut, date_Fin, frequence) as
+select don.idDon , don.montant , don.dateDon , don.idAssociation , don.idUtilisateur , 'RECURRENT', don_recurrent.date_Debut , don_recurrent.date_Fin , don_recurrent.frequence
+from don inner join don_recurrent on don.idDon = don_recurrent.idDon
+union
+select don.idDon , don.montant , don.dateDon , don.idAssociation , don.idUtilisateur , 'UNIQUE', null , null , null
+from don inner join don_unique on don.idDon = don_unique.idDon
+;
+
+select * from V_DONS;
