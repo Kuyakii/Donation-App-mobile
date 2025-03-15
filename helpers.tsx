@@ -153,3 +153,11 @@ export function getAllDons(){
     };
     return dons;
 }
+
+export function getSeuils(){
+    let seuils = [];
+    for(let i = 0; i < 1000; i++) {
+        seuils.push(i*1000);
+    }
+    return seuils;
+}

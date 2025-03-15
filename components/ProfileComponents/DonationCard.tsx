@@ -1,17 +1,30 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Colors from "@/constants/Colors";
+import {getSeuils} from "@/helpers";
 
-export default function  DonationCard (){
+// @ts-ignore
+export default function  DonationCard ({montantDon}){
+    const seuils = getSeuils();
+    let max = seuils[0];
+    for (let i = 0; i < seuils.length; i++) {
+        if (seuils[i] >= Number(montantDon)) {
+            max = seuils[i];
+            break;
+        }
+    }
+    const pourcentage = (montantDon/max)*100;
+    const progressWidth = `${Math.min(pourcentage, 100)}%`; // Évite que ça dépasse 100%
+
     return (
         <View style={styles.donationCard}>
-            <Text style={styles.donationTitle}>Vous avez déjà donné 25€ !</Text>
+            <Text style={styles.donationTitle}>Vous avez déjà donné {montantDon}€ !</Text>
 
             <View style={styles.progressContainer}>
                 <View style={styles.progressBar}>
-                    <View style={[styles.progressFill, { width: '50%' }]} />
+                    <View style={[styles.progressFill, { width: progressWidth }]} />
                 </View>
-                <Text style={styles.progressText}>50€</Text>
+                <Text style={styles.progressText}>{max}€</Text>
             </View>
 
             <Text style={styles.badgesTitle}>Vos badges :</Text>

@@ -37,10 +37,13 @@ export default function UserProfileScreen() {
     }
     const dons = getAllDons();
     const donsUser: IDon[] = [];
+    let montantDonne:number = 0;
     dons.forEach((d : IDon) => {
         // @ts-ignore
-        if(d.idUtilisateur === user.idUtilisateur)
+        if(d.idUtilisateur === user.idUtilisateur) {
             donsUser.push(d);
+            montantDonne+= d.montant;
+        }
     });
     console.log(donsUser);
 
@@ -74,7 +77,7 @@ export default function UserProfileScreen() {
                 </View>
 
                 {/* Section de progression des dons */}
-                <DonationCard />
+                <DonationCard montantDon={montantDonne}/>
 
                 {/* Section des Top Associations */}
                 <TopAssociations />
