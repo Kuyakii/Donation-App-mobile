@@ -18,10 +18,11 @@ import AssociationItem from '../../components/AssociationItem';
 import DonationCard from '../../components/ProfileComponents/DonationCard';
 import TopAssociations from '../../components/ProfileComponents/TopAssociations';
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
-import {checkLogin, getUtilisateurConnecte} from "@/helpers";
+import {checkLogin, getAllDons, getUtilisateurConnecte} from "@/helpers";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";
 import {FavoriteProvider} from "@/context/FavoriteContext";
 import Colors from "@/constants/Colors";
+import {IDon} from "@/backend/interfaces/IDon";
 
 export default function UserProfileScreen() {
 
@@ -34,6 +35,14 @@ export default function UserProfileScreen() {
         email = user.email;
         console.log("Pseudo " + Pseudo + " Email " + email);
     }
+    const dons = getAllDons();
+    const donsUser: IDon[] = [];
+    dons.forEach((d : IDon) => {
+        // @ts-ignore
+        if(d.idUtilisateur === user.idUtilisateur)
+            donsUser.push(d);
+    });
+    console.log(donsUser);
 
     return (
         <View style={styles.container}>

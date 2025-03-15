@@ -1,4 +1,6 @@
 import { MariaDBConnection } from '../database/MariaDBConnection';
+import {IAssociation} from "@/backend/interfaces/IAssociation";
+import { IDon } from '../interfaces/IDon';
 
 export class DonationRepository {
     private db: MariaDBConnection;
@@ -45,6 +47,16 @@ export class DonationRepository {
 
         } finally {
             connection.release();
+        }
+    }
+
+    async getAll(): Promise<IDon[]> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query('SELECT * FROM V_DONS');
+            return rows as IDon[];
+        } finally {
+            connection.release(); // Libérer la connexion
         }
     }
 }

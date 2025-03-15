@@ -136,3 +136,20 @@ export async function checkFavorite(idUtilisateur: number, idAssociation: number
         return false;
     }
 }
+
+export function getAllDons(){
+    const [dons, setDons] = useState([]);
+    useEffect(() => {
+        fetchDons();
+    }, []);
+    const fetchDons = async () => {
+        try {
+            const response = await fetch(`${BASE_URL}/getDons`);
+            const data = await response.json();
+            setDons(data);
+        } catch (error) {
+            console.error('Erreur lors de la récupération des dons', error);
+        }
+    };
+    return dons;
+}

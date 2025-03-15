@@ -215,6 +215,16 @@ app.post('/create-payment-intent', async (req, res) => {
     }
 });
 
+app.get('/getDons', async (req: Request, res: Response) => {
+    try {
+        const dons = await donsRepo.getAll();
+        res.json(dons);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des dons', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
     console.log(`Serveur backend en écoute sur http://localhost:${port}`);
