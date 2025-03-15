@@ -38,14 +38,24 @@ export default function UserProfileScreen() {
     const dons = getAllDons();
     const donsUser: IDon[] = [];
     let montantDonne:number = 0;
+    const donsParAssos: Record<number, number> = {};
     dons.forEach((d : IDon) => {
         // @ts-ignore
         if(d.idUtilisateur === user.idUtilisateur) {
             donsUser.push(d);
             montantDonne+= d.montant;
+            if(!donsParAssos[d.idAssociation]){
+                donsParAssos[d.idAssociation] = 0;
+            }
+            donsParAssos[d.idAssociation]+= d.montant;
         }
     });
-    console.log(donsUser);
+
+    const donsParAssosTries = Object.entries(donsParAssos)
+        .sort(([, montantA], [, montantB]) => montantB - montantA).slice(0,3) // Tri décroissant
+        ;
+
+    //console.log(donsParAssosTries);
 
     return (
         <View style={styles.container}>
@@ -80,7 +90,7 @@ export default function UserProfileScreen() {
                 <DonationCard montantDon={montantDonne}/>
 
                 {/* Section des Top Associations */}
-                <TopAssociations />
+                <TopAssociations topAssos={donsParAssosTries} />
 
                 {/* Section des Associations favorites */}
                 <FavoriteProvider>
