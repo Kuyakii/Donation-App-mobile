@@ -84,19 +84,11 @@ export default function UserProfileScreen() {
         fetchDons();
     }, []);
 
-    if (isLoading) {
+    if (isLoading || !user) {
         return (
             <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#0000ff" />
                 <Text>Chargement du profil...</Text>
-            </View>
-        );
-    }
-
-    if (!user) {
-        return (
-            <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>Utilisateur non trouvé</Text>
             </View>
         );
     }

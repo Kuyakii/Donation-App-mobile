@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import Colors from "@/constants/Colors";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
 import {getAssociation} from "@/helpers";
+import {images} from "@/config";
 
+// @ts-ignore
 export default function TopAssociations({topAssos}) {
     const [listeAssos, setListeAssos] = useState<IAssociation[] | null>(null);
     useEffect(() => {
@@ -28,21 +30,45 @@ export default function TopAssociations({topAssos}) {
 
             <View style={styles.associationItem}>
                 <Text style={styles.rankingNumber}>1.</Text>
-                <View style={styles.associationLogo}></View>
+
+                <Image
+                    style={styles.favoriteImage}
+                    source={
+                        listeAssos && listeAssos[0] && listeAssos[0].nomImage && images[listeAssos[0].nomImage]
+                            ? images[listeAssos[0].nomImage] // Utiliser l'image de l'association
+                            : images['tmp.png'] // Image par défaut
+                    }>
+                </Image>
                 <Text style={styles.associationName}>{(listeAssos && listeAssos[0]) ? listeAssos[0].nom : "Aucune"}</Text>
                 <Text>Montant donné : {(listeAssos && listeAssos[0]) ? topAssos[0][1] : "Aucun"}</Text>
             </View>
 
             <View style={styles.associationItem}>
                 <Text style={styles.rankingNumber}>2.</Text>
-                <View style={styles.associationLogo}></View>
+                <Image
+                    style={styles.favoriteImage}
+                    source={
+                        listeAssos && listeAssos[1] && listeAssos[1].nomImage && images[listeAssos[1].nomImage]
+                            ? images[listeAssos[1].nomImage] // Utiliser l'image de l'association
+                            : images['tmp.png'] // Image par défaut
+                    }
+                >
+                </Image>
                 <Text style={styles.associationName}>{(listeAssos && listeAssos[1]) ? listeAssos[1].nom : "Aucune"}</Text>
                 <Text>Montant donné : {(listeAssos && listeAssos[1]) ? topAssos[1][1] : "Aucun"}</Text>
             </View>
 
             <View style={styles.associationItem}>
                 <Text style={styles.rankingNumber}>3.</Text>
-                <View style={styles.associationLogo}></View>
+                <Image
+                    style={styles.favoriteImage}
+                    source={
+                        listeAssos && listeAssos[2] && listeAssos[2].nomImage && images[listeAssos[2].nomImage]
+                            ? images[listeAssos[2].nomImage] // Utiliser l'image de l'association
+                            : images['tmp.png'] // Image par défaut
+                    }
+                >
+                </Image>
                 <Text style={styles.associationName}>{(listeAssos && listeAssos[2]) ? listeAssos[2].nom : "Aucune"}</Text>
                 <Text>Montant donné : {(listeAssos && listeAssos[2]) ? topAssos[2][1] : "Aucun"}</Text>
             </View>
@@ -78,15 +104,16 @@ const styles = StyleSheet.create({
     rankingNumber: {
         fontSize: 16,
         fontWeight: 'bold',
-        marginRight: 10,
-    },
-    associationLogo: {
-        width: 50,
-        height: 50,
-        backgroundColor: '#f2f2f2',
-        marginRight: 16,
+
     },
     associationName: {
         fontSize: 16,
+    },
+    favoriteImage: {
+        width: 60,
+        height: 60,
+        marginBottom: 4,
+        borderRadius: 4,
+        resizeMode: 'contain', // Ajuste l'image
     },
 });

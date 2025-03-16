@@ -26,5 +26,6 @@ export const images = {
     "unafam.png": require("@/assets/images/unafam.png"),
     "unapei.png": require("@/assets/images/unapei.png"),
     "logo-petit.png": require("@/assets/images/logo-petit.png"),
+    "tmp.png": require("@/assets/images/adaptive-icon.png"),
 };
 
