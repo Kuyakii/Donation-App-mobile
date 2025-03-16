@@ -97,6 +97,11 @@ Ajout de la fonctionnalité ajout dans la liste de favoris une association, un b
 
 ## qrCode
 Page qrCode fonctionnelle, avec un scanneur corner style et animé, un message s'affiche quand on scan avec le lien du QR Code.
+
+## PageUserDynamique
+
+Récupération des dons de l'utilisateur, affichage des badges selon des seuils; une barre de progrssion vers le badge suivant; les 3 assos les plus données et aussi, la modale avec la liste des dons, filtrable en fonction du type de don et du montant. Aussi, récupération des rôles des users et stockage de ça dans le AsyncStorage.
+
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \
