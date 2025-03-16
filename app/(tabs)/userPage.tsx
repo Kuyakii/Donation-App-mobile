@@ -27,12 +27,15 @@ import {useNavigation} from "@react-navigation/native";
 import {IUtilisateur} from "@/backend/interfaces/IUtilisateur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {BASE_URL} from "@/config";
+import AssociationListModal from "@/components/DonationListModal";
 
 export default function UserProfileScreen() {
     const [isLoading, setIsLoading] = useState(true);
     const navigation = useNavigation();
     const [user, setUser] = useState<IUtilisateur | null>(null);
     const [dons, setDons] = useState<IDon[]>([]);
+    const [modalVisible, setModalVisible] = useState(false);
+
 
     useEffect(() => {
         const checkLogin = async () => {
@@ -129,7 +132,7 @@ export default function UserProfileScreen() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity style={styles.actionButton} onPress={() => setModalVisible(true)}>
                         <View style={styles.iconContainer}>
                             <Feather name="gift" size={icon_size} color="black" />
                             <Text style={styles.actionText}>Dons</Text>
@@ -154,6 +157,7 @@ export default function UserProfileScreen() {
 
                 <BoutonDeconnexion />
             </ScrollView>
+            <AssociationListModal visible={modalVisible} onClose={() => setModalVisible(false)} dons={donsUser} total={montantDonne}></AssociationListModal>
         </View>
     );
 }
