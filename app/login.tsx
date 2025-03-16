@@ -35,6 +35,7 @@ const LoginScreen = () => {
             await AsyncStorage.setItem('token', data.token);
             console.log(data.user);
             await AsyncStorage.setItem('utilisateur', JSON.stringify(data.user));
+            await AsyncStorage.setItem('role', JSON.stringify(data.role));
 
             Alert.alert('Succès', 'Connexion réussie !');
             // @ts-ignore

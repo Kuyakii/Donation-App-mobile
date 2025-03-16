@@ -34,6 +34,7 @@ export default function UserProfileScreen() {
     const navigation = useNavigation();
     const [user, setUser] = useState<IUtilisateur | null>(null);
     const [dons, setDons] = useState<IDon[]>([]);
+    const [role, setRole] = useState<String>();
     const [modalVisible, setModalVisible] = useState(false);
 
 
@@ -61,6 +62,12 @@ export default function UserProfileScreen() {
                     // Si l'utilisateur n'existe pas, rediriger vers la page de connexion
                     // @ts-ignore
                     navigation.navigate('login');
+                }
+                const roles = await AsyncStorage.getItem('role');
+                console.log('Role récupéré:', roles); // Afficher le token récupéré
+
+                if (roles) {
+                    setRole(roles);
                 }
             } catch (error) {
                 console.error("Erreur lors de la vérification de la connexion:", error);

@@ -113,13 +113,20 @@ app.post('/login', async (req: Request, res: Response) => {
         return;
     }
 
+    const role = await userRepo.getRole(email);
+    console.log(role);
+    if (!role) {
+        res.status(400).json({ message: 'Rôle incorrect.' });
+        return;
+    }
+
     // Générer un token JWT
     // @ts-ignore
-    const token = jwt.sign({ id: user.idUtilisateur, email: user.email, role: user.role }, JWT_SECRET, {
+    const token = jwt.sign({ id: user.idUtilisateur, email: user.email, role: role }, JWT_SECRET, {
         expiresIn: '1h',
     });
 
-    res.json({ token, user });
+    res.json({ token, user, role });
 });
 
 // Route pour le mot de passe oublié

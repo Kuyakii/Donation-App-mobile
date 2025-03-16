@@ -1,6 +1,7 @@
 // src/repositories/UserRepository.ts
 import { MariaDBConnection } from '../database/MariaDBConnection';
 import { IUtilisateur } from '../interfaces/IUtilisateur';
+import { RowDataPacket } from 'mysql2';
 
 export class UtilisateurRepository {
     private db: MariaDBConnection;
@@ -51,6 +52,40 @@ export class UtilisateurRepository {
             );
         } finally {
             connection.release();
+        }
+    }
+    async getRole(email: string): Promise<string> {
+        const connection = await this.db.getConnection();
+        try {
+            // Récupérer l'idUtilisateur correspondant à l'email
+            const [users] = await connection.query<RowDataPacket[]>('SELECT idUtilisateur FROM Utilisateur WHERE email = ?', [email]);
+
+            // Vérifier si l'utilisateur existe
+            if (!users || users.length === 0) {
+                throw new Error('Utilisateur non trouvé');
+            }
+
+            const idUtilisateur = users[0].idUtilisateur;
+
+            // Vérifier si l'utilisateur est un admin_application
+            const [adminApp] = await connection.query<RowDataPacket[]>('SELECT * FROM admin_application WHERE idUtilisateur = ?', [idUtilisateur]);
+            if (adminApp && adminApp.length > 0) {
+                return 'ADMIN_APP';
+            }
+
+            // Vérifier si l'utilisateur est un admin_association
+            const [adminAsso] = await connection.query<RowDataPacket[]>('SELECT * FROM admin_association WHERE idUtilisateur = ?', [idUtilisateur]);
+            if (adminAsso && adminAsso.length > 0) {
+                return 'ADMIN_ASSO';
+            }
+
+            // Si aucun rôle admin n'est trouvé, retourner 'CITOYEN'
+            return 'CITOYEN';
+        } catch (error) {
+            console.error('Erreur lors de la récupération du rôle :', error);
+            throw error; // Propager l'erreur pour la gestion externe
+        } finally {
+            connection.release(); // Toujours libérer la connexion
         }
     }
 }
