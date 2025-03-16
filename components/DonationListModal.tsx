@@ -48,6 +48,7 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
                     <Text style={styles.modalTitle}>Vos Dons : {total}€</Text>
+                    <Text style={styles.modalSubTitle}>Vous avez effectuez {dons.length} dons pour un montant total égal à {total}€</Text>
 
                     {/* Filtres et tris */}
                     <View style={styles.filterContainer}>
@@ -177,6 +178,13 @@ const styles = StyleSheet.create({
     },
     modalTitle: {
         fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: '#333',
+    },
+    modalSubTitle: {
+        fontSize: 15,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
