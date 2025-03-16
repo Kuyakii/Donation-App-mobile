@@ -1,32 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
     StyleSheet,
     ScrollView,
     TouchableOpacity,
-    SafeAreaView,
-    Button,
-    Platform,
-    StatusBar, ActivityIndicator
+    ActivityIndicator,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Header from '../../components/header';
-import SearchBar from '../../components/SearchBar';
-import Section from '../../components/Section';
-import AssociationItem from '../../components/AssociationItem';
 import DonationCard from '../../components/ProfileComponents/DonationCard';
 import TopAssociations from '../../components/ProfileComponents/TopAssociations';
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
-import {checkLogin, estConnecte, getAllDons, getUtilisateurConnecte} from "@/helpers";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";
-import {FavoriteProvider} from "@/context/FavoriteContext";
+import { FavoriteProvider } from "@/context/FavoriteContext";
 import Colors from "@/constants/Colors";
-import {IDon} from "@/backend/interfaces/IDon";
-import {useNavigation} from "@react-navigation/native";
-import {IUtilisateur} from "@/backend/interfaces/IUtilisateur";
+import { IDon } from "@/backend/interfaces/IDon";
+import { useNavigation } from "@react-navigation/native";
+import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {BASE_URL} from "@/config";
+import { BASE_URL } from "@/config";
 import AssociationListModal from "@/components/DonationListModal";
 
 export default function UserProfileScreen() {
@@ -34,37 +27,33 @@ export default function UserProfileScreen() {
     const navigation = useNavigation();
     const [user, setUser] = useState<IUtilisateur | null>(null);
     const [dons, setDons] = useState<IDon[]>([]);
-    const [role, setRole] = useState<String>();
+    const [role, setRole] = useState<string>('');
     const [modalVisible, setModalVisible] = useState(false);
-
 
     useEffect(() => {
         const checkLogin = async () => {
             try {
-                // Vérifier si l'utilisateur est connecté en récupérant le token
                 const storedToken = await AsyncStorage.getItem('token');
-                console.log('Token récupéré:', storedToken); // Afficher le token récupéré
+                console.log('Token récupéré:', storedToken);
 
                 if (!storedToken) {
-                    // Si pas de token, rediriger vers la page de connexion
                     // @ts-ignore
                     navigation.navigate('login');
-                    return; // Arrêter l'exécution ici
+                    return;
                 }
 
-                // Si le token existe, récupérer les informations de l'utilisateur
                 const utilisateurString = await AsyncStorage.getItem('utilisateur');
                 if (utilisateurString) {
                     const utilisateur: IUtilisateur = JSON.parse(utilisateurString);
                     console.log("Utilisateur récupéré :", utilisateur);
                     setUser(utilisateur);
                 } else {
-                    // Si l'utilisateur n'existe pas, rediriger vers la page de connexion
                     // @ts-ignore
                     navigation.navigate('login');
                 }
+
                 const roles = await AsyncStorage.getItem('role');
-                console.log('Role récupéré:', roles); // Afficher le token récupéré
+                console.log('Role récupéré:', roles);
 
                 if (roles) {
                     setRole(roles);
@@ -74,11 +63,11 @@ export default function UserProfileScreen() {
                 // @ts-ignore
                 navigation.navigate('login');
             } finally {
-                setIsLoading(false); // Arrêter le chargement une fois la vérification terminée
+                setIsLoading(false);
             }
         };
 
-        checkLogin(); // Exécuter la fonction lors du montage du composant
+        checkLogin();
     }, [navigation]);
 
     useEffect(() => {
@@ -125,6 +114,50 @@ export default function UserProfileScreen() {
         .sort(([, montantA], [, montantB]) => montantB - montantA)
         .slice(0, 3);
 
+    // Afficher une interface différente pour les administrateurs d'application
+    if (role.toString().includes('ADMIN_ASSO')) {
+        return (
+            <View style={styles.container}>
+                <Header />
+                <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
+                    <Text style={styles.welcomeTitle}>Bonjour, Admin {Pseudo}</Text>
+
+                    {/* Contenu spécifique à l'admin */}
+                    <View style={styles.adminSection}>
+                        <Text style={styles.sectionTitle}>Statistiques des dons</Text>
+                        <Text>Total des dons de 2025 : 3000€</Text>
+                        <Text>Dons récurrents actifs : 7</Text>
+                    </View>
+
+                    <View style={styles.adminSection}>
+                        <Text style={styles.sectionTitle}>Favoris</Text>
+                        <Text>Utilisateurs ayant mis en favoris l’association : 37</Text>
+                    </View>
+
+                    <View style={styles.adminSection}>
+                        <Text style={styles.sectionTitle}>Évolution des dons</Text>
+                        <Text>Type de dons : Tous</Text>
+                        {/* Ajoutez ici un graphique ou une visualisation des dons */}
+                    </View>
+
+                    <View style={styles.adminSection}>
+                        <Text style={styles.sectionTitle}>Activités récentes (inf à 30j)</Text>
+                        <Text>Nouveaux dons : 5</Text>
+                        <Text>Nouveaux dons récurrents : 1</Text>
+                        <Text>Nouveaux favoris : 0</Text>
+                    </View>
+
+                    <TouchableOpacity style={styles.adminButton}>
+                        <Text style={styles.adminButtonText}>Modifier ma page association</Text>
+                    </TouchableOpacity>
+
+                    <BoutonDeconnexion />
+                </ScrollView>
+            </View>
+        );
+    }
+
+    // Page standard pour les utilisateurs
     return (
         <View style={styles.container}>
             <Header />
@@ -164,7 +197,7 @@ export default function UserProfileScreen() {
 
                 <BoutonDeconnexion />
             </ScrollView>
-            <AssociationListModal visible={modalVisible} onClose={() => setModalVisible(false)} dons={donsUser} total={montantDonne}></AssociationListModal>
+            <AssociationListModal visible={modalVisible} onClose={() => setModalVisible(false)} dons={donsUser} total={montantDonne} />
         </View>
     );
 }
@@ -174,14 +207,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-
     },
     scrollView: {
         flex: 1,
         paddingHorizontal: 16,
     },
     scrollViewContent: {
-        paddingBottom: 100, // Espace en bas pour bien voir le bouton deconnexion
+        paddingBottom: 100,
     },
     welcomeTitle: {
         fontSize: 24,
@@ -216,15 +248,24 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    errorContainer: {
-        flex: 1,
-        justifyContent: 'center',
+    adminSection: {
+        marginBottom: 20,
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+    },
+    adminButton: {
+        backgroundColor: Colors.primary_dark.background,
+        padding: 15,
+        borderRadius: 10,
         alignItems: 'center',
-        backgroundColor: '#FFFFFFFF',
+        marginTop: 20,
     },
-    errorText: {
-        color: 'red',
+    adminButtonText: {
+        color: Colors.primary_dark.text,
         fontSize: 16,
+        fontWeight: 'bold',
     },
-
 });
