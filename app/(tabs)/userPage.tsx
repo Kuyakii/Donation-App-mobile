@@ -8,7 +8,7 @@ import {
     SafeAreaView,
     Button,
     Platform,
-    StatusBar
+    StatusBar, ActivityIndicator
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import Header from '../../components/header';
@@ -18,44 +18,110 @@ import AssociationItem from '../../components/AssociationItem';
 import DonationCard from '../../components/ProfileComponents/DonationCard';
 import TopAssociations from '../../components/ProfileComponents/TopAssociations';
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
-import {checkLogin, getAllDons, getUtilisateurConnecte} from "@/helpers";
+import {checkLogin, estConnecte, getAllDons, getUtilisateurConnecte} from "@/helpers";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";
 import {FavoriteProvider} from "@/context/FavoriteContext";
 import Colors from "@/constants/Colors";
 import {IDon} from "@/backend/interfaces/IDon";
+import {useNavigation} from "@react-navigation/native";
+import {IUtilisateur} from "@/backend/interfaces/IUtilisateur";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {BASE_URL} from "@/config";
 
 export default function UserProfileScreen() {
+    const [isLoading, setIsLoading] = useState(true);
+    const navigation = useNavigation();
+    const [user, setUser] = useState<IUtilisateur | null>(null);
+    const [dons, setDons] = useState<IDon[]>([]);
 
-    checkLogin();
-    const user = getUtilisateurConnecte();
-    let Pseudo;
-    let email
-    if(user){
-        Pseudo = user.pseudonyme;
-        email = user.email;
-        console.log("Pseudo " + Pseudo + " Email " + email);
+    useEffect(() => {
+        const checkLogin = async () => {
+            try {
+                // Vérifier si l'utilisateur est connecté en récupérant le token
+                const storedToken = await AsyncStorage.getItem('token');
+                console.log('Token récupéré:', storedToken); // Afficher le token récupéré
+
+                if (!storedToken) {
+                    // Si pas de token, rediriger vers la page de connexion
+                    // @ts-ignore
+                    navigation.navigate('login');
+                    return; // Arrêter l'exécution ici
+                }
+
+                // Si le token existe, récupérer les informations de l'utilisateur
+                const utilisateurString = await AsyncStorage.getItem('utilisateur');
+                if (utilisateurString) {
+                    const utilisateur: IUtilisateur = JSON.parse(utilisateurString);
+                    console.log("Utilisateur récupéré :", utilisateur);
+                    setUser(utilisateur);
+                } else {
+                    // Si l'utilisateur n'existe pas, rediriger vers la page de connexion
+                    // @ts-ignore
+                    navigation.navigate('login');
+                }
+            } catch (error) {
+                console.error("Erreur lors de la vérification de la connexion:", error);
+                // @ts-ignore
+                navigation.navigate('login');
+            } finally {
+                setIsLoading(false); // Arrêter le chargement une fois la vérification terminée
+            }
+        };
+
+        checkLogin(); // Exécuter la fonction lors du montage du composant
+    }, [navigation]);
+
+    useEffect(() => {
+        const fetchDons = async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/getDons`);
+                const data = await response.json();
+                setDons(data);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des dons', error);
+            }
+        };
+        fetchDons();
+    }, []);
+
+    if (isLoading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text>Chargement du profil...</Text>
+            </View>
+        );
     }
-    const dons = getAllDons();
+
+    if (!user) {
+        return (
+            <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>Utilisateur non trouvé</Text>
+            </View>
+        );
+    }
+
+    const { pseudonyme: Pseudo, email } = user;
+    console.log("Pseudo " + Pseudo + " Email " + email);
+
     const donsUser: IDon[] = [];
-    let montantDonne:number = 0;
+    let montantDonne: number = 0;
     const donsParAssos: Record<number, number> = {};
-    dons.forEach((d : IDon) => {
-        // @ts-ignore
-        if(d.idUtilisateur === user.idUtilisateur) {
+
+    dons.forEach((d: IDon) => {
+        if (d.idUtilisateur === user.idUtilisateur) {
             donsUser.push(d);
-            montantDonne+= d.montant;
-            if(!donsParAssos[d.idAssociation]){
+            montantDonne += d.montant;
+            if (!donsParAssos[d.idAssociation]) {
                 donsParAssos[d.idAssociation] = 0;
             }
-            donsParAssos[d.idAssociation]+= d.montant;
+            donsParAssos[d.idAssociation] += d.montant;
         }
     });
 
     const donsParAssosTries = Object.entries(donsParAssos)
-        .sort(([, montantA], [, montantB]) => montantB - montantA).slice(0,3) // Tri décroissant
-        ;
-
-    //console.log(donsParAssosTries);
+        .sort(([, montantA], [, montantB]) => montantB - montantA)
+        .slice(0, 3);
 
     return (
         <View style={styles.container}>
@@ -86,21 +152,16 @@ export default function UserProfileScreen() {
                     </TouchableOpacity>
                 </View>
 
-                {/* Section de progression des dons */}
-                <DonationCard montantDon={montantDonne}/>
+                <DonationCard montantDon={montantDonne} />
 
-                {/* Section des Top Associations */}
                 <TopAssociations topAssos={donsParAssosTries} />
 
-                {/* Section des Associations favorites */}
                 <FavoriteProvider>
                     <AssociationFavoriteList />
                 </FavoriteProvider>
 
-                <BoutonDeconnexion></BoutonDeconnexion>
-
+                <BoutonDeconnexion />
             </ScrollView>
-
         </View>
     );
 }
@@ -146,6 +207,21 @@ const styles = StyleSheet.create({
     },
     actionText: {
         fontSize: 14,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    errorContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFFFF',
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 16,
     },
 
 });
