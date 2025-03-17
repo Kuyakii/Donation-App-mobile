@@ -116,6 +116,9 @@ export default function UserProfileScreen() {
 
     // Afficher une interface différente pour les administrateurs d'application
     if (role.toString().includes('ADMIN_ASSO')) {
+        const donsAssos:IDon[] = [];
+
+
         return (
             <View style={styles.container}>
                 <Header />

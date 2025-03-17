@@ -59,4 +59,14 @@ export class DonationRepository {
             connection.release(); // Libérer la connexion
         }
     }
+
+    async getAssosByAdminAssos(emailAdmin:string): Promise<IDon[]> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query('select * from V_DONS where idAssociation = (select aa.idAssociation from admin_association aa where aa.idUtilisateur = (select u.idUtilisateur from utilisateur u where u.email = ?) )', [emailAdmin]);
+            return rows as IDon[];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
 }
