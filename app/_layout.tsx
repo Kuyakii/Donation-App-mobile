@@ -58,6 +58,7 @@ function RootLayoutNav() {
         <Stack.Screen name="detailsAssos" options={{ headerShown: false }} />
         <Stack.Screen name="dons" options={{ headerShown: false}} />
         <Stack.Screen name="login" options={{ headerShown: false  }} />
+        <Stack.Screen name="settings" options={{ headerShown: false  }} />
       </Stack>
     </ThemeProvider>
   );
