@@ -242,7 +242,8 @@ export default function AdminAssoScreen() {
                 ref={scrollViewRef}
                 contentContainerStyle={styles.scrollViewContent}
             >
-                <Text style={styles.welcomeTitle}>Bonjour, Admin, administrateur de l'association </Text>
+                <Text style={styles.welcomeTitle}>Bonjour, Admin</Text>
+                <Text style={styles.welcomeTitle2}>Administrateur de l'association </Text>
                 {/* Association Card*/}
                 <View style={styles.assoCard}>
                     {association ? (
@@ -362,13 +363,13 @@ export default function AdminAssoScreen() {
                 <View style={styles.adminSection}>
                     <Text style={styles.sectionTitle}>Statistiques des dons</Text>
                     <Text>Total des dons de {selectedYear} : <Text style={styles.highlight}>{totalDons}€</Text></Text>
-                    <Text>Dons récurrents actifs : {donsRecurentsAssos.length}</Text>
+                    <Text>Dons récurrents actifs : <Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
                 </View>
 
                 {/* Favoris */}
                 <View style={styles.adminSection}>
                     <Text style={styles.sectionTitle}>Favoris</Text>
-                    <Text>Utilisateurs ayant mis en favoris l'association : {nbAssosFav}</Text>
+                    <Text>Utilisateurs ayant mis en favoris l'association : <Text style={styles.highlight}>{nbAssosFav}</Text></Text>
                 </View>
 
                 {/* Graphique des dons - AMÉLIORÉ */}
@@ -426,8 +427,8 @@ export default function AdminAssoScreen() {
                 {/* Activités récentes */}
                 <View style={styles.adminSection}>
                     <Text style={styles.sectionTitle}>Activités récentes (inf à 30j)</Text>
-                    <Text>Nouveaux dons : {getRecentDonsCount(donsAssos)}</Text>
-                    <Text>Nouveaux dons récurrents : {getRecentDonsCount(donsRecurentsAssos)}</Text>
+                    <Text>Nouveaux dons : <Text style={styles.highlight}>{getRecentDonsCount(donsAssos)}</Text></Text>
+                    <Text>Nouveaux dons récurrents : <Text style={styles.highlight}>{getRecentDonsCount(donsRecurentsAssos)}</Text></Text>
                 </View>
 
                 {/* Wall of Givers - Meilleurs donateurs */}
@@ -468,6 +469,10 @@ const styles = StyleSheet.create({
     welcomeTitle: {
         fontSize: 24,
         fontWeight: 'bold',
+        marginBottom: 10
+    },
+    welcomeTitle2: {
+    fontSize: 18,
         marginBottom: 10
     },
     adminSection: {
