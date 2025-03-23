@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
     View,
     Text,
@@ -22,6 +22,7 @@ export default function AdminAssoScreen() {
     const [user, setUser] = useState<IUtilisateur | null>(null);
     const [donsAssos, setDonsAssos] = useState<IDon[]>([]);
     const [selectedYear, setSelectedYear] = useState(2025);
+    const scrollViewRef = useRef<ScrollView>(null);
 
     useEffect(() => {
         const loadUser = async () => {
@@ -88,10 +89,25 @@ export default function AdminAssoScreen() {
     const data = labels.map((_, index) => montantsParMois[index] || 0);
     const totalDons = data.reduce((a, b) => a + b, 0);
 
+    // Calculer une valeur maximale appropriée pour l'échelle Y
+    const maxValue = Math.max(...data);
+    const yAxisMax = maxValue <= 0 ? 100 : Math.ceil(maxValue * 1.2 / 100) * 100;
+
+    // Formatter les valeurs sur l'axe Y pour réduire l'encombrement
+    const formatYLabel = (value: number) => {
+        if (value >= 1000) {
+            return `${(value / 1000).toFixed(0)}k€`;
+        }
+        return `${value}€`;
+    };
+
     return (
         <View style={styles.container}>
             <Header />
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <ScrollView
+                ref={scrollViewRef}
+                contentContainerStyle={styles.scrollViewContent}
+            >
                 <Text style={styles.welcomeTitle}>Bonjour, Admin</Text>
 
                 {/* Sélecteur d'année */}
@@ -122,26 +138,56 @@ export default function AdminAssoScreen() {
                     <Text>Utilisateurs ayant mis en favoris l'association : 37</Text>
                 </View>
 
-                {/* Graphique des dons */}
-                <View style={styles.adminSection}>
+                {/* Graphique des dons - AMÉLIORÉ */}
+                <View style={styles.chartContainer}>
                     <Text style={styles.sectionTitle}>Évolution des dons</Text>
-                    <BarChart
-                        data={{
-                            labels: labels,
-                            datasets: [{ data: data }]
-                        }}
-                        width={screenWidth * 0.9}
-                        height={300}
-                        chartConfig={{
-                            backgroundColor: "#f3f3f3",
-                            backgroundGradientFrom: "#ffffff",
-                            backgroundGradientTo: "#ffffff",
-                            decimalPlaces: 0,
-                            color: () => `rgba(128, 0, 128, 1)`, // Violet
-                            labelColor: () => `black`,
-                        }}
-                        style={{ marginVertical: 8, borderRadius: 10 }}
-                    />
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                        <BarChart
+                            data={{
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        data: data,
+                                    }
+                                ]
+                            }}
+                            width={Math.max(screenWidth, 600)}
+                            height={350}
+                            yAxisSuffix="€"
+                            yAxisMax={yAxisMax}
+                            yAxisMin={0}
+                            fromZero
+                            showValuesOnTopOfBars={true}
+                            chartConfig={{
+                                backgroundColor: "#ffffff",
+                                backgroundGradientFrom: "#ffffff",
+                                backgroundGradientTo: "#ffffff",
+                                decimalPlaces: 0,
+                                color: () => "rgba(128, 0, 128, 0.8)",
+                                labelColor: () => "rgba(0, 0, 0, 0.8)",
+                                style: {
+                                    borderRadius: 16,
+                                },
+                                barPercentage: 0.7,
+                                propsForLabels: {
+                                    fontSize: 14,
+                                    fontWeight: 'bold',
+                                },
+                                propsForBackgroundLines: {
+                                    strokeDasharray: '',
+                                    stroke: "rgba(0, 0, 0, 0.1)",
+                                    strokeWidth: 1,
+                                },
+                            }}
+                            yLabelsOffset={20}  // Décale l'affichage des labels Y pour éviter la coupure
+                            withInnerLines={true}
+                            withHorizontalLabels={true}
+                            withVerticalLabels={true}
+                            verticalLabelRotation={0}
+                            horizontalLabelRotation={0}
+                        />
+                    </ScrollView>
+
                 </View>
 
                 {/* Activités récentes */}
@@ -151,7 +197,6 @@ export default function AdminAssoScreen() {
                     <Text>Nouveaux dons récurrents : 1</Text>
                     <Text>Nouveaux favoris : 0</Text>
                 </View>
-
                 {/* Bouton de modification */}
                 <TouchableOpacity style={styles.adminButton}>
                     <Text style={styles.adminButtonText}>Modifier ma page association</Text>
@@ -187,10 +232,21 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 15
     },
+    chartContainer: {
+        backgroundColor: "#f3f3f3",
+        padding: 15,
+        borderRadius: 10,
+        marginBottom: 15,
+    },
+    chart: {
+        marginVertical: 8,
+        borderRadius: 10,
+        paddingRight: 15,
+    },
     sectionTitle: {
         fontSize: 18,
         fontWeight: "bold",
-        marginBottom: 5
+        marginBottom: 15
     },
     highlight: {
         color: "purple",
@@ -219,12 +275,18 @@ const styles = StyleSheet.create({
     },
     adminButton: {
         backgroundColor: "purple",
-        padding: 10,
+        padding: 15,
         borderRadius: 5,
-        alignItems: "center"
+        alignItems: "center",
+        marginVertical: 10,
     },
     adminButtonText: {
         color: "white",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: 16,
+    },
+    propsForLabels: {
+        fontSize: 12, // Réduit de 14 à 12
+        fontWeight: 'bold',
     },
 });
