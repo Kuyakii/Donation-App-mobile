@@ -102,7 +102,7 @@ Page qrCode fonctionnelle, avec un scanneur corner style et animé, un message s
 
 Récupération des dons de l'utilisateur, affichage des badges selon des seuils; une barre de progrssion vers le badge suivant; les 3 assos les plus données et aussi, la modale avec la liste des dons, filtrable en fonction du type de don et du montant. Aussi, récupération des rôles des users et stockage de ça dans le AsyncStorage.
 
-## PageUserDynamique
+## adminAssosPage
 
 Développement front et back (endpoint) de la page admin assos, disponible uniquement pour ces derniers, pour leurs associations.
 
