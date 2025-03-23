@@ -22,6 +22,7 @@ export default function AdminAssoScreen() {
     const [user, setUser] = useState<IUtilisateur | null>(null);
     const [donsAssos, setDonsAssos] = useState<IDon[]>([]);
     const [donsRecurentsAssos, setDonsRecurentsAssos] = useState<IDon[]>([]);
+    const [nbAssosFav, setnbAssosFav] = useState<number>();
     const [selectedYear, setSelectedYear] = useState(2025);
     const scrollViewRef = useRef<ScrollView>(null);
 
@@ -76,6 +77,23 @@ export default function AdminAssoScreen() {
 
         if (user) {
             fetchDonsAssosRecurents();
+        }
+    }, [user]);
+    useEffect(() => {
+        const fetchNbAssosFav = async () => {
+            if (!user) return;
+
+            try {
+                const response = await fetch(`${BASE_URL}/getAssosFavorites/${user.email}`);
+                const data = await response.json();
+                setnbAssosFav(data);
+            } catch (error) {
+                console.error('Erreur lors de la récupération du nombre d\'associations fav', error);
+            }
+        };
+
+        if (user) {
+            fetchNbAssosFav();
         }
     }, [user]);
 
@@ -154,7 +172,7 @@ export default function AdminAssoScreen() {
                 {/* Favoris */}
                 <View style={styles.adminSection}>
                     <Text style={styles.sectionTitle}>Favoris</Text>
-                    <Text>Utilisateurs ayant mis en favoris l'association : 37</Text>
+                    <Text>Utilisateurs ayant mis en favoris l'association : {nbAssosFav}</Text>
                 </View>
 
                 {/* Graphique des dons - AMÉLIORÉ */}

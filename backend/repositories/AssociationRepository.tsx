@@ -94,4 +94,28 @@ export class AssociationRepository {
             connection.release(); // Libérer la connexion
         }
     }
+
+    // Récupérer toutes les associations favorites d'un admin application
+    async findFavoritesByAssos(email: string): Promise<number> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query(
+                `SELECT COUNT(a.idUtilisateur) AS nbAssosFav
+             FROM associationsfavorites a
+             WHERE a.idAssociation = (
+                 SELECT aa.idAssociation
+                 FROM admin_association aa
+                 INNER JOIN utilisateur u ON aa.idUtilisateur = u.idUtilisateur
+                 WHERE u.email = ?
+             )`,
+                [email]
+            );
+
+            // @ts-ignore
+            return rows[0]?.nbAssosFav || 0;
+        } finally {
+            connection.release();
+        }
+    }
+
 }

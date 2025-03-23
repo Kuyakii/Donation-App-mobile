@@ -254,6 +254,17 @@ app.get('/getDonsRecurrent/:email', async (req: Request, res: Response) => {
     }
 });
 
+app.get('/getAssosFavorites/:email', async (req: Request, res: Response) => {
+    const { email } = req.params;
+    try {
+        const dons = await associationRepository.findFavoritesByAssos(email);
+        res.json(dons);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des associations favorites', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
     console.log(`Serveur backend en écoute sur http://localhost:${port}`);
