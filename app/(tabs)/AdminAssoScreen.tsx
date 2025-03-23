@@ -6,7 +6,7 @@ import {
     ScrollView,
     TouchableOpacity,
     ActivityIndicator,
-    Dimensions, Image
+    Dimensions, Image, Alert, Modal, TextInput, KeyboardAvoidingView, Platform
 } from 'react-native';
 import Header from '../../components/header';
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
@@ -19,6 +19,8 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
 
 export default function AdminAssoScreen() {
+    const { height: screenHeight } = Dimensions.get('window');
+
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<IUtilisateur | null>(null);
     const [association, setAssociation] = useState<IAssociation | null>(null);
@@ -28,6 +30,13 @@ export default function AdminAssoScreen() {
     const [nbAssosFav, setnbAssosFav] = useState<number>();
     const [selectedYear, setSelectedYear] = useState(2025);
     const scrollViewRef = useRef<ScrollView>(null);
+
+    // States pour la modal d'édition
+    const [modalVisible, setModalVisible] = useState(false);
+    const [editedNom, setEditedNom] = useState('');
+    const [editedDescription, setEditedDescription] = useState('');
+    const [editedDescriptionCourte, setEditedDescriptionCourte] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const loadUser = async () => {
@@ -55,6 +64,12 @@ export default function AdminAssoScreen() {
                 const response = await fetch(`${BASE_URL}/associationsByMail/${user.email}`);
                 const data = await response.json();
                 setAssociation(data);
+
+                if (data) {
+                    setEditedNom(data.nom);
+                    setEditedDescription(data.description);
+                    setEditedDescriptionCourte(data.descriptionCourte);
+                }
             } catch (error) {
                 console.error('Erreur lors de la récupération des dons de l\'association', error);
             }
@@ -183,6 +198,43 @@ export default function AdminAssoScreen() {
         return dons.filter(don => new Date(don.dateDon) >= thirtyDaysAgo).length;
     };
 
+    const handleUpdateAssociation = async () => {
+        if (!association) return;
+
+        setIsSubmitting(true);
+
+        try {
+            const updatedAssociation = {
+                ...association,
+                nom: editedNom,
+                description: editedDescription,
+                descriptionCourte: editedDescriptionCourte
+            };
+
+            const response = await fetch(`${BASE_URL}/updateAssociation/${association.idAssociation}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedAssociation),
+            });
+
+            if (response.ok) {
+                // Mettre à jour l'état local avec les nouvelles valeurs
+                setAssociation(updatedAssociation);
+                setModalVisible(false);
+                Alert.alert('Succès', 'Informations de l\'association mises à jour avec succès');
+            } else {
+                Alert.alert('Erreur', 'Impossible de mettre à jour les informations');
+            }
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour des informations:', error);
+            Alert.alert('Erreur', 'Une erreur est survenue lors de la mise à jour');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <Header />
@@ -208,9 +260,88 @@ export default function AdminAssoScreen() {
                 </View>
 
                 {/* Bouton de modification */}
-                <TouchableOpacity style={styles.adminButton}>
+                <TouchableOpacity
+                    style={styles.adminButton}
+                    onPress={() => setModalVisible(true)}
+                >
                     <Text style={styles.adminButtonText}>Modifier ma page association</Text>
                 </TouchableOpacity>
+
+                {/* Modal d'édition */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.centeredView}>
+                        <KeyboardAvoidingView
+                            behavior={Platform.OS === "ios" ? "padding" : "height"}
+                            style={styles.keyboardAvoidingView}
+                        >
+                            <View style={[styles.modalView, { maxHeight: screenHeight * 0.8 }]}>
+                                <Text style={styles.modalTitle}>Modifier les informations</Text>
+
+                                <ScrollView style={styles.modalScrollView} contentContainerStyle={styles.modalScrollViewContent}>
+                                    <View style={styles.inputContainer}>
+                                        <Text style={styles.label}>Nom</Text>
+                                        <TextInput
+                                            style={styles.input}
+                                            value={editedNom}
+                                            onChangeText={setEditedNom}
+                                            placeholder="Nom de l'association"
+                                        />
+                                    </View>
+
+                                    <View style={styles.inputContainer}>
+                                        <Text style={styles.label}>Description</Text>
+                                        <TextInput
+                                            style={[styles.input, styles.textArea]}
+                                            value={editedDescription}
+                                            onChangeText={setEditedDescription}
+                                            placeholder="Description détaillée"
+                                            multiline={true}
+                                            numberOfLines={4}
+                                        />
+                                    </View>
+
+                                    <View style={styles.inputContainer}>
+                                        <Text style={styles.label}>Description courte</Text>
+                                        <TextInput
+                                            style={[styles.input, styles.textArea]}
+                                            value={editedDescriptionCourte}
+                                            onChangeText={setEditedDescriptionCourte}
+                                            placeholder="Description courte"
+                                            multiline={true}
+                                            numberOfLines={2}
+                                        />
+                                    </View>
+                                </ScrollView>
+
+                                <View style={styles.modalButtons}>
+                                    <TouchableOpacity
+                                        style={[styles.button, styles.buttonCancel]}
+                                        onPress={() => setModalVisible(false)}
+                                        disabled={isSubmitting}
+                                    >
+                                        <Text style={styles.buttonCancelText}>Annuler</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[styles.button, styles.buttonSave]}
+                                        onPress={handleUpdateAssociation}
+                                        disabled={isSubmitting}
+                                    >
+                                        {isSubmitting ? (
+                                            <ActivityIndicator size="small" color="white" />
+                                        ) : (
+                                            <Text style={styles.buttonText}>Enregistrer</Text>
+                                        )}
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </KeyboardAvoidingView>
+                    </View>
+                </Modal>
 
                 {/* Sélecteur d'année */}
                 <View style={styles.yearSelector}>
@@ -454,4 +585,88 @@ const styles = StyleSheet.create({
         flexShrink: 1,
         flexWrap: 'wrap',
     },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    keyboardAvoidingView: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    modalView: {
+        width: '100%',
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    modalScrollView: {
+        width: '100%',
+    },
+    modalScrollViewContent: {
+        paddingBottom: 10,
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        color: 'purple',
+    },
+    inputContainer: {
+        marginBottom: 15,
+    },
+    label: {
+        fontSize: 16,
+        marginBottom: 5,
+        fontWeight: '600',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        padding: 10,
+        fontSize: 16,
+    },
+    textArea: {
+        minHeight: 100,
+        textAlignVertical: 'top',
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+    },
+    button: {
+        padding: 12,
+        borderRadius: 8,
+        minWidth: '45%',
+        alignItems: 'center',
+    },
+
+    buttonCancel: {
+    backgroundColor: '#f3f3f3',
+},
+buttonCancelText: {
+    fontWeight: 'bold',
+        fontSize: 16,
+        color: '#333',
+},
+buttonSave: {
+    backgroundColor: 'purple',
+},
+buttonText: {
+    fontWeight: 'bold',
+        fontSize: 16,
+        color: 'white',
+},
 });

@@ -60,9 +60,9 @@ export class AssociationRepository {
         const connection = await this.db.getConnection();
         try {
             const { nom, description,descriptionCourte,nomImage, localisation, idType } = association;
-            await connection.query(
-                'UPDATE Association SET nom = ?, description = ?,descriptionCourte = ? ,nomImage = ?, localisation = ?, idType = ? WHERE idAssociation = ?',
-                [nom, description,descriptionCourte,nomImage, localisation, idType, idAssociation]
+                await connection.query(
+                'UPDATE Association SET nom = ?, description = ?,descriptionCourte = ? WHERE idAssociation = ?',
+                [nom, description,descriptionCourte, idAssociation]
             );
         } finally {
             connection.release(); // Libérer la connexion

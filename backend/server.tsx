@@ -90,6 +90,20 @@ app.put('/associations/:id', async (req: Request, res: Response) => {
     }
 });
 
+app.put('/updateAssociation/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { nom,description,descriptionCourte,idAssociation,nomImage,localisation,idType } = req.body;
+    try {
+        const updatedAssociation = { nom,description,descriptionCourte,idAssociation,nomImage,localisation,idType };
+        console.log(localisation.x);
+        await associationRepository.update(Number(id), updatedAssociation);
+        res.send('Association mise à jour');
+    } catch (error) {
+        console.error('Erreur lors de la mise à jour de l\'association', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 // Route pour l'inscription
 app.post('/register', async (req: Request, res: Response) => {
     const { email, password, pseudonyme } = req.body;
