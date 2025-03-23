@@ -243,10 +243,10 @@ app.get('/getDonsAdmin/:email', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/getDonsRecurrent/:idAsso', async (req: Request, res: Response) => {
-    const { idAsso } = req.params;
+app.get('/getDonsRecurrent/:email', async (req: Request, res: Response) => {
+    const { email } = req.params;
     try {
-        const dons = await donsRepo.geDonRecurrentByAssos(idAsso);
+        const dons = await donsRepo.geDonRecurrentByAssos(email);
         res.json(dons);
     } catch (error) {
         console.error('Erreur lors de la récupération des dons récurrents', error);

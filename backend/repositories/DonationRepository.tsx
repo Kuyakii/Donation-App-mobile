@@ -70,11 +70,10 @@ export class DonationRepository {
         }
     }
 
-    async geDonRecurrentByAssos(idAssos:string): Promise<IDon[]> {
-        let id = Number(idAssos);
+    async geDonRecurrentByAssos(emailAdmin:string): Promise<IDon[]> {
         const connection = await this.db.getConnection();
         try {
-            const [rows] = await connection.query("select * from v_dons vd where vd.typeDon COLLATE utf8mb4_unicode_ci = 'RECURRENT' and vd.idAssociation = ?", [id]);
+            const [rows] = await connection.query("select * from v_dons vd where vd.typeDon COLLATE utf8mb4_unicode_ci = 'RECURRENT' and vd.idAssociation = (SELECT idAssociation FROM admin_association inner join utilisateur on utilisateur.idUtilisateur = admin_association.idUtilisateur where utilisateur.email = ?)", [emailAdmin]);
             return rows as IDon[];
         } finally {
             connection.release(); // Libérer la connexion

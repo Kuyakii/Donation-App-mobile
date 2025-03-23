@@ -21,6 +21,7 @@ export default function AdminAssoScreen() {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<IUtilisateur | null>(null);
     const [donsAssos, setDonsAssos] = useState<IDon[]>([]);
+    const [donsRecurentsAssos, setDonsRecurentsAssos] = useState<IDon[]>([]);
     const [selectedYear, setSelectedYear] = useState(2025);
     const scrollViewRef = useRef<ScrollView>(null);
 
@@ -57,6 +58,24 @@ export default function AdminAssoScreen() {
 
         if (user) {
             fetchDonsAssos();
+        }
+    }, [user]);
+
+    useEffect(() => {
+        const fetchDonsAssosRecurents = async () => {
+            if (!user) return;
+
+            try {
+                const response = await fetch(`${BASE_URL}/getDonsRecurrent/${user.email}`);
+                const data = await response.json();
+                setDonsRecurentsAssos(data);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des dons récurrents de l\'association', error);
+            }
+        };
+
+        if (user) {
+            fetchDonsAssosRecurents();
         }
     }, [user]);
 
@@ -129,7 +148,7 @@ export default function AdminAssoScreen() {
                 <View style={styles.adminSection}>
                     <Text style={styles.sectionTitle}>Statistiques des dons</Text>
                     <Text>Total des dons de {selectedYear} : <Text style={styles.highlight}>{totalDons}€</Text></Text>
-                    <Text>Dons récurrents actifs : 7</Text>
+                    <Text>Dons récurrents actifs : {donsRecurentsAssos.length}</Text>
                 </View>
 
                 {/* Favoris */}
