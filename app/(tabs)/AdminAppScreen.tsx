@@ -6,8 +6,10 @@ import {
     ScrollView,
     TouchableOpacity,
     ActivityIndicator,
-    Dimensions, Image, Alert, Modal, TextInput, KeyboardAvoidingView, Platform
+    Dimensions,
+    Modal, FlatList
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import Header from '../../components/header';
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
 import Colors from "@/constants/Colors";
@@ -29,7 +31,9 @@ export default function AdminAppScreen() {
     const [meilleursDonateurs, setMeilleursDonateurs] = useState<{ idUtilisateur: number, pseudonyme: string, totalMontant: number }[]>([]);
     const [nbAssosFav, setnbAssosFav] = useState<number>();
     const [selectedYear, setSelectedYear] = useState(2025);
+    const [selectedAssociation, setSelectedAssociation] = useState<string | null>("0");
     const scrollViewRef = useRef<ScrollView>(null);
+    const [dropdownVisible, setDropdownVisible] = useState(false);
 
 
     useEffect(() => {
@@ -112,11 +116,20 @@ export default function AdminAppScreen() {
     }
 
     const screenWidth = Dimensions.get("window").width;
+    const getSelectedAssociationName = () => {
+        if (selectedAssociation === "0") return "Toutes les associations";
+        const asso = association?.find(a => a.idAssociation+"" === selectedAssociation);
+        return asso ? asso.nom : "Toutes les associations";
+    };
+
+        const filteredDons = selectedAssociation === "0"
+            ? donsAssos
+            : donsAssos.filter(don => don.idAssociation === parseInt(selectedAssociation));
 
     // Fonction pour calculer les montants par mois
     const getMontantsParMois = (year: number) => {
         const montants: Record<number, number> = {};
-        donsAssos.forEach((d) => {
+        filteredDons.forEach((d) => {
             const donYear = new Date(d.dateDon).getFullYear();
             const month = new Date(d.dateDon).getMonth(); // 0 = Janvier
             if (donYear === year) {
@@ -161,6 +174,7 @@ export default function AdminAppScreen() {
                 <Text style={styles.welcomeTitle}>Bonjour, Admin {user.pseudonyme}</Text>
                 <Text style={styles.welcomeTitle2}>Administrateur de l'application </Text>
 
+
                 {/* Sélecteur d'année */}
                 <View style={styles.yearSelector}>
                     {[2023, 2024, 2025].map((year) => (
@@ -175,6 +189,57 @@ export default function AdminAppScreen() {
                         </TouchableOpacity>
                     ))}
                 </View>
+                {/* Sélecteur d'association - NOUVEAU */}
+                <View style={styles.adminSection}>
+                    <Text style={styles.sectionTitle}>Choisir une association</Text>
+
+                    <TouchableOpacity
+                        style={styles.dropdownButton}
+                        onPress={() => setDropdownVisible(true)}
+                    >
+                        <Text style={styles.dropdownButtonText}>{getSelectedAssociationName()}</Text>
+                        <Text style={styles.dropdownIcon}>▼</Text>
+                    </TouchableOpacity>
+
+                    <Modal
+                        transparent={true}
+                        visible={dropdownVisible}
+                        onRequestClose={() => setDropdownVisible(false)}
+                        animationType="fade"
+                    >
+                        <TouchableOpacity
+                            style={styles.modalOverlay}
+                            activeOpacity={1}
+                            onPress={() => setDropdownVisible(false)}
+                        >
+                            <View style={styles.dropdownListContainer}>
+                                <FlatList
+                                    data={[{idAssociation: 0, nom: "Toutes les associations"}, ...(association || [])]}
+                                    keyExtractor={(item) => item.idAssociation+""}
+                                    renderItem={({item}) => (
+                                        <TouchableOpacity
+                                            style={[
+                                                styles.dropdownItem,
+                                                item.idAssociation+"" === selectedAssociation ? styles.dropdownItemSelected : null
+                                            ]}
+                                            onPress={() => {
+                                                setSelectedAssociation(item.idAssociation+"");
+                                                setDropdownVisible(false);
+                                            }}
+                                        >
+                                            <Text style={[
+                                                styles.dropdownItemText,
+                                                item.idAssociation+"" === selectedAssociation ? styles.dropdownItemTextSelected : null
+                                            ]}>
+                                                {item.nom}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    )}
+                                />
+                            </View>
+                        </TouchableOpacity>
+                    </Modal>
+                </View>
 
                 {/* Statistiques des dons */}
                 <View style={styles.adminSection}>
@@ -188,7 +253,6 @@ export default function AdminAppScreen() {
                     <Text style={styles.sectionTitle}>Favoris</Text>
                     <Text>Utilisateurs ayant mis en favoris l'association : <Text style={styles.highlight}>{nbAssosFav}</Text></Text>
                 </View>
-
                 {/* Graphique des dons - AMÉLIORÉ */}
                 <View style={styles.chartContainer}>
                     <Text style={styles.sectionTitle}>Évolution des dons</Text>
@@ -490,5 +554,60 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
         color: 'white',
+    },
+    dropdownButton: {
+        backgroundColor: 'white',
+        padding: 12,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    dropdownButtonText: {
+        fontSize: 16,
+        color: 'black',
+    },
+    dropdownIcon: {
+        fontSize: 12,
+        color: 'purple',
+    },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: 20,
+    },
+    dropdownListContainer: {
+        backgroundColor: 'white',
+        borderRadius: 8,
+        width: '90%',
+        maxHeight: 300,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    dropdownItem: {
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
+    },
+    dropdownItemSelected: {
+        backgroundColor: '#F3E5F5',
+    },
+    dropdownItemText: {
+        fontSize: 16,
+        color: 'black',
+    },
+    dropdownItemTextSelected: {
+        color: 'purple',
+        fontWeight: 'bold',
     },
 });
