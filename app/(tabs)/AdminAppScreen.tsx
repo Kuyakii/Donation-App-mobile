@@ -117,12 +117,12 @@ export default function AdminAppScreen() {
 
     const screenWidth = Dimensions.get("window").width;
     const getSelectedAssociationName = () => {
-        if (selectedAssociation === "0") return "Toutes les associations";
+        if (selectedAssociation === "0" || selectedAssociation === 0) return "Toutes les associations";
         const asso = association?.find(a => a.idAssociation+"" === selectedAssociation);
         return asso ? asso.nom : "Toutes les associations";
     };
 
-        const filteredDons = selectedAssociation === "0"
+        const filteredDons = selectedAssociation === "0" || selectedAssociation === 0
             ? donsAssos
             : donsAssos.filter(don => don.idAssociation === parseInt(selectedAssociation));
 
@@ -161,7 +161,15 @@ export default function AdminAppScreen() {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(today.getDate() - 30);
 
-        return dons.filter(don => new Date(don.dateDon) >= thirtyDaysAgo).length;
+        return dons.filter(don => (new Date(don.dateDon) >= thirtyDaysAgo)).length;
+    };
+
+    const getRecentDonsCountReccurent = (dons: IDon[]) => {
+        const today = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+
+        return dons.filter(don => (new Date(don.dateDon) >= thirtyDaysAgo) && (don.typeDon === 'RECURRENT')).length;
     };
 
     return (
@@ -308,8 +316,8 @@ export default function AdminAppScreen() {
                 {/* Activités récentes */}
                 <View style={styles.adminSection}>
                     <Text style={styles.sectionTitle}>Activités récentes (inf à 30j)</Text>
-                    <Text>Nouveaux dons : <Text style={styles.highlight}>{getRecentDonsCount(donsAssos)}</Text></Text>
-                    <Text>Nouveaux dons récurrents : <Text style={styles.highlight}>{getRecentDonsCount(donsRecurentsAssos)}</Text></Text>
+                    <Text>Nouveaux dons : <Text style={styles.highlight}>{getRecentDonsCount(filteredDons)}</Text></Text>
+                    <Text>Nouveaux dons récurrents : <Text style={styles.highlight}>{getRecentDonsCountReccurent(filteredDons)}</Text></Text>
                 </View>
 
                 {/* Wall of Givers - Meilleurs donateurs */}
