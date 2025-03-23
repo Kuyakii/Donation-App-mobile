@@ -2,6 +2,7 @@
 import { MariaDBConnection } from '../database/MariaDBConnection';
 import { IUtilisateur } from '../interfaces/IUtilisateur';
 import { RowDataPacket } from 'mysql2';
+import {IDon} from "@/backend/interfaces/IDon";
 
 export class UtilisateurRepository {
     private db: MariaDBConnection;
@@ -86,6 +87,17 @@ export class UtilisateurRepository {
             throw error; // Propager l'erreur pour la gestion externe
         } finally {
             connection.release(); // Toujours libérer la connexion
+        }
+    }
+
+
+    async getAll(): Promise<IUtilisateur[]> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query('SELECT * FROM utilisateur');
+            return rows as IUtilisateur[];
+        } finally {
+            connection.release(); // Libérer la connexion
         }
     }
 }

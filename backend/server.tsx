@@ -315,6 +315,16 @@ app.get('/getMeilleursDonateurs', async (req: Request, res: Response) => {
     }
 });
 
+app.get('/getUtilisateurs', async (req: Request, res: Response) => {
+    try {
+        const dons = await userRepo.getAll();
+        res.json(dons);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
     console.log(`Serveur backend en écoute sur http://localhost:${port}`);

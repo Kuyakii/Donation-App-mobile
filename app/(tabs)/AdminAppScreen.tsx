@@ -25,6 +25,7 @@ export default function AdminAppScreen() {
 
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<IUtilisateur | null>(null);
+    const [utilisateurs, setUtilisateurs] = useState<IUtilisateur[] | null>(null);
     const [association, setAssociation] = useState<IAssociation[] | null>(null);
     const [donsAssos, setDonsAssos] = useState<IDon[]>([]);
     const [donsRecurentsAssos, setDonsRecurentsAssos] = useState<IDon[]>([]);
@@ -34,6 +35,7 @@ export default function AdminAppScreen() {
     const [selectedAssociation, setSelectedAssociation] = useState<string | null>("0");
     const scrollViewRef = useRef<ScrollView>(null);
     const [dropdownVisible, setDropdownVisible] = useState(false);
+    const [activeTab, setActiveTab] = useState('stats');
 
 
     useEffect(() => {
@@ -68,6 +70,23 @@ export default function AdminAppScreen() {
         };
         if (user) {
             getAssociation();
+        }
+    }, [user]);
+
+    useEffect(() => {
+        const getUtilisateurs = async () => {
+            if (!user) return;
+
+            try {
+                const response = await fetch(`${BASE_URL}/getUtilisateurs`);
+                const data = await response.json();
+                setUtilisateurs(data);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des utilisateurs', error);
+            }
+        };
+        if (user) {
+            getUtilisateurs();
         }
     }, [user]);
 
@@ -172,171 +191,210 @@ export default function AdminAppScreen() {
         return dons.filter(don => (new Date(don.dateDon) >= thirtyDaysAgo) && (don.typeDon === 'RECURRENT')).length;
     };
 
-    return (
+    const renderStats = () => (
         <View style={styles.container}>
+            {/* Sélecteur d'année */}
+            <View style={styles.yearSelector}>
+                {[2023, 2024, 2025].map((year) => (
+                    <TouchableOpacity
+                        key={year}
+                        style={[styles.yearButton, selectedYear === year && styles.selectedYear]}
+                        onPress={() => setSelectedYear(year)}
+                    >
+                        <Text style={[styles.yearText, selectedYear === year && styles.selectedYearText]}>
+                            {year}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
+            {/* Sélecteur d'association - NOUVEAU */}
+            <View style={styles.adminSection}>
+                <Text style={styles.sectionTitle}>Choisir une association</Text>
+
+                <TouchableOpacity
+                    style={styles.dropdownButton}
+                    onPress={() => setDropdownVisible(true)}
+                >
+                    <Text style={styles.dropdownButtonText}>{getSelectedAssociationName()}</Text>
+                    <Text style={styles.dropdownIcon}>▼</Text>
+                </TouchableOpacity>
+
+                <Modal
+                    transparent={true}
+                    visible={dropdownVisible}
+                    onRequestClose={() => setDropdownVisible(false)}
+                    animationType="fade"
+                >
+                    <TouchableOpacity
+                        style={styles.modalOverlay}
+                        activeOpacity={1}
+                        onPress={() => setDropdownVisible(false)}
+                    >
+                        <View style={styles.dropdownListContainer}>
+                            <FlatList
+                                data={[{idAssociation: 0, nom: "Toutes les associations"}, ...(association || [])]}
+                                keyExtractor={(item) => item.idAssociation+""}
+                                renderItem={({item}) => (
+                                    <TouchableOpacity
+                                        style={[
+                                            styles.dropdownItem,
+                                            item.idAssociation+"" === selectedAssociation ? styles.dropdownItemSelected : null
+                                        ]}
+                                        onPress={() => {
+                                            setSelectedAssociation(item.idAssociation+"");
+                                            setDropdownVisible(false);
+                                        }}
+                                    >
+                                        <Text style={[
+                                            styles.dropdownItemText,
+                                            item.idAssociation+"" === selectedAssociation ? styles.dropdownItemTextSelected : null
+                                        ]}>
+                                            {item.nom}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        </View>
+                    </TouchableOpacity>
+                </Modal>
+            </View>
+
+            {/* Statistiques des dons */}
+            <View style={styles.adminSection}>
+                <Text style={styles.sectionTitle}>Statistiques des dons</Text>
+                <Text>Total des dons de {selectedYear} : <Text style={styles.highlight}>{totalDons}€</Text></Text>
+                <Text>Dons récurrents actifs : <Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
+            </View>
+
+            {/* Favoris */}
+            <View style={styles.adminSection}>
+                <Text style={styles.sectionTitle}>Favoris</Text>
+                <Text>Utilisateurs ayant mis en favoris l'association : <Text style={styles.highlight}>{nbAssosFav}</Text></Text>
+            </View>
+            {/* Graphique des dons - AMÉLIORÉ */}
+            <View style={styles.chartContainer}>
+                <Text style={styles.sectionTitle}>Évolution des dons</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                    <BarChart
+                        data={{
+                            labels: labels,
+                            datasets: [
+                                {
+                                    data: data,
+                                }
+                            ]
+                        }}
+                        width={Math.max(screenWidth, 600)}
+                        height={350}
+                        yAxisSuffix="€"
+                        yAxisMax={yAxisMax}
+                        yAxisMin={0}
+                        fromZero
+                        showValuesOnTopOfBars={true}
+                        chartConfig={{
+                            backgroundColor: "#ffffff",
+                            backgroundGradientFrom: "#ffffff",
+                            backgroundGradientTo: "#ffffff",
+                            decimalPlaces: 0,
+                            color: () => "rgba(128, 0, 128, 0.8)",
+                            labelColor: () => "rgba(0, 0, 0, 0.8)",
+                            style: {
+                                borderRadius: 16,
+                            },
+                            barPercentage: 0.7,
+                            propsForLabels: {
+                                fontSize: 12,
+                                fontWeight: 'bold',
+                            },
+                            propsForBackgroundLines: {
+                                strokeDasharray: '',
+                                stroke: "rgba(0, 0, 0, 0.1)",
+                                strokeWidth: 1,
+                            },
+                        }}
+                        yLabelsOffset={10}  // Décale l'affichage des labels Y pour éviter la coupure
+                        withInnerLines={true}
+                        withHorizontalLabels={true}
+                        withVerticalLabels={true}
+                        verticalLabelRotation={0}
+                        horizontalLabelRotation={0}
+                    />
+                </ScrollView>
+
+            </View>
+
+            {/* Activités récentes */}
+            <View style={styles.adminSection}>
+                <Text style={styles.sectionTitle}>Activités récentes (inf à 30j)</Text>
+                <Text>Nouveaux dons : <Text style={styles.highlight}>{getRecentDonsCount(filteredDons)}</Text></Text>
+                <Text>Nouveaux dons récurrents : <Text style={styles.highlight}>{getRecentDonsCountReccurent(filteredDons)}</Text></Text>
+            </View>
+
+            {/* Wall of Givers - Meilleurs donateurs */}
+            <View style={styles.adminSection}>
+                <Text style={styles.sectionTitle}>🏆 Wall of Givers 🏆</Text>
+                <Text style={{marginBottom: 10}}>Meilleurs donateurs de l'application Soteria</Text>
+                {meilleursDonateurs.length > 0 ? (
+                    meilleursDonateurs.map((donateur, index) => (
+                        <View key={donateur.idUtilisateur} style={styles.donateurItem}>
+                            <Text style={styles.donateurRank}>{index + 1}.</Text>
+                            <Text style={styles.donateurName}>{donateur.pseudonyme}</Text>
+                            <Text style={styles.donateurAmount}>{donateur.totalMontant}€</Text>
+                        </View>
+                    ))
+                ) : (
+                    <Text>Aucun donateur pour l'instant.</Text>
+                )}
+            </View>
+            <BoutonDeconnexion />
+    </View>
+    );
+    const renderUsers = () => (
+        <View>
+            <Text style={styles.title}>Gestion des Utilisateurs</Text>
+            <FlatList
+                data={utilisateurs}
+                keyExtractor={(item) => item.idUtilisateur.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.listItem}>
+                        <Text>{item.pseudonyme} - {item.email}</Text>
+                        {/*<Text>Dons: {item.donations.reduce((a, b) => a + b, 0)}€</Text>*/}
+                    </View>
+                )}
+            />
+        </View>
+    );
+
+    const renderAssociations = () => (
+        <View>
+            <Text style={styles.title}>Gestion des Associations</Text>
+            <FlatList
+                data={association}
+                keyExtractor={(item) => item.idAssociation.toString()}
+                renderItem={({ item }) => (
+                    <View style={styles.listItem}>
+                        <Text>{item.nom}</Text>
+                    </View>
+                )}
+            />
+        </View>
+    );
+
+    return (
+        <View style={styles.container2}>
             <Header />
             <ScrollView
                 ref={scrollViewRef}
-                contentContainerStyle={styles.scrollViewContent}
-            >
+                contentContainerStyle={styles.scrollViewContent}>
                 <Text style={styles.welcomeTitle}>Bonjour, Admin {user.pseudonyme}</Text>
-                <Text style={styles.welcomeTitle2}>Administrateur de l'application </Text>
-
-
-                {/* Sélecteur d'année */}
-                <View style={styles.yearSelector}>
-                    {[2023, 2024, 2025].map((year) => (
-                        <TouchableOpacity
-                            key={year}
-                            style={[styles.yearButton, selectedYear === year && styles.selectedYear]}
-                            onPress={() => setSelectedYear(year)}
-                        >
-                            <Text style={[styles.yearText, selectedYear === year && styles.selectedYearText]}>
-                                {year}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-                {/* Sélecteur d'association - NOUVEAU */}
-                <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>Choisir une association</Text>
-
-                    <TouchableOpacity
-                        style={styles.dropdownButton}
-                        onPress={() => setDropdownVisible(true)}
-                    >
-                        <Text style={styles.dropdownButtonText}>{getSelectedAssociationName()}</Text>
-                        <Text style={styles.dropdownIcon}>▼</Text>
-                    </TouchableOpacity>
-
-                    <Modal
-                        transparent={true}
-                        visible={dropdownVisible}
-                        onRequestClose={() => setDropdownVisible(false)}
-                        animationType="fade"
-                    >
-                        <TouchableOpacity
-                            style={styles.modalOverlay}
-                            activeOpacity={1}
-                            onPress={() => setDropdownVisible(false)}
-                        >
-                            <View style={styles.dropdownListContainer}>
-                                <FlatList
-                                    data={[{idAssociation: 0, nom: "Toutes les associations"}, ...(association || [])]}
-                                    keyExtractor={(item) => item.idAssociation+""}
-                                    renderItem={({item}) => (
-                                        <TouchableOpacity
-                                            style={[
-                                                styles.dropdownItem,
-                                                item.idAssociation+"" === selectedAssociation ? styles.dropdownItemSelected : null
-                                            ]}
-                                            onPress={() => {
-                                                setSelectedAssociation(item.idAssociation+"");
-                                                setDropdownVisible(false);
-                                            }}
-                                        >
-                                            <Text style={[
-                                                styles.dropdownItemText,
-                                                item.idAssociation+"" === selectedAssociation ? styles.dropdownItemTextSelected : null
-                                            ]}>
-                                                {item.nom}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    )}
-                                />
-                            </View>
-                        </TouchableOpacity>
-                    </Modal>
-                </View>
-
-                {/* Statistiques des dons */}
-                <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>Statistiques des dons</Text>
-                    <Text>Total des dons de {selectedYear} : <Text style={styles.highlight}>{totalDons}€</Text></Text>
-                    <Text>Dons récurrents actifs : <Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
-                </View>
-
-                {/* Favoris */}
-                <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>Favoris</Text>
-                    <Text>Utilisateurs ayant mis en favoris l'association : <Text style={styles.highlight}>{nbAssosFav}</Text></Text>
-                </View>
-                {/* Graphique des dons - AMÉLIORÉ */}
-                <View style={styles.chartContainer}>
-                    <Text style={styles.sectionTitle}>Évolution des dons</Text>
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                        <BarChart
-                            data={{
-                                labels: labels,
-                                datasets: [
-                                    {
-                                        data: data,
-                                    }
-                                ]
-                            }}
-                            width={Math.max(screenWidth, 600)}
-                            height={350}
-                            yAxisSuffix="€"
-                            yAxisMax={yAxisMax}
-                            yAxisMin={0}
-                            fromZero
-                            showValuesOnTopOfBars={true}
-                            chartConfig={{
-                                backgroundColor: "#ffffff",
-                                backgroundGradientFrom: "#ffffff",
-                                backgroundGradientTo: "#ffffff",
-                                decimalPlaces: 0,
-                                color: () => "rgba(128, 0, 128, 0.8)",
-                                labelColor: () => "rgba(0, 0, 0, 0.8)",
-                                style: {
-                                    borderRadius: 16,
-                                },
-                                barPercentage: 0.7,
-                                propsForLabels: {
-                                    fontSize: 12,
-                                    fontWeight: 'bold',
-                                },
-                                propsForBackgroundLines: {
-                                    strokeDasharray: '',
-                                    stroke: "rgba(0, 0, 0, 0.1)",
-                                    strokeWidth: 1,
-                                },
-                            }}
-                            yLabelsOffset={10}  // Décale l'affichage des labels Y pour éviter la coupure
-                            withInnerLines={true}
-                            withHorizontalLabels={true}
-                            withVerticalLabels={true}
-                            verticalLabelRotation={0}
-                            horizontalLabelRotation={0}
-                        />
-                    </ScrollView>
-
-                </View>
-
-                {/* Activités récentes */}
-                <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>Activités récentes (inf à 30j)</Text>
-                    <Text>Nouveaux dons : <Text style={styles.highlight}>{getRecentDonsCount(filteredDons)}</Text></Text>
-                    <Text>Nouveaux dons récurrents : <Text style={styles.highlight}>{getRecentDonsCountReccurent(filteredDons)}</Text></Text>
-                </View>
-
-                {/* Wall of Givers - Meilleurs donateurs */}
-                <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>🏆 Wall of Givers 🏆</Text>
-                    <Text style={{marginBottom: 10}}>Meilleurs donateurs de l'application Soteria</Text>
-                    {meilleursDonateurs.length > 0 ? (
-                        meilleursDonateurs.map((donateur, index) => (
-                            <View key={donateur.idUtilisateur} style={styles.donateurItem}>
-                                <Text style={styles.donateurRank}>{index + 1}.</Text>
-                                <Text style={styles.donateurName}>{donateur.pseudonyme}</Text>
-                                <Text style={styles.donateurAmount}>{donateur.totalMontant}€</Text>
-                            </View>
-                        ))
-                    ) : (
-                        <Text>Aucun donateur pour l'instant.</Text>
-                    )}
-                </View>
-                <BoutonDeconnexion />
+                <Text style={styles.welcomeTitle2}>Administrateur de l'application </Text>            <View style={styles.tabs}>
+                <TouchableOpacity onPress={() => setActiveTab('stats')} style={styles.tabButton}><Text>Stats</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => setActiveTab('users')} style={styles.tabButton}><Text>Utilisateurs</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => setActiveTab('associations')} style={styles.tabButton}><Text>Associations</Text></TouchableOpacity>
+            </View>
+            {activeTab === 'stats' && renderStats()}
+            {activeTab === 'users' && renderUsers()}
+            {activeTab === 'associations' && renderAssociations()}
             </ScrollView>
         </View>
     );
@@ -618,4 +676,9 @@ const styles = StyleSheet.create({
         color: 'purple',
         fontWeight: 'bold',
     },
+    tabs: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20 },
+    tabButton: { padding: 10, backgroundColor: '#ddd', borderRadius: 5 },
+    title: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+    listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc'},
+    container2: {backgroundColor: Colors.light.background},
 });
