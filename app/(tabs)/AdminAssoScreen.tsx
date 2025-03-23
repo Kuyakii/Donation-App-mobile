@@ -6,20 +6,22 @@ import {
     ScrollView,
     TouchableOpacity,
     ActivityIndicator,
-    Dimensions
+    Dimensions, Image
 } from 'react-native';
 import Header from '../../components/header';
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
 import Colors from "@/constants/Colors";
 import { IDon } from "@/backend/interfaces/IDon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { BASE_URL } from "@/config";
+import {BASE_URL, images} from "@/config";
 import { BarChart } from "react-native-chart-kit";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
+import {IAssociation} from "@/backend/interfaces/IAssociation";
 
 export default function AdminAssoScreen() {
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<IUtilisateur | null>(null);
+    const [association, setAssociation] = useState<IAssociation | null>(null);
     const [donsAssos, setDonsAssos] = useState<IDon[]>([]);
     const [donsRecurentsAssos, setDonsRecurentsAssos] = useState<IDon[]>([]);
     const [meilleursDonateurs, setMeilleursDonateurs] = useState<{ idUtilisateur: number, pseudonyme: string, totalMontant: number }[]>([]);
@@ -44,6 +46,23 @@ export default function AdminAssoScreen() {
 
         loadUser();
     }, []);
+
+    useEffect(() => {
+        const getAssociation = async () => {
+            if (!user) return;
+
+            try {
+                const response = await fetch(`${BASE_URL}/associationsByMail/${user.email}`);
+                const data = await response.json();
+                setAssociation(data);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des dons de l\'association', error);
+            }
+        };
+        if (user) {
+            getAssociation();
+        }
+    }, [user]);
 
     useEffect(() => {
         const fetchDonsAssos = async () => {
@@ -171,7 +190,16 @@ export default function AdminAssoScreen() {
                 ref={scrollViewRef}
                 contentContainerStyle={styles.scrollViewContent}
             >
-                <Text style={styles.welcomeTitle}>Bonjour, Admin</Text>
+                <Text style={styles.welcomeTitle}>Bonjour, Admin, administrateur de l'association </Text>
+                {/* Association Card */}
+                <View style={styles.assoCard}>
+                    <Image
+                        style={styles.associationImage}
+                        // @ts-ignore
+                        source={images[association.nomImage]} // Charge l'image dynamique
+                    />
+                    <Text style={styles.assoName}>{association.nom}</Text>
+                </View>
 
                 {/* Sélecteur d'année */}
                 <View style={styles.yearSelector}>
@@ -263,7 +291,7 @@ export default function AdminAssoScreen() {
                 {/* Wall of Givers - Meilleurs donateurs */}
                 <View style={styles.adminSection}>
                     <Text style={styles.sectionTitle}>🏆 Wall of Givers 🏆</Text>
-                    <Text style={{marginBottom: 10}}>Meilleurs donateurs de </Text>
+                    <Text style={{marginBottom: 10}}>Meilleurs donateurs de : {association?.nom}</Text>
                     {meilleursDonateurs.length > 0 ? (
                         meilleursDonateurs.map((donateur, index) => (
                             <View key={donateur.idUtilisateur} style={styles.donateurItem}>
@@ -401,5 +429,26 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         color: "purple",
+    },
+    assoCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#F3D9FF',
+        padding: 15,
+        borderRadius: 10,
+        marginBottom: 20,
+    },
+    assoImage: {
+        width: 80,
+        height: 80,
+        backgroundColor: '#DDD',
+        marginRight: 15,
+    },
+    assoName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        flex: 1,
+        flexShrink: 1,
+        flexWrap: 'wrap',
     },
 });

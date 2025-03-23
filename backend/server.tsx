@@ -50,6 +50,21 @@ app.get('/associations/:id', async (req: Request, res: Response) => {
     }
 });
 
+app.get('/associationsByMail/:email', async (req: Request, res: Response) => {
+    const { email } = req.params;
+    try {
+        const association = await associationRepository.findByAdmin(email);
+        if (association) {
+            res.json(association);
+        } else {
+            res.status(404).send('Association non trouvée');
+        }
+    } catch (error) {
+        console.error('Erreur lors de la récupération de l\'association', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 app.post('/associations', async (req: Request, res: Response) => {
     const { nom, description,descriptionCourte,nomImage, localisation, idType } = req.body;
     try {

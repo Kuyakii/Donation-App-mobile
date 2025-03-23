@@ -118,4 +118,15 @@ export class AssociationRepository {
         }
     }
 
+    // Récupérer une association par le mail de son admin
+    async findByAdmin(email: string): Promise<IAssociation | undefined> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query('SELECT a.idAssociation, a.nom, a.description, a.descriptionCourte, a.nomImage, a.localisation, a.idType FROM Association a inner join Admin_association aa on a.idAssociation = aa.idAssociation inner join utilisateur u on u.idUtilisateur = aa.idUtilisateur WHERE u.email = ?', [email]);
+            return (rows as IAssociation[])[0];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
+
 }
