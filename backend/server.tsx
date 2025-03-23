@@ -265,6 +265,17 @@ app.get('/getAssosFavorites/:email', async (req: Request, res: Response) => {
     }
 });
 
+app.get('/getMeilleurDonateur/:email', async (req: Request, res: Response) => {
+    const { email } = req.params;
+    try {
+        const dons = await donsRepo.getMeilleurDonateur(email);
+        res.json(dons);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des meilleurs donateurs', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
     console.log(`Serveur backend en écoute sur http://localhost:${port}`);

@@ -22,6 +22,7 @@ export default function AdminAssoScreen() {
     const [user, setUser] = useState<IUtilisateur | null>(null);
     const [donsAssos, setDonsAssos] = useState<IDon[]>([]);
     const [donsRecurentsAssos, setDonsRecurentsAssos] = useState<IDon[]>([]);
+    const [meilleursDonateurs, setMeilleursDonateurs] = useState<{ idUtilisateur: number, pseudonyme: string, totalMontant: number }[]>([]);
     const [nbAssosFav, setnbAssosFav] = useState<number>();
     const [selectedYear, setSelectedYear] = useState(2025);
     const scrollViewRef = useRef<ScrollView>(null);
@@ -97,6 +98,23 @@ export default function AdminAssoScreen() {
         }
     }, [user]);
 
+    useEffect(() => {
+        const fetchMeilleursDonateurs = async () => {
+            if (!user) return;
+
+            try {
+                const response = await fetch(`${BASE_URL}/getMeilleurDonateur/${user.email}`);
+                const data = await response.json();
+                setMeilleursDonateurs(data);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des meilleurs donateurs', error);
+            }
+        };
+        if (user) {
+            fetchMeilleursDonateurs();
+        }
+    }, [user]);
+
     if (isLoading || !user) {
         return (
             <View style={styles.loadingContainer}>
@@ -136,6 +154,14 @@ export default function AdminAssoScreen() {
             return `${(value / 1000).toFixed(0)}k€`;
         }
         return `${value}€`;
+    };
+
+    const getRecentDonsCount = (dons: IDon[]) => {
+        const today = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+
+        return dons.filter(don => new Date(don.dateDon) >= thirtyDaysAgo).length;
     };
 
     return (
@@ -230,14 +256,33 @@ export default function AdminAssoScreen() {
                 {/* Activités récentes */}
                 <View style={styles.adminSection}>
                     <Text style={styles.sectionTitle}>Activités récentes (inf à 30j)</Text>
-                    <Text>Nouveaux dons : 5</Text>
-                    <Text>Nouveaux dons récurrents : 1</Text>
-                    <Text>Nouveaux favoris : 0</Text>
+                    <Text>Nouveaux dons : {getRecentDonsCount(donsAssos)}</Text>
+                    <Text>Nouveaux dons récurrents : {getRecentDonsCount(donsRecurentsAssos)}</Text>
                 </View>
+
+                {/* Wall of Givers - Meilleurs donateurs */}
+                <View style={styles.adminSection}>
+                    <Text style={styles.sectionTitle}>🏆 Wall of Givers 🏆</Text>
+                    <Text style={{marginBottom: 10}}>Meilleurs donateurs de </Text>
+                    {meilleursDonateurs.length > 0 ? (
+                        meilleursDonateurs.map((donateur, index) => (
+                            <View key={donateur.idUtilisateur} style={styles.donateurItem}>
+                                <Text style={styles.donateurRank}>{index + 1}.</Text>
+                                <Text style={styles.donateurName}>{donateur.pseudonyme}</Text>
+                                <Text style={styles.donateurAmount}>{donateur.totalMontant}€</Text>
+                            </View>
+                        ))
+                    ) : (
+                        <Text>Aucun donateur pour l'instant.</Text>
+                    )}
+                </View>
+
                 {/* Bouton de modification */}
                 <TouchableOpacity style={styles.adminButton}>
                     <Text style={styles.adminButtonText}>Modifier ma page association</Text>
                 </TouchableOpacity>
+
+
 
                 <BoutonDeconnexion />
             </ScrollView>
@@ -325,5 +370,36 @@ const styles = StyleSheet.create({
     propsForLabels: {
         fontSize: 12, // Réduit de 14 à 12
         fontWeight: 'bold',
+    },
+    donateurItem: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        backgroundColor: "#fff",
+        padding: 12,
+        borderRadius: 8,
+        marginVertical: 5,
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 5,
+        elevation: 3,
+    },
+    donateurRank: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "gold",
+        width: 30,
+    },
+    donateurName: {
+        fontSize: 16,
+        fontWeight: "600",
+        flex: 1,
+        textAlign: "left",
+    },
+    donateurAmount: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "purple",
     },
 });
