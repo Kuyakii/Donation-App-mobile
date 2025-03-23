@@ -60,7 +60,7 @@ export default function AdminAssoScreen() {
             }
         };
         if (user) {
-            getAssociation();
+                getAssociation();
         }
     }, [user]);
 
@@ -191,15 +191,26 @@ export default function AdminAssoScreen() {
                 contentContainerStyle={styles.scrollViewContent}
             >
                 <Text style={styles.welcomeTitle}>Bonjour, Admin, administrateur de l'association </Text>
-                {/* Association Card */}
+                {/* Association Card*/}
                 <View style={styles.assoCard}>
-                    <Image
-                        style={styles.associationImage}
-                        // @ts-ignore
-                        source={images[association.nomImage]} // Charge l'image dynamique
-                    />
-                    <Text style={styles.assoName}>{association.nom}</Text>
+                    {association ? (
+                        <>
+                            <Image
+                                style={styles.assoImage}
+                                // @ts-ignore
+                                source={images[association.nomImage]}
+                            />
+                            <Text style={styles.assoName}>{association.nom}</Text>
+                        </>
+                    ) : (
+                        <Text>Chargement des informations de l'association...</Text>
+                    )}
                 </View>
+
+                {/* Bouton de modification */}
+                <TouchableOpacity style={styles.adminButton}>
+                    <Text style={styles.adminButtonText}>Modifier ma page association</Text>
+                </TouchableOpacity>
 
                 {/* Sélecteur d'année */}
                 <View style={styles.yearSelector}>
@@ -304,14 +315,6 @@ export default function AdminAssoScreen() {
                         <Text>Aucun donateur pour l'instant.</Text>
                     )}
                 </View>
-
-                {/* Bouton de modification */}
-                <TouchableOpacity style={styles.adminButton}>
-                    <Text style={styles.adminButtonText}>Modifier ma page association</Text>
-                </TouchableOpacity>
-
-
-
                 <BoutonDeconnexion />
             </ScrollView>
         </View>
@@ -386,9 +389,10 @@ const styles = StyleSheet.create({
     adminButton: {
         backgroundColor: "purple",
         padding: 15,
-        borderRadius: 5,
+        borderRadius: 10,
         alignItems: "center",
         marginVertical: 10,
+        marginBottom: 30,
     },
     adminButtonText: {
         color: "white",
@@ -441,7 +445,6 @@ const styles = StyleSheet.create({
     assoImage: {
         width: 80,
         height: 80,
-        backgroundColor: '#DDD',
         marginRight: 15,
     },
     assoName: {
