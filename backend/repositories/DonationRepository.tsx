@@ -69,4 +69,16 @@ export class DonationRepository {
             connection.release(); // Libérer la connexion
         }
     }
+
+    async geDonRecurrentByAssos(idAssos:string): Promise<IDon[]> {
+        let id = Number(idAssos);
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query("select * from v_dons vd where vd.typeDon COLLATE utf8mb4_unicode_ci = 'RECURRENT' and vd.idAssociation = ?", [id]);
+            return rows as IDon[];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
+
 }

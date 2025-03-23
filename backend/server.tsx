@@ -243,6 +243,17 @@ app.get('/getDonsAdmin/:email', async (req: Request, res: Response) => {
     }
 });
 
+app.get('/getDonsRecurrent/:idAsso', async (req: Request, res: Response) => {
+    const { idAsso } = req.params;
+    try {
+        const dons = await donsRepo.geDonRecurrentByAssos(idAsso);
+        res.json(dons);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des dons récurrents', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
     console.log(`Serveur backend en écoute sur http://localhost:${port}`);
