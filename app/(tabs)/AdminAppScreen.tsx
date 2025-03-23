@@ -18,12 +18,12 @@ import { BarChart } from "react-native-chart-kit";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
 
-export default function AdminAssoScreen() {
+export default function AdminAppScreen() {
     const { height: screenHeight } = Dimensions.get('window');
 
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<IUtilisateur | null>(null);
-    const [association, setAssociation] = useState<IAssociation | null>(null);
+    const [association, setAssociation] = useState<IAssociation[] | null>(null);
     const [donsAssos, setDonsAssos] = useState<IDon[]>([]);
     const [donsRecurentsAssos, setDonsRecurentsAssos] = useState<IDon[]>([]);
     const [meilleursDonateurs, setMeilleursDonateurs] = useState<{ idUtilisateur: number, pseudonyme: string, totalMontant: number }[]>([]);
@@ -31,12 +31,6 @@ export default function AdminAssoScreen() {
     const [selectedYear, setSelectedYear] = useState(2025);
     const scrollViewRef = useRef<ScrollView>(null);
 
-    // States pour la modal d'édition
-    const [modalVisible, setModalVisible] = useState(false);
-    const [editedNom, setEditedNom] = useState('');
-    const [editedDescription, setEditedDescription] = useState('');
-    const [editedDescriptionCourte, setEditedDescriptionCourte] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const loadUser = async () => {
@@ -61,21 +55,15 @@ export default function AdminAssoScreen() {
             if (!user) return;
 
             try {
-                const response = await fetch(`${BASE_URL}/associationsByMail/${user.email}`);
+                const response = await fetch(`${BASE_URL}/associations`);
                 const data = await response.json();
                 setAssociation(data);
-
-                if (data) {
-                    setEditedNom(data.nom);
-                    setEditedDescription(data.description);
-                    setEditedDescriptionCourte(data.descriptionCourte);
-                }
             } catch (error) {
-                console.error('Erreur lors de la récupération des dons de l\'association', error);
+                console.error('Erreur lors de la récupération des associations', error);
             }
         };
         if (user) {
-                getAssociation();
+            getAssociation();
         }
     }, [user]);
 
@@ -84,11 +72,11 @@ export default function AdminAssoScreen() {
             if (!user) return;
 
             try {
-                const response = await fetch(`${BASE_URL}/getDonsAdmin/${user.email}`);
+                const response = await fetch(`${BASE_URL}/getDons`);
                 const data = await response.json();
                 setDonsAssos(data);
             } catch (error) {
-                console.error('Erreur lors de la récupération des dons de l\'association', error);
+                console.error('Erreur lors de la récupération des dons des associations', error);
             }
         };
 
@@ -98,46 +86,11 @@ export default function AdminAssoScreen() {
     }, [user]);
 
     useEffect(() => {
-        const fetchDonsAssosRecurents = async () => {
-            if (!user) return;
-
-            try {
-                const response = await fetch(`${BASE_URL}/getDonsRecurrent/${user.email}`);
-                const data = await response.json();
-                setDonsRecurentsAssos(data);
-            } catch (error) {
-                console.error('Erreur lors de la récupération des dons récurrents de l\'association', error);
-            }
-        };
-
-        if (user) {
-            fetchDonsAssosRecurents();
-        }
-    }, [user]);
-    useEffect(() => {
-        const fetchNbAssosFav = async () => {
-            if (!user) return;
-
-            try {
-                const response = await fetch(`${BASE_URL}/getAssosFavorites/${user.email}`);
-                const data = await response.json();
-                setnbAssosFav(data);
-            } catch (error) {
-                console.error('Erreur lors de la récupération du nombre d\'associations fav', error);
-            }
-        };
-
-        if (user) {
-            fetchNbAssosFav();
-        }
-    }, [user]);
-
-    useEffect(() => {
         const fetchMeilleursDonateurs = async () => {
             if (!user) return;
 
             try {
-                const response = await fetch(`${BASE_URL}/getMeilleurDonateur/${user.email}`);
+                const response = await fetch(`${BASE_URL}/getMeilleursDonateurs`);
                 const data = await response.json();
                 setMeilleursDonateurs(data);
             } catch (error) {
@@ -198,43 +151,6 @@ export default function AdminAssoScreen() {
         return dons.filter(don => new Date(don.dateDon) >= thirtyDaysAgo).length;
     };
 
-    const handleUpdateAssociation = async () => {
-        if (!association) return;
-
-        setIsSubmitting(true);
-
-        try {
-            const updatedAssociation = {
-                ...association,
-                nom: editedNom,
-                description: editedDescription,
-                descriptionCourte: editedDescriptionCourte
-            };
-
-            const response = await fetch(`${BASE_URL}/updateAssociation/${association.idAssociation}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedAssociation),
-            });
-
-            if (response.ok) {
-                // Mettre à jour l'état local avec les nouvelles valeurs
-                setAssociation(updatedAssociation);
-                setModalVisible(false);
-                Alert.alert('Succès', 'Informations de l\'association mises à jour avec succès');
-            } else {
-                Alert.alert('Erreur', 'Impossible de mettre à jour les informations');
-            }
-        } catch (error) {
-            console.error('Erreur lors de la mise à jour des informations:', error);
-            Alert.alert('Erreur', 'Une erreur est survenue lors de la mise à jour');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
     return (
         <View style={styles.container}>
             <Header />
@@ -243,106 +159,7 @@ export default function AdminAssoScreen() {
                 contentContainerStyle={styles.scrollViewContent}
             >
                 <Text style={styles.welcomeTitle}>Bonjour, Admin {user.pseudonyme}</Text>
-                <Text style={styles.welcomeTitle2}>Administrateur de l'association </Text>
-                {/* Association Card*/}
-                <View style={styles.assoCard}>
-                    {association ? (
-                        <>
-                            <Image
-                                style={styles.assoImage}
-                                // @ts-ignore
-                                source={images[association.nomImage]}
-                            />
-                            <Text style={styles.assoName}>{association.nom}</Text>
-                        </>
-                    ) : (
-                        <Text>Chargement des informations de l'association...</Text>
-                    )}
-                </View>
-
-                {/* Bouton de modification */}
-                <TouchableOpacity
-                    style={styles.adminButton}
-                    onPress={() => setModalVisible(true)}
-                >
-                    <Text style={styles.adminButtonText}>Modifier ma page association</Text>
-                </TouchableOpacity>
-
-                {/* Modal d'édition */}
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => setModalVisible(false)}
-                >
-                    <View style={styles.centeredView}>
-                        <KeyboardAvoidingView
-                            behavior={Platform.OS === "ios" ? "padding" : "height"}
-                            style={styles.keyboardAvoidingView}
-                        >
-                            <View style={[styles.modalView, { maxHeight: screenHeight * 0.8 }]}>
-                                <Text style={styles.modalTitle}>Modifier les informations</Text>
-
-                                <ScrollView style={styles.modalScrollView} contentContainerStyle={styles.modalScrollViewContent}>
-                                    <View style={styles.inputContainer}>
-                                        <Text style={styles.label}>Nom</Text>
-                                        <TextInput
-                                            style={styles.input}
-                                            value={editedNom}
-                                            onChangeText={setEditedNom}
-                                            placeholder="Nom de l'association"
-                                        />
-                                    </View>
-
-                                    <View style={styles.inputContainer}>
-                                        <Text style={styles.label}>Description</Text>
-                                        <TextInput
-                                            style={[styles.input, styles.textArea]}
-                                            value={editedDescription}
-                                            onChangeText={setEditedDescription}
-                                            placeholder="Description détaillée"
-                                            multiline={true}
-                                            numberOfLines={4}
-                                        />
-                                    </View>
-
-                                    <View style={styles.inputContainer}>
-                                        <Text style={styles.label}>Description courte</Text>
-                                        <TextInput
-                                            style={[styles.input, styles.textArea]}
-                                            value={editedDescriptionCourte}
-                                            onChangeText={setEditedDescriptionCourte}
-                                            placeholder="Description courte"
-                                            multiline={true}
-                                            numberOfLines={2}
-                                        />
-                                    </View>
-                                </ScrollView>
-
-                                <View style={styles.modalButtons}>
-                                    <TouchableOpacity
-                                        style={[styles.button, styles.buttonCancel]}
-                                        onPress={() => setModalVisible(false)}
-                                        disabled={isSubmitting}
-                                    >
-                                        <Text style={styles.buttonCancelText}>Annuler</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={[styles.button, styles.buttonSave]}
-                                        onPress={handleUpdateAssociation}
-                                        disabled={isSubmitting}
-                                    >
-                                        {isSubmitting ? (
-                                            <ActivityIndicator size="small" color="white" />
-                                        ) : (
-                                            <Text style={styles.buttonText}>Enregistrer</Text>
-                                        )}
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </KeyboardAvoidingView>
-                    </View>
-                </Modal>
+                <Text style={styles.welcomeTitle2}>Administrateur de l'application </Text>
 
                 {/* Sélecteur d'année */}
                 <View style={styles.yearSelector}>
@@ -404,7 +221,7 @@ export default function AdminAssoScreen() {
                                 },
                                 barPercentage: 0.7,
                                 propsForLabels: {
-                                    fontSize: 14,
+                                    fontSize: 12,
                                     fontWeight: 'bold',
                                 },
                                 propsForBackgroundLines: {
@@ -413,7 +230,7 @@ export default function AdminAssoScreen() {
                                     strokeWidth: 1,
                                 },
                             }}
-                            yLabelsOffset={20}  // Décale l'affichage des labels Y pour éviter la coupure
+                            yLabelsOffset={10}  // Décale l'affichage des labels Y pour éviter la coupure
                             withInnerLines={true}
                             withHorizontalLabels={true}
                             withVerticalLabels={true}
@@ -434,7 +251,7 @@ export default function AdminAssoScreen() {
                 {/* Wall of Givers - Meilleurs donateurs */}
                 <View style={styles.adminSection}>
                     <Text style={styles.sectionTitle}>🏆 Wall of Givers 🏆</Text>
-                    <Text style={{marginBottom: 10}}>Meilleurs donateurs de : {association?.nom}</Text>
+                    <Text style={{marginBottom: 10}}>Meilleurs donateurs de l'application Soteria</Text>
                     {meilleursDonateurs.length > 0 ? (
                         meilleursDonateurs.map((donateur, index) => (
                             <View key={donateur.idUtilisateur} style={styles.donateurItem}>
@@ -469,11 +286,10 @@ const styles = StyleSheet.create({
     welcomeTitle: {
         fontSize: 22,
         fontWeight: 'bold',
-        marginBottom: 10,
-        flexWrap: "nowrap",
+        marginBottom: 10
     },
     welcomeTitle2: {
-    fontSize: 18,
+        fontSize: 18,
         marginBottom: 10
     },
     adminSection: {
@@ -660,19 +476,19 @@ const styles = StyleSheet.create({
     },
 
     buttonCancel: {
-    backgroundColor: '#f3f3f3',
-},
-buttonCancelText: {
-    fontWeight: 'bold',
+        backgroundColor: '#f3f3f3',
+    },
+    buttonCancelText: {
+        fontWeight: 'bold',
         fontSize: 16,
         color: '#333',
-},
-buttonSave: {
-    backgroundColor: 'purple',
-},
-buttonText: {
-    fontWeight: 'bold',
+    },
+    buttonSave: {
+        backgroundColor: 'purple',
+    },
+    buttonText: {
+        fontWeight: 'bold',
         fontSize: 16,
         color: 'white',
-},
+    },
 });

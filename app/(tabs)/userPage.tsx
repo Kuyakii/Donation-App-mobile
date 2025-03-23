@@ -65,6 +65,12 @@ export default function UserProfileScreen() {
                             screen : 'AdminAssoScreen'
                         });
                         return;
+                    } else if(roles.toString().includes('ADMIN_APP')){
+                        // @ts-ignore
+                        navigation.replace('(tabs)',{
+                            screen : 'AdminAppScreen'
+                        });
+                        return;
                     }
                 }
             } catch (error) {
