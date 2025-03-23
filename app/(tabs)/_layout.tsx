@@ -1,10 +1,9 @@
 import React from 'react';
-import { Tabs } from 'expo-router';
+import { Tabs, usePathname } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import {Image, StyleSheet} from "react-native";
-import {images} from "@/config";
+import { Image, StyleSheet } from "react-native";
+import { images } from "@/config";
 
 // Fonction pour générer les icônes de la barre de navigation
 // @ts-ignore
@@ -13,29 +12,32 @@ function TabBarIcon({ name, color }) {
 }
 
 export default function TabLayout() {
+    const pathname = usePathname();
+
+    // Déterminer si nous sommes sur la page admin
+    const isAdminRoute = pathname.includes('AdminAssoScreen');
 
     return (
         <Tabs
             screenOptions={{
-                headerShown : false,
+                headerShown: false,
                 tabBarActiveTintColor: Colors.primary_dark.background,
                 tabBarInactiveTintColor: 'gray',
                 tabBarStyle: {
                     backgroundColor: '#f2f2f2',
                     height: 60,
                     paddingTop: 10,
-                    marginBottom: 10, // Ajoute un espace en bas
-                    marginHorizontal: 20, // Optionnel: crée un effet "flottant" horizontal
-                    borderRadius: 16, // Optionnel: arrondit les coins pour un effet flottant
-                    position: 'absolute', // Rend la barre flottante
-                    bottom: 10, // Position par rapport au bas
+                    marginBottom: 10,
+                    marginHorizontal: 20,
+                    borderRadius: 16,
+                    position: 'absolute',
+                    bottom: 10,
                     left: 0,
                     right: 0,
                     shadowOpacity: 0.25,
                     shadowRadius: 3.84,
                     elevation: 5,
                 },
-                // S'assurer que le contenu de l'écran n'est pas caché par la barre
                 tabBarItemStyle: {
                     paddingBottom: 5,
                 },
@@ -59,8 +61,7 @@ export default function TabLayout() {
                 name="index"
                 options={{
                     title: '',
-                    tabBarIcon: ({ color }) => <Image  style={styles.logoImage}
-                                                       source={images["logo-petit.png"]}/>,
+                    tabBarIcon: ({ color }) => <Image style={styles.logoImage} source={images["logo-petit.png"]}/>,
                 }}
             />
             <Tabs.Screen
@@ -74,11 +75,11 @@ export default function TabLayout() {
                 name="userPage"
                 options={{
                     title: '',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={isAdminRoute ? Colors.primary_dark.background : color} />,
                 }}
             />
             <Tabs.Screen
-            name="AdminAssoScreen"
+                name="AdminAssoScreen"
                 options={{
                     title: '',
                     href: null,
@@ -86,14 +87,13 @@ export default function TabLayout() {
             />
         </Tabs>
     );
-
 }
+
 const styles = StyleSheet.create({
     logoImage: {
         width: 80,
         height: 40,
         margin: 12,
-        resizeMode: 'contain', // Ajuste l'image
-
+        resizeMode: 'contain',
     }
 });
