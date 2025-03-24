@@ -22,6 +22,7 @@ import {IAssociation} from "@/backend/interfaces/IAssociation";
 import AssociationItem from "@/components/AssociationItem";
 import {useRouter} from "expo-router";
 import {useNavigation} from "@react-navigation/native";
+import { EditAssociationModal } from '@/components/EditAssociationModal';
 
 export default function AdminAppScreen() {
     const router = useRouter();
@@ -38,7 +39,8 @@ export default function AdminAppScreen() {
     const scrollViewRef = useRef<ScrollView>(null);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [activeTab, setActiveTab] = useState('stats');
-
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+    const [selectedAssociationForEdit, setSelectedAssociationForEdit] = useState<IAssociation | null>(null);
 
     useEffect(() => {
         const loadUser = async () => {
@@ -388,6 +390,41 @@ export default function AdminAppScreen() {
 
 </View>
     );
+    const handleEditAssociation = (association: IAssociation) => {
+        setSelectedAssociationForEdit(association);
+        setIsEditModalVisible(true);
+    };
+
+    const handleSaveAssociation = async (updatedAssociation: Partial<IAssociation>) => {
+        try {
+            const response = await fetch(`${BASE_URL}/updateAssociation/${updatedAssociation.idAssociation}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedAssociation)
+            });
+
+            if (!response.ok) {
+                throw new Error('Erreur lors de la mise à jour de l\'association');
+            }
+
+            // Mettre à jour la liste des associations
+            setAssociation(prevAssociations =>
+                prevAssociations.map(asso =>
+                    asso.idAssociation === updatedAssociation.idAssociation
+                        ? { ...asso, ...updatedAssociation }
+                        : asso
+                )
+            );
+
+            Alert.alert("Succès", "L'association a été mise à jour avec succès");
+        } catch (error) {
+            console.error('Erreur de mise à jour:', error);
+            Alert.alert("Erreur", "Impossible de mettre à jour l'association");
+        }
+    };
 
 
     const handleDeleteAssociation = (id: number) => {
@@ -443,14 +480,7 @@ export default function AdminAppScreen() {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <Text style={styles.title}>Gestion des Associations</Text>
-                <TouchableOpacity
-                    style={styles.addButton}
-                    onPress={() => handleAjouterAssociation()}
-                >
-                    <Text style={styles.addButtonText}>+ Ajouter</Text>
-                </TouchableOpacity>
             </View>
-
             {association.map((asso: IAssociation) => (
                 <View key={asso.idAssociation} style={styles.associationCard}>
                     <TouchableOpacity
@@ -480,15 +510,31 @@ export default function AdminAppScreen() {
                             </View>
                         </View>
                     </TouchableOpacity>
+                    <View style={styles.associationActions}>
 
                     <TouchableOpacity
-                        style={styles.deleteButton}
+                        style={[styles.actionButton, styles.editButton]}
+                        onPress={() => handleEditAssociation(asso)}
+                    >
+                        <Text style={styles.actionButtonText}>Modifier</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={[styles.actionButton, styles.deleteButton]}
                         onPress={() => handleDeleteAssociation(asso.idAssociation)}
                     >
-                        <Text style={styles.deleteButtonText}>Supprimer</Text>
+                        <Text style={styles.actionButtonText}>Supprimer</Text>
                     </TouchableOpacity>
                 </View>
+                </View>
             ))}
+            <EditAssociationModal
+                isVisible={isEditModalVisible}
+                association={selectedAssociationForEdit}
+                utilisateurs={utilisateurs}
+                onClose={() => setIsEditModalVisible(false)}
+                onSave={handleSaveAssociation}
+            />
         </View>
     );
 
@@ -855,5 +901,26 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 16,
+    },
+    associationActions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        borderTopWidth: 1,
+        borderTopColor: '#f0f0f0',
+    },
+    actionButton: {
+        flex: 1,
+        padding: 12,
+        alignItems: 'center',
+    },
+    editButton: {
+        backgroundColor: '#4CAF50',
+    },
+    deleteButton: {
+        backgroundColor: '#f44336',
+    },
+    actionButtonText: {
+        color: 'white',
+        fontWeight: '500',
     },
 });
