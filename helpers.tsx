@@ -100,6 +100,39 @@ export const getAssociation = async (idAssociation: string | number | string[]) 
     };
     return association;*/ return data;
 }
+export function getAssociationsByType(idType: number) {
+    const [associations, setAssociations] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchAssociationsByType = async () => {
+            try {
+                setLoading(true);
+                // Récupérer d'abord toutes les associations
+                const response = await fetch(`${BASE_URL}/associations`);
+                const allAssociations = await response.json();
+
+                // Filtrer les associations par l'idType spécifié
+                const filteredAssociations = allAssociations.filter(
+                    (association: any) => Number(association.idType) === Number(idType)
+                );
+
+                setAssociations(filteredAssociations);
+                setLoading(false);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des associations par type:', error);
+                setError('Impossible de charger les associations');
+                setLoading(false);
+            }
+        };
+
+        fetchAssociationsByType();
+    }, [idType]);
+
+    return { associations, loading, error };
+}
+
 export function estConnecte() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 

@@ -1,17 +1,51 @@
-import React, { useState, useRef } from 'react';
-import { StyleSheet, Text, View, Dimensions, Animated, PanResponder, TouchableOpacity } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { StyleSheet, Text, View, Dimensions, Animated, PanResponder, TouchableOpacity, Image } from 'react-native';
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";
+import { ScrollView } from 'react-native';
+import {getAllAssociation, getAssociation, getAssociationsByType} from "@/helpers";
+import { images } from "@/config";
+import {IAssociation} from "@/backend/interfaces/IAssociation";
+import AssociationItem from "@/components/AssociationItem";
+import {router, useRouter} from "expo-router";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
 const SWIPE_OUT_DURATION = 250;
 
+// Types d'associations et leurs scores initiaux
+const associationTypes = {
+    "Familles et aides aux personnes en difficulté": 0,
+    "Handicap": 0,
+    "Maladies chroniques et rares": 0,
+    "Droits des patients et prévention santé": 0,
+    "Autres thématiques": 0,
+    "Addictions": 0,
+    "Maladies infectieuses et immunitaires": 0,
+    "Santé mentale": 0,
+    "Cancer": 0
+};
+const typeOptions = [
+    { label: "Santé mentale", value: "3" },
+    { label: "Handicap", value: "2" },
+    { label: "Addictions", value: "1" },
+    { label: "Maladies chroniques et rares", value: "4" },
+    { label: "Maladies infectieuses et immunitaires", value: "5" },
+    { label: "Cancer", value: "6" },
+    { label: "Droits des patients et prévention santé", value: "7" },
+    { label: "Familles et aides aux personnes en difficulté", value: "8" },
+    { label: "Autres thématiques", value: "9" }
+];
 
-export default function App() {
+export default function QuestionnaireScreen() {
+    const router = useRouter();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
+    const associations = getAllAssociation();
     const [completed, setCompleted] = useState(false);
+    const [scores, setScores] = useState({...associationTypes});
+    const [recommendedAssociations, setRecommendedAssociations] = useState([]);
+    const [loadingRecommendations, setLoadingRecommendations] = useState(false);
     const position = useRef(new Animated.ValueXY()).current;
     const rotation = position.x.interpolate({
         inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
@@ -19,22 +53,225 @@ export default function App() {
         extrapolate: 'clamp'
     });
 
-    // Questions à poser
+    // Questions à poser avec les points à attribuer
     const questions = [
-        "Souhaitez vous aider les personnes en situation d'handicaps physiques ?",
-        "Préférez-vous supporter une association proche de chez vous ? ",
-        "Voulez-vous supporter une association de santé mentale ? ",
-        "Souhaitez vous aider les personnes en situation d'addiction ?",
-        "Souhaitez vous aider les personnes proches de malades ?"
+        {
+            text: "Préférez-vous aider directement des personnes en difficulté dans leur quotidien ?",
+            points: {
+                yes: {
+                    "Familles et aides aux personnes en difficulté": 1,
+                    "Handicap": 1,
+                    "Maladies chroniques et rares": 1
+                },
+                no: {
+                    "Droits des patients et prévention santé": 1,
+                    "Autres thématiques": 1
+                }
+            }
+        },
+        {
+            text: "Vous sentez-vous plus concerné(e) par la prévention et la sensibilisation que par l'aide directe ?",
+            points: {
+                yes: {
+                    "Droits des patients et prévention santé": 1,
+                    "Addictions": 1,
+                    "Maladies infectieuses et immunitaires": 1
+                },
+                no: {
+                    "Familles et aides aux personnes en difficulté": 1,
+                    "Santé mentale": 1,
+                    "Handicap": 1
+                }
+            }
+        },
+        {
+            text: "Souhaitez-vous vous engager dans une cause liée à la santé mentale et au bien-être psychologique ?",
+            points: {
+                yes: {
+                    "Santé mentale": 2,
+                    "Addictions": 1,
+                    "Familles et aides aux personnes en difficulté": 1
+                },
+                no: {
+                    "Cancer": 1,
+                    "Maladies infectieuses et immunitaires": 1
+                }
+            }
+        },
+        {
+            text: "Pensez-vous que les maladies graves et chroniques méritent plus de soutien ?",
+            points: {
+                yes: {
+                    "Cancer": 1,
+                    "Maladies chroniques et rares": 1,
+                    "Maladies infectieuses et immunitaires": 1
+                },
+                no: {
+                    "Handicap": 1,
+                    "Droits des patients et prévention santé": 1
+                }
+            }
+        },
+        {
+            text: "Aimeriez-vous contribuer à la lutte contre certaines dépendances (alcool, tabac, drogues, écrans) ?",
+            points: {
+                yes: {
+                    "Addictions": 2,
+                    "Santé mentale": 1,
+                    "Droits des patients et prévention santé": 1
+                },
+                no: {
+                    "Handicap": 1,
+                    "Maladies chroniques et rares": 1
+                }
+            }
+        },
+        {
+            text: "Vous sentez-vous plus concerné(e) par des maladies qui touchent un grand nombre de personnes ?",
+            points: {
+                yes: {
+                    "Cancer": 1,
+                    "Maladies infectieuses et immunitaires": 1,
+                    "Addictions": 1
+                },
+                no: {
+                    "Maladies chroniques et rares": 1,
+                    "Handicap": 1,
+                    "Familles et aides aux personnes en difficulté": 1
+                }
+            }
+        },
+        {
+            text: "L'entraide et le soutien aux familles touchées par des problèmes de santé vous semblent-ils prioritaires ?",
+            points: {
+                yes: {
+                    "Familles et aides aux personnes en difficulté": 1,
+                    "Handicap": 1,
+                    "Maladies chroniques et rares": 1
+                },
+                no: {
+                    "Autres thématiques": 1,
+                    "Droits des patients et prévention santé": 1
+                }
+            }
+        },
+        {
+            text: "Selon vous, la recherche et l'innovation en santé doivent-elles être une priorité ?",
+            points: {
+                yes: {
+                    "Cancer": 1,
+                    "Maladies chroniques et rares": 1,
+                    "Maladies infectieuses et immunitaires": 1
+                },
+                no: {
+                    "Familles et aides aux personnes en difficulté": 1,
+                    "Santé mentale": 1
+                }
+            }
+        },
+        {
+            text: "Pensez-vous que la société doit faire plus d'efforts pour inclure et soutenir les personnes en situation de handicap ?",
+            points: {
+                yes: {
+                    "Handicap": 2,
+                    "Familles et aides aux personnes en difficulté": 1,
+                    "Maladies chroniques et rares": 1
+                },
+                no: {
+                    "Autres thématiques": 1,
+                    "Droits des patients et prévention santé": 1
+                }
+            }
+        },
+        {
+            text: "Souhaitez-vous vous impliquer dans une cause qui ne concerne pas directement une maladie spécifique ?",
+            points: {
+                yes: {
+                    "Autres thématiques": 2,
+                    "Droits des patients et prévention santé": 1,
+                    "Addictions": 1
+                },
+                no: {
+                    "Cancer": 1,
+                    "Maladies chroniques et rares": 1
+                }
+            }
+        }
     ];
+
+    // Mettre à jour les scores en fonction des réponses
+    const updateScores = (answer: boolean) => {
+        const question = questions[currentIndex];
+        const pointsToAdd = answer ? question.points.yes : question.points.no;
+
+        const updatedScores = { ...scores };
+
+        // Ajouter les points aux catégories correspondantes
+        Object.entries(pointsToAdd).forEach(([category, points]) => {
+            // @ts-ignore
+            updatedScores[category] = (updatedScores[category] || 0) + points;
+        });
+
+        setScores(updatedScores);
+    };
 
     // Fonction pour recommencer le questionnaire
     const restartQuiz = () => {
         setCurrentIndex(0);
         setAnswers([]);
         setCompleted(false);
+        setScores({...associationTypes});
+        setRecommendedAssociations([]);
         position.setValue({ x: 0, y: 0 });
     };
+
+    // Générer des recommandations basées sur les scores
+    const generateRecommendations = () => {
+        setLoadingRecommendations(true);
+
+        // Trier les types d'associations par score
+        const sortedTypes = Object.entries(scores)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 2); // Prendre les 2 types avec les scores les plus élevés
+
+        try {
+            const recommendations = [];
+
+            // Pour chaque type parmi les 2 meilleurs
+            for (const [type, score] of sortedTypes) {
+                if (score > 0) { // Ne considérer que les types ayant des points
+                    // Récupérer les associations disponibles pour ce type
+                    const getCurrentTypeValue = () => typeOptions.find(option => option.label === type)?.value
+
+                    const availableAssociations = associations.filter( (asso :IAssociation) => asso.idType === parseInt(getCurrentTypeValue() as string));
+
+                    if (availableAssociations.length > 0) {
+                        // Choisir une association aléatoire de ce type
+                        const randomIndex = Math.floor(Math.random() * availableAssociations.length);
+                        const selectedAssociation = availableAssociations[randomIndex];
+
+
+                        recommendations.push({selectedAssociation: selectedAssociation});
+
+                    }
+                }
+            }
+
+            // @ts-ignore
+            setRecommendedAssociations(recommendations);
+            setLoadingRecommendations(false);
+            return recommendations;
+
+        } catch (error) {
+            console.error("Erreur lors de la génération des recommandations:", error);
+        }
+    };
+    // Générer des recommandations quand le questionnaire est terminé
+    useEffect(() => {
+        if (completed) {
+            generateRecommendations();
+        }
+    }, [completed]);
 
     // Créer un nouveau panResponder pour chaque rendu
     const panResponder = PanResponder.create({
@@ -63,9 +300,15 @@ export default function App() {
     };
 
     const onSwipeComplete = (direction: string) => {
-        const answer = direction === 'right' ? true : false;
+        const answer = direction === 'right';
+        const currentQuestion = questions[currentIndex];
+
+        // Mettre à jour les scores
+        updateScores(answer);
+
+        // Ajouter la réponse
         // @ts-ignore
-        setAnswers([...answers, { question: questions[currentIndex], answer }]);
+        setAnswers([...answers, {question: currentQuestion.text, answer}]);
 
         // Réinitialiser la position APRÈS le setState
         setTimeout(() => {
@@ -86,6 +329,18 @@ export default function App() {
             useNativeDriver: false
         }).start();
     };
+    const handleNavigate = (idAssos: number) => {
+        router.replace({
+            pathname: "/detailsAssos",
+            params: { id: idAssos },
+        });
+    };
+    const navigateToDons =(idAssos: number) => {
+        router.push({
+            pathname: "/dons",
+            params: { id: idAssos },
+        });
+    };
 
     // Calculer le contour pour l'aura
     const rightGlowOpacity = position.x.interpolate({
@@ -100,18 +355,62 @@ export default function App() {
         extrapolate: 'clamp'
     });
 
+
     if (completed) {
+        // Add this right before setting the recommendations
+        console.log("Generated recommendations:", recommendedAssociations);
+        console.log("Available associations:", associations.length);
+        console.log("Current scores:", scores);
+        // @ts-ignore
+
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>Résultats</Text>
-                {answers.map((item, index) => (
-                    <View key={index} style={styles.resultItem}>
-                        <Text style={styles.questionText}>{item.question}</Text>
-                        <Text style={item.answer ? styles.yesText : styles.noText}>
-                            {item.answer ? 'Oui' : 'Non'}
+
+            <ScrollView style={styles.container}>
+                <Text style={styles.title}>Recommandations pour vous</Text>
+
+                {loadingRecommendations ? (
+                    <Text style={styles.loadingText}>Recherche des associations qui vous correspondent...</Text>
+                ) : recommendedAssociations.length > 0 ? (
+                    <ScrollView>
+                        <Text style={styles.subtitle}>
+                            Basé sur vos réponses, ces associations pourraient vous intéresser :
                         </Text>
-                    </View>
-                ))}
+
+                        {recommendedAssociations.map((asso, index) => (
+                            <View key={index} style={styles.associationRecommendation}>
+                                <View style={styles.associationContent}>
+                                    <TouchableOpacity onPress={() => handleNavigate(asso.selectedAssociation.idAssociation)}>
+                                        <AssociationItem
+                                            name={asso.selectedAssociation.nom + ""}
+                                            description={asso.selectedAssociation.descriptionCourte}
+                                            imageName={asso.selectedAssociation.nomImage}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                                <TouchableOpacity style={styles.donateButton} onPress={() => navigateToDons(asso.selectedAssociation.idAssociation)}>
+                                    <Text style={styles.donateButtonText}>Faire un don</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ))}
+                    </ScrollView>
+                ) : (
+                    <Text style={styles.noResultsText}>
+                        Nous n'avons pas pu trouver d'associations correspondant à vos critères.
+                        Essayez de refaire le questionnaire ou explorez toutes nos associations.
+                    </Text>
+                )}
+
+                <Text style={styles.resultsSummary}>Résumé de vos réponses :</Text>
+                <ScrollView style={styles.resultsContainer}>
+                    {answers.map((item, index) => (
+                        <View key={index} style={styles.resultItem}>
+                            <Text style={styles.questionText} numberOfLines={2}>{item.question}</Text>
+                            <Text style={item.answer ? styles.yesText : styles.noText}>
+                                {item.answer ? 'Oui' : 'Non'}
+                            </Text>
+                        </View>
+                    ))}
+                </ScrollView>
 
                 <TouchableOpacity
                     style={styles.restartButton}
@@ -119,7 +418,7 @@ export default function App() {
                 >
                     <Text style={styles.restartButtonText}>Recommencer</Text>
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
         );
     }
 
@@ -127,54 +426,55 @@ export default function App() {
         <>
             <Header/>
             <View style={styles.container}>
-            <Text style={styles.title}>Questionnaire</Text>
-            <Text style={styles.subtitle}>Ce questionnaire vous aidera à trouver quelle association est faite pour vous.</Text>
-            <Text style={styles.explication}>Swipe à droite pour Oui, à gauche pour Non</Text>
-            <Text style={styles.counter}>{currentIndex + 1}/{questions.length}</Text>
+                <Text style={styles.title}>Questionnaire</Text>
+                <Text style={styles.subtitle}>Ce questionnaire vous aidera à trouver quelle association est faite pour vous.</Text>
+                <Text style={styles.explication}>Swipe à droite pour Oui, à gauche pour Non</Text>
+                <Text style={styles.counter}>{currentIndex + 1}/{questions.length}</Text>
 
-            <View style={styles.cardContainer}>
-                {/* Aura verte (Oui) */}
-                <Animated.View
-                    style={[
-                        styles.aura,
-                        styles.greenAura,
-                        {opacity: rightGlowOpacity}
-                    ]}/>
+                <View style={styles.cardContainer}>
+                    {/* Aura verte (Oui) */}
+                    <Animated.View
+                        style={[
+                            styles.aura,
+                            styles.greenAura,
+                            {opacity: rightGlowOpacity}
+                        ]}/>
 
-                {/* Aura rouge (Non) */}
-                <Animated.View
-                    style={[
-                        styles.aura,
-                        styles.redAura,
-                        {opacity: leftGlowOpacity}
-                    ]}/>
+                    {/* Aura rouge (Non) */}
+                    <Animated.View
+                        style={[
+                            styles.aura,
+                            styles.redAura,
+                            {opacity: leftGlowOpacity}
+                        ]}/>
 
-                <Animated.View
-                    style={[
-                        styles.cardStyle,
-                        {
-                            transform: [
-                                {translateX: position.x},
-                                {translateY: position.y},
-                                {rotate: rotation}
-                            ]
-                        }
-                    ]}
-                    {...panResponder.panHandlers}
-                >
-                    <Text style={styles.questionText}>{questions[currentIndex]}</Text>
-                </Animated.View>
-            </View>
-
-            <View style={styles.actionsContainer}>
-                <View style={styles.actionIndicator}>
-                    <Text style={styles.noText}>Non</Text>
+                    <Animated.View
+                        style={[
+                            styles.cardStyle,
+                            {
+                                transform: [
+                                    {translateX: position.x},
+                                    {translateY: position.y},
+                                    {rotate: rotation}
+                                ]
+                            }
+                        ]}
+                        {...panResponder.panHandlers}
+                    >
+                        <Text style={styles.questionText}>{questions[currentIndex].text}</Text>
+                    </Animated.View>
                 </View>
-                <View style={styles.actionIndicator}>
-                    <Text style={styles.yesText}>Oui</Text>
+
+                <View style={styles.actionsContainer}>
+                    <View style={styles.actionIndicator}>
+                        <Text style={styles.noText}>Non</Text>
+                    </View>
+                    <View style={styles.actionIndicator}>
+                        <Text style={styles.yesText}>Oui</Text>
+                    </View>
                 </View>
             </View>
-        </View></>
+        </>
     );
 }
 
@@ -212,7 +512,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         flex: 1,
-        margin : 20,
+        margin: 20,
         position: 'relative',
         alignItems: 'center',
     },
@@ -266,11 +566,35 @@ const styles = StyleSheet.create({
         color: '#F44336',
         fontWeight: 'bold',
     },
+    // Styles pour les résultats
+    loadingText: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#555',
+        marginVertical: 20,
+    },
+    noResultsText: {
+        textAlign: 'center',
+        fontSize: 16,
+        color: '#555',
+        marginVertical: 20,
+        fontStyle: 'italic',
+    },
+    resultsContainer: {
+        marginTop: 10,
+        marginBottom: 20,
+    },
+    resultsSummary: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginTop: 20,
+        marginBottom: 10,
+    },
     resultItem: {
         backgroundColor: 'white',
-        padding: 15,
+        padding: 12,
         borderRadius: 10,
-        marginBottom: 10,
+        marginBottom: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -279,6 +603,53 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 2,
         elevation: 2,
+    },
+    associationRecommendation: {
+        backgroundColor: 'white',
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    associationContent: {
+        flexDirection: 'row',
+        marginBottom: 12,
+    },
+    associationImage: {
+        width: 70,
+        height: 70,
+        borderRadius: 8,
+        backgroundColor: '#f0f0f0',
+    },
+    associationDetails: {
+        marginLeft: 16,
+        flex: 1,
+        justifyContent: 'center',
+    },
+    associationName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 4,
+    },
+    associationType: {
+        fontSize: 14,
+        color: '#666',
+        fontStyle: 'italic',
+    },
+    donateButton: {
+        backgroundColor: Colors.primary_dark.background,
+        padding: 12,
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    donateButtonText: {
+        color: Colors.primary_dark.text,
+        fontWeight: 'bold',
+        fontSize: 16,
     },
     restartButton: {
         backgroundColor: Colors.primary_dark.background,
