@@ -100,4 +100,17 @@ export class UtilisateurRepository {
             connection.release(); // Libérer la connexion
         }
     }
+
+    // Mettre à jour le mot de passe d'un utilisateur
+    async updateUser(email: string, pseudo: string, idUser: number): Promise<void> {
+        const connection = await this.db.getConnection();
+        try {
+            await connection.query(
+                'UPDATE Utilisateur SET pseudonyme = ?, email = ? WHERE idUtilisateur = ? ',
+                [pseudo, email, idUser]
+            );
+        } finally {
+            connection.release();
+        }
+    }
 }

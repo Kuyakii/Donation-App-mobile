@@ -3,7 +3,7 @@ import {
     View,
     Text,
     TouchableOpacity,
-    FlatList,
+    ScrollView,
     Modal,
     TextInput,
     StyleSheet,
@@ -30,10 +30,10 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
     const [editedPseudonyme, setEditedPseudonyme] = useState('');
     const [editedEmail, setEditedEmail] = useState('');
 
-    const handleEditUser = (user: IUtilisateur) => {
-        setSelectedUser(user);
-        setEditedPseudonyme(user.pseudonyme);
-        setEditedEmail(user.email);
+    const handleEditUser = (userToEdit: IUtilisateur) => {
+        setSelectedUser(userToEdit);
+        setEditedPseudonyme(userToEdit.pseudonyme);
+        setEditedEmail(userToEdit.email);
         setIsEditModalVisible(true);
     };
 
@@ -65,10 +65,10 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
             }
 
             // Mettre à jour la liste des utilisateurs
-            const updatedUsers = utilisateurs.map(user =>
-                user.idUtilisateur === selectedUser.idUtilisateur
-                    ? { ...user, pseudonyme: editedPseudonyme, email: editedEmail }
-                    : user
+            const updatedUsers = utilisateurs.map(u =>
+                u.idUtilisateur === selectedUser.idUtilisateur
+                    ? { ...u, pseudonyme: editedPseudonyme, email: editedEmail }
+                    : u
             );
 
             onUpdateUsers(updatedUsers);
@@ -80,10 +80,10 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
         }
     };
 
-    const handleDeleteUser = (user: IUtilisateur) => {
+    const handleDeleteUser = (userToDelete: IUtilisateur) => {
         Alert.alert(
             "Confirmation",
-            `Êtes-vous sûr de vouloir supprimer l'utilisateur ${user.pseudonyme} ?`,
+            `Êtes-vous sûr de vouloir supprimer l'utilisateur ${userToDelete.pseudonyme} ?`,
             [
                 {
                     text: "Annuler",
@@ -94,7 +94,7 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
                     style: "destructive",
                     onPress: async () => {
                         try {
-                            const response = await fetch(`${BASE_URL}/deleteUtilisateur/${user.idUtilisateur}`, {
+                            const response = await fetch(`${BASE_URL}/deleteUtilisateur/${userToDelete.idUtilisateur}`, {
                                 method: 'DELETE',
                                 headers: {
                                     'Accept': 'application/json',
@@ -108,7 +108,7 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
 
                             // Mettre à jour la liste des utilisateurs
                             const updatedUsers = utilisateurs.filter(
-                                u => u.idUtilisateur !== user.idUtilisateur
+                                u => u.idUtilisateur !== userToDelete.idUtilisateur
                             );
 
                             onUpdateUsers(updatedUsers);
@@ -123,10 +123,12 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
         );
     };
 
-    const renderUserItem = ({ item }: { item: IUtilisateur }) => (
-        <View style={styles.userItem}>
+    const renderUserItem = (item: IUtilisateur) => (
+        <View key={item.idUtilisateur} style={styles.userItem}>
             <View style={styles.userInfo}>
-                <Text style={styles.userName}>{item.pseudonyme}{item.idUtilisateur == user.idUtilisateur ? " (Moi)": ""}</Text>
+                <Text style={styles.userName}>
+                    {item.pseudonyme}{item.idUtilisateur == user.idUtilisateur ? " (Moi)": ""}
+                </Text>
                 <Text style={styles.userEmail}>{item.email}</Text>
             </View>
             <View style={styles.userActions}>
@@ -148,14 +150,13 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
 
     return (
         <View style={styles.container}>
-            <FlatList
-                data={utilisateurs}
-                keyExtractor={(item) => item.idUtilisateur.toString()}
-                renderItem={renderUserItem}
-                ListEmptyComponent={
+            <ScrollView>
+                {utilisateurs.length > 0 ? (
+                    utilisateurs.map(renderUserItem)
+                ) : (
                     <Text style={styles.emptyListText}>Aucun utilisateur trouvé</Text>
-                }
-            />
+                )}
+            </ScrollView>
 
             {/* Modal de modification d'utilisateur */}
             <Modal

@@ -336,6 +336,18 @@ app.get('/getUtilisateurs', async (req: Request, res: Response) => {
     }
 });
 
+app.put('/updateUtilisateur/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { email, pseudonyme } = req.body;
+    try {
+        const dons = await userRepo.updateUser(email, pseudonyme, Number(id));
+        res.json(dons);
+    } catch (error) {
+        console.error('Erreur lors de l\'update de l\'utilisateur', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
     console.log(`Serveur backend en écoute sur http://localhost:${port}`);

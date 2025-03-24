@@ -148,12 +148,14 @@ export default function AdminAppScreen() {
 
     const screenWidth = Dimensions.get("window").width;
     const getSelectedAssociationName = () => {
+        // @ts-ignore
         if (selectedAssociation === "0" || selectedAssociation === 0) return "Toutes les associations";
         const asso = association?.find(a => a.idAssociation+"" === selectedAssociation);
         return asso ? asso.nom : "Toutes les associations";
     };
 
-        const filteredDons = selectedAssociation === "0" || selectedAssociation === 0
+        // @ts-ignore
+    const filteredDons = selectedAssociation === "0" || selectedAssociation === 0
             ? donsAssos
             : donsAssos.filter(don => don.idAssociation === parseInt(selectedAssociation));
 
@@ -540,7 +542,8 @@ export default function AdminAppScreen() {
                 ref={scrollViewRef}
                 contentContainerStyle={styles.scrollViewContent}>
                 <Text style={styles.welcomeTitle}>Bonjour, Admin {user.pseudonyme}</Text>
-                <Text style={styles.welcomeTitle2}>Administrateur de l'application </Text>            <View style={styles.tabs}>
+                <Text style={styles.welcomeTitle2}>Administrateur de l'application </Text>
+                <View style={styles.tabs}>
                 <TouchableOpacity onPress={() => setActiveTab('stats')} style={styles.tabButton}><Text>Stats</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => setActiveTab('users')} style={styles.tabButton}><Text>Utilisateurs</Text></TouchableOpacity>
                 <TouchableOpacity onPress={() => setActiveTab('associations')} style={styles.tabButton}><Text>Associations</Text></TouchableOpacity>
@@ -910,9 +913,6 @@ const styles = StyleSheet.create({
     },
     editButton: {
         backgroundColor: '#4CAF50',
-    },
-    deleteButton: {
-        backgroundColor: '#f44336',
     },
     actionButtonText: {
         color: 'white',
