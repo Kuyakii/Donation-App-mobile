@@ -21,6 +21,7 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "@/config";
 import AssociationListModal from "@/components/DonationListModal";
+import AssociationFavoritesModal from "@/components/AssociationFavoritesModal";
 
 export default function UserProfileScreen() {
     const [isLoading, setIsLoading] = useState(true);
@@ -29,6 +30,8 @@ export default function UserProfileScreen() {
     const [dons, setDons] = useState<IDon[]>([]);
     const [role, setRole] = useState<string>('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [favoriteModalVisible, setFavoriteModalVisible] = useState(false);
+
 
     useEffect(() => {
         const checkLogin = async () => {
@@ -130,6 +133,7 @@ export default function UserProfileScreen() {
         .slice(0, 3);
 
     return (
+        <FavoriteProvider>
         <View style={styles.container}>
             <Header />
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
@@ -150,7 +154,10 @@ export default function UserProfileScreen() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() => setFavoriteModalVisible(true)}
+                    >
                         <View style={styles.iconContainer}>
                             <Feather name="star" size={icon_size} color="#FFD700" />
                             <Text style={styles.actionText}>Favoris</Text>
@@ -162,14 +169,16 @@ export default function UserProfileScreen() {
 
                 <TopAssociations topAssos={donsParAssosTries} />
 
-                <FavoriteProvider>
-                    <AssociationFavoriteList />
-                </FavoriteProvider>
 
                 <BoutonDeconnexion />
             </ScrollView>
             <AssociationListModal visible={modalVisible} onClose={() => setModalVisible(false)} dons={donsUser} total={montantDonne} />
+            <AssociationFavoritesModal
+                visible={favoriteModalVisible}
+                onClose={() => setFavoriteModalVisible(false)}
+            />
         </View>
+        </FavoriteProvider>
     );
 }
 
