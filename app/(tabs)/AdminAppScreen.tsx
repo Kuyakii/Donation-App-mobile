@@ -543,10 +543,43 @@ export default function AdminAppScreen() {
                 <Text style={styles.welcomeTitle}>Bonjour, Admin {user.pseudonyme}</Text>
                 <Text style={styles.welcomeTitle2}>Administrateur de l'application </Text>
                 <View style={styles.tabs}>
-                <TouchableOpacity onPress={() => setActiveTab('stats')} style={styles.tabButton}><Text>Stats</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => setActiveTab('users')} style={styles.tabButton}><Text>Utilisateurs</Text></TouchableOpacity>
-                <TouchableOpacity onPress={() => setActiveTab('associations')} style={styles.tabButton}><Text>Associations</Text></TouchableOpacity>
-            </View>
+                    <TouchableOpacity
+                        onPress={() => setActiveTab('stats')}
+                        style={[
+                            styles.tabButton,
+                            activeTab === 'stats' && styles.activeTab
+                        ]}
+                    >
+                        <Text style={[
+                            styles.tabButtonText,
+                            activeTab === 'stats' && styles.activeTabButtonText
+                        ]}>Stats</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => setActiveTab('users')}
+                        style={[
+                            styles.tabButton,
+                            activeTab === 'users' && styles.activeTab
+                        ]}
+                    >
+                        <Text style={[
+                            styles.tabButtonText,
+                            activeTab === 'users' && styles.activeTabButtonText
+                        ]}>Utilisateurs</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => setActiveTab('associations')}
+                        style={[
+                            styles.tabButton,
+                            activeTab === 'associations' && styles.activeTab
+                        ]}
+                    >
+                        <Text style={[
+                            styles.tabButtonText,
+                            activeTab === 'associations' && styles.activeTabButtonText
+                        ]}>Associations</Text>
+                    </TouchableOpacity>
+                </View>
             {activeTab === 'stats' && renderStats()}
             {activeTab === 'users' && renderUsers()}
             {activeTab === 'associations' && renderAssociations()}
@@ -833,8 +866,39 @@ const styles = StyleSheet.create({
         color: 'purple',
         fontWeight: 'bold',
     },
-    tabs: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20 },
-    tabButton: { padding: 10, backgroundColor: '#ddd', borderRadius: 5 },
+    tabs: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginBottom: 20,
+        backgroundColor: '#f0f0f0',
+        borderRadius: 10,
+        padding: 4
+    },
+    tabButton: {
+        padding: 10,
+        backgroundColor: 'transparent',
+        borderRadius: 8,
+        flex: 1,
+        alignItems: 'center',
+        marginHorizontal: 2,
+        transition: 'background-color 0.3s',
+    },
+    activeTab: {
+        backgroundColor: 'white',
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    tabButtonText: {
+        color: '#666',
+        fontWeight: '500',
+    },
+    activeTabButtonText: {
+        color: 'purple',
+        fontWeight: 'bold',
+    },
     title: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
     listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc'},
     container2: {backgroundColor: 'white'},
