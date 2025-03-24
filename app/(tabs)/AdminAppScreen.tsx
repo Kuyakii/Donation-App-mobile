@@ -7,7 +7,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     Dimensions,
-    Modal, FlatList
+    Modal, FlatList, Alert
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import Header from '../../components/header';
@@ -19,10 +19,12 @@ import {BASE_URL, images} from "@/config";
 import { BarChart } from "react-native-chart-kit";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
+import AssociationItem from "@/components/AssociationItem";
+import {useRouter} from "expo-router";
+import {useNavigation} from "@react-navigation/native";
 
 export default function AdminAppScreen() {
-    const { height: screenHeight } = Dimensions.get('window');
-
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<IUtilisateur | null>(null);
     const [utilisateurs, setUtilisateurs] = useState<IUtilisateur[] | null>(null);
@@ -72,6 +74,13 @@ export default function AdminAppScreen() {
             getAssociation();
         }
     }, [user]);
+
+    const handleNavigate = (idAssos: number) => {
+        router.replace({
+            pathname: "/detailsAssos",
+            params: { id: idAssos},
+        });
+    };
 
     useEffect(() => {
         const getUtilisateurs = async () => {
@@ -190,6 +199,19 @@ export default function AdminAppScreen() {
 
         return dons.filter(don => (new Date(don.dateDon) >= thirtyDaysAgo) && (don.typeDon === 'RECURRENT')).length;
     };
+
+    function getDonsParAssociation(id : number) {
+        let somme =0;
+        let nbDon = 0;
+        donsAssos.forEach((d) => {
+            if(d.idAssociation === id) {
+                somme += d.montant;
+                ++nbDon;
+            }
+        })
+        let moyenne = Math.round(somme/nbDon);
+        return [somme, moyenne, nbDon];
+    }
 
     const renderStats = () => (
         <View style={styles.container}>
@@ -352,6 +374,7 @@ export default function AdminAppScreen() {
     const renderUsers = () => (
         <View>
             <Text style={styles.title}>Gestion des Utilisateurs</Text>
+
             <FlatList
                 data={utilisateurs}
                 keyExtractor={(item) => item.idUtilisateur.toString()}
@@ -362,21 +385,110 @@ export default function AdminAppScreen() {
                     </View>
                 )}
             />
-        </View>
+
+</View>
     );
 
+
+    const handleDeleteAssociation = (id: number) => {
+        // Afficher une confirmation avant suppression
+        Alert.alert(
+            "Confirmation",
+            "Êtes-vous sûr de vouloir supprimer cette association?",
+            [
+                {
+                    text: "Annuler",
+                    style: "cancel"
+                },
+                {
+                    text: "Supprimer",
+                    onPress: async () => {
+                        try {
+                            const response = await fetch(`${BASE_URL}/deleteAssociations/${id}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+
+                            console.log('Response status:', response.status);
+                            console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+                            const responseText = await response.text();
+                            console.log('Response body:', responseText);
+                            if (response.status !== 201 && response.status !== 200) {
+                                throw new Error(`Erreur de suppression. Statut: ${response.status}, Réponse: ${responseText}`);
+                            }
+                            let data;
+                            setAssociation(prevAssociations =>
+                                prevAssociations.filter(asso => asso.idAssociation !== id)
+                            );
+                            Alert.alert("Succès", "L'association a été supprimée avec succès");
+                        } catch (error) {
+                            console.error('Erreur détaillée de suppression:', error);
+                            Alert.alert(
+                                "Erreur",
+                                `Impossible de supprimer l'association. Détails: ${error.message}`,
+                                [{ text: "OK" }]
+                            );
+                        }
+                    },
+                    style: "destructive"
+                }
+            ]
+        );
+    };
+    const navigation = useNavigation();
     const renderAssociations = () => (
-        <View>
-            <Text style={styles.title}>Gestion des Associations</Text>
-            <FlatList
-                data={association}
-                keyExtractor={(item) => item.idAssociation.toString()}
-                renderItem={({ item }) => (
-                    <View style={styles.listItem}>
-                        <Text>{item.nom}</Text>
-                    </View>
-                )}
-            />
+        <View style={styles.container}>
+            <View style={styles.headerContainer}>
+                <Text style={styles.title}>Gestion des Associations</Text>
+                <TouchableOpacity
+                    style={styles.addButton}
+                    onPress={() => handleAjouterAssociation()}
+                >
+                    <Text style={styles.addButtonText}>+ Ajouter</Text>
+                </TouchableOpacity>
+            </View>
+
+            {association.map((asso: IAssociation) => (
+                <View key={asso.idAssociation} style={styles.associationCard}>
+                    <TouchableOpacity
+                        style={styles.associationContent}
+                        onPress={() => handleNavigate(asso.idAssociation)}
+                    >
+                        <AssociationItem
+                            name={asso.nom}
+                            description={asso.descriptionCourte}
+                            imageName={asso.nomImage}
+                        />
+
+                        <View style={styles.statsContainer}>
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>Somme des dons:</Text>
+                                <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[0]} €</Text>
+                            </View>
+
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>Moyenne:</Text>
+                                <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[1]} €</Text>
+                            </View>
+
+                            <View style={styles.statItem}>
+                                <Text style={styles.statLabel}>Nombre:</Text>
+                                <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[2]}</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.deleteButton}
+                        onPress={() => handleDeleteAssociation(asso.idAssociation)}
+                    >
+                        <Text style={styles.deleteButtonText}>Supprimer</Text>
+                    </TouchableOpacity>
+                </View>
+            ))}
         </View>
     );
 
@@ -404,6 +516,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        marginBottom: 125,
     },
     loadingContainer: {
         flex: 1,
@@ -681,4 +794,66 @@ const styles = StyleSheet.create({
     title: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
     listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc'},
     container2: {backgroundColor: Colors.light.background},
+
+    addButton: {
+        backgroundColor: '#4CAF50',
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 6,
+    },
+    addButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    associationCard: {
+        backgroundColor: 'white',
+        borderRadius: 8,
+        marginBottom: 16,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+        overflow: 'hidden',
+    },
+    associationContent: {
+        padding: 16,
+    },
+    statsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 12,
+        paddingTop: 12,
+        borderTopWidth: 1,
+        borderTopColor: '#f0f0f0',
+    },
+    statItem: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    statLabel: {
+        fontSize: 12,
+        color: '#666',
+        marginBottom: 2,
+    },
+    statValue: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#333',
+    },
+    deleteButton: {
+        backgroundColor: '#f44336',
+        padding: 8,
+        alignItems: 'center',
+    },
+    deleteButtonText: {
+        color: 'white',
+        fontWeight: '500',
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
 });

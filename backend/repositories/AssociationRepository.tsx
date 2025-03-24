@@ -12,7 +12,7 @@ export class AssociationRepository {
     async findAll(): Promise<IAssociation[]> {
         const connection = await this.db.getConnection();
         try {
-            const [rows] = await connection.query('SELECT * FROM Association');
+            const [rows] = await connection.query('SELECT * FROM Association where idAssociation <> 0');
             return rows as IAssociation[];
         } finally {
             connection.release(); // Libérer la connexion
@@ -129,4 +129,23 @@ export class AssociationRepository {
         }
     }
 
+    async deleteAsso(idAsso: number) {
+        const connection = await this.db.getConnection();
+        try {
+            await connection.query(
+                'DELETE FROM AssociationsFavorites WHERE idAssociation = ?',
+                [idAsso]
+            );
+            await connection.query(
+                'UPDATE `don` SET `idAssociation` = 0 WHERE `idAssociation` = ?',
+                [idAsso]
+            );
+            await connection.query(
+                'DELETE FROM `Association` WHERE `idAssociation` = ?',
+                [idAsso]
+            );
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
 }

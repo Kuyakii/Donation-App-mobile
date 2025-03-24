@@ -564,3 +564,6 @@ INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_
 -- Don récurrent 15
 INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (20.00, '2025-03-25', 1, 0);
 INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2025-03-25', '2026-03-25', 'mensuel');
+
+INSERT INTO association (idAssociation, nom, description, descriptionCourte, nomImage, localisation, idType) VALUES (0, 'Anonyme', '', '', '', '', 1);
+UPDATE association set idAssociation = 0 where idAssociation = LAST_INSERT_ID();

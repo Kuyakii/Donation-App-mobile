@@ -77,6 +77,17 @@ app.post('/associations', async (req: Request, res: Response) => {
     }
 });
 
+app.delete('/deleteAssociations/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        await associationRepository.deleteAsso(Number(id));
+        res.status(201).send('Association Supprimée');
+    } catch (error) {
+        console.error('Erreur lors de la supression de l\'association', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 app.put('/associations/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     const { nom, description, localisation } = req.body;
