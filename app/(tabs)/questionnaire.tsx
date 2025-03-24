@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, Text, View, Dimensions, Animated, PanResponder, TouchableOpacity, Image } from 'react-native';
+import { ScrollView } from 'react-native';
+import { router, useRouter } from "expo-router";
+
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";
-import { ScrollView } from 'react-native';
-import {getAllAssociation, getAssociation, getAssociationsByType} from "@/helpers";
-import { images } from "@/config";
-import {IAssociation} from "@/backend/interfaces/IAssociation";
+import { getAllAssociation } from "@/helpers";
+import { IAssociation } from "@/backend/interfaces/IAssociation";
 import AssociationItem from "@/components/AssociationItem";
-import {router, useRouter} from "expo-router";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
@@ -25,6 +25,7 @@ const associationTypes = {
     "Santé mentale": 0,
     "Cancer": 0
 };
+
 const typeOptions = [
     { label: "Santé mentale", value: "3" },
     { label: "Handicap", value: "2" },
@@ -243,16 +244,14 @@ export default function QuestionnaireScreen() {
                     // Récupérer les associations disponibles pour ce type
                     const getCurrentTypeValue = () => typeOptions.find(option => option.label === type)?.value
 
-                    const availableAssociations = associations.filter( (asso :IAssociation) => asso.idType === parseInt(getCurrentTypeValue() as string));
+                    const availableAssociations = associations.filter((asso: IAssociation) => asso.idType === parseInt(getCurrentTypeValue() as string));
 
                     if (availableAssociations.length > 0) {
                         // Choisir une association aléatoire de ce type
                         const randomIndex = Math.floor(Math.random() * availableAssociations.length);
                         const selectedAssociation = availableAssociations[randomIndex];
 
-
                         recommendations.push({selectedAssociation: selectedAssociation});
-
                     }
                 }
             }
@@ -266,6 +265,7 @@ export default function QuestionnaireScreen() {
             console.error("Erreur lors de la génération des recommandations:", error);
         }
     };
+
     // Générer des recommandations quand le questionnaire est terminé
     useEffect(() => {
         if (completed) {
@@ -329,13 +329,15 @@ export default function QuestionnaireScreen() {
             useNativeDriver: false
         }).start();
     };
+
     const handleNavigate = (idAssos: number) => {
         router.replace({
             pathname: "/detailsAssos",
             params: { id: idAssos },
         });
     };
-    const navigateToDons =(idAssos: number) => {
+
+    const navigateToDons = (idAssos: number) => {
         router.push({
             pathname: "/dons",
             params: { id: idAssos },
@@ -355,16 +357,8 @@ export default function QuestionnaireScreen() {
         extrapolate: 'clamp'
     });
 
-
     if (completed) {
-        // Add this right before setting the recommendations
-        console.log("Generated recommendations:", recommendedAssociations);
-        console.log("Available associations:", associations.length);
-        console.log("Current scores:", scores);
-        // @ts-ignore
-
         return (
-
             <ScrollView style={styles.container}>
                 <Text style={styles.title}>Recommandations pour vous</Text>
 
@@ -387,7 +381,10 @@ export default function QuestionnaireScreen() {
                                         />
                                     </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity style={styles.donateButton} onPress={() => navigateToDons(asso.selectedAssociation.idAssociation)}>
+                                <TouchableOpacity
+                                    style={styles.donateButton}
+                                    onPress={() => navigateToDons(asso.selectedAssociation.idAssociation)}
+                                >
                                     <Text style={styles.donateButtonText}>Faire un don</Text>
                                 </TouchableOpacity>
                             </View>
@@ -404,10 +401,26 @@ export default function QuestionnaireScreen() {
                 <ScrollView style={styles.resultsContainer}>
                     {answers.map((item, index) => (
                         <View key={index} style={styles.resultItem}>
-                            <Text style={styles.questionText} numberOfLines={2}>{item.question}</Text>
-                            <Text style={item.answer ? styles.yesText : styles.noText}>
-                                {item.answer ? 'Oui' : 'Non'}
+                            <Text style={styles.questionTextResume} numberOfLines={2}>
+                                {item.question}
                             </Text>
+                            <View
+                                style={
+                                    item.answer
+                                        ? styles.resultAnswerContainer
+                                        : styles.resultNegativeAnswerContainer
+                                }
+                            >
+                                <Text
+                                    style={
+                                        item.answer
+                                            ? styles.yesText
+                                            : styles.noText
+                                    }
+                                >
+                                    {item.answer ? 'Oui' : 'Non'}
+                                </Text>
+                            </View>
                         </View>
                     ))}
                 </ScrollView>
@@ -465,14 +478,6 @@ export default function QuestionnaireScreen() {
                     </Animated.View>
                 </View>
 
-                <View style={styles.actionsContainer}>
-                    <View style={styles.actionIndicator}>
-                        <Text style={styles.noText}>Non</Text>
-                    </View>
-                    <View style={styles.actionIndicator}>
-                        <Text style={styles.yesText}>Oui</Text>
-                    </View>
-                </View>
             </View>
         </>
     );
@@ -545,9 +550,15 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(244, 67, 54, 0.3)',
     },
     questionText: {
-        fontSize: 12,
-        textAlign: 'left',
+        fontSize: 18,
+        textAlign: 'center',
         fontWeight: '500',
+    },
+    questionTextResume: {
+        fontSize: 15,
+        flex: 1,
+        marginRight: 10,
+        color: '#333',
     },
     actionsContainer: {
         flexDirection: 'row',
@@ -561,13 +572,11 @@ const styles = StyleSheet.create({
     yesText: {
         color: '#4CAF50',
         fontWeight: 'bold',
-
     },
     noText: {
         color: '#F44336',
         fontWeight: 'bold',
     },
-    // Styles pour les résultats
     loadingText: {
         textAlign: 'center',
         fontSize: 16,
@@ -593,17 +602,30 @@ const styles = StyleSheet.create({
     },
     resultItem: {
         backgroundColor: 'white',
-        padding: 12,
-        borderRadius: 10,
-        marginBottom: 8,
+        padding: 15,
+        borderRadius: 12,
+        marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
+        shadowOpacity: 0.1,
         shadowRadius: 2,
         elevation: 2,
+    },
+
+    resultAnswerContainer: {
+        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 6,
+    },
+    resultNegativeAnswerContainer: {
+        backgroundColor: 'rgba(244, 67, 54, 0.1)',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 6,
     },
     associationRecommendation: {
         backgroundColor: 'white',
@@ -619,27 +641,6 @@ const styles = StyleSheet.create({
     associationContent: {
         flexDirection: 'row',
         marginBottom: 12,
-    },
-    associationImage: {
-        width: 70,
-        height: 70,
-        borderRadius: 8,
-        backgroundColor: '#f0f0f0',
-    },
-    associationDetails: {
-        marginLeft: 16,
-        flex: 1,
-        justifyContent: 'center',
-    },
-    associationName: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 4,
-    },
-    associationType: {
-        fontSize: 14,
-        color: '#666',
-        fontStyle: 'italic',
     },
     donateButton: {
         backgroundColor: Colors.primary_dark.background,
@@ -657,6 +658,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         marginTop: 20,
+        marginBottom :90,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
