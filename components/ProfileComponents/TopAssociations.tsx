@@ -87,8 +87,8 @@ export default function TopAssociations({topAssos}) {
 
 const styles = StyleSheet.create({
     topAssociationsCard: {
-        borderWidth: 1,
-        borderColor: 'black',
+        borderWidth: 0.5,
+        borderColor: 'grey',
         borderRadius: 12,
         padding: 16,
         backgroundColor: Colors.container_light.backgroundColor,

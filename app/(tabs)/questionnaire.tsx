@@ -545,8 +545,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(244, 67, 54, 0.3)',
     },
     questionText: {
-        fontSize: 18,
-        textAlign: 'center',
+        fontSize: 12,
+        textAlign: 'left',
         fontWeight: '500',
     },
     actionsContainer: {
@@ -561,6 +561,7 @@ const styles = StyleSheet.create({
     yesText: {
         color: '#4CAF50',
         fontWeight: 'bold',
+
     },
     noText: {
         color: '#F44336',

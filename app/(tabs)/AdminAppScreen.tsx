@@ -471,7 +471,6 @@ export default function AdminAppScreen() {
             ]
         );
     };
-    const navigation = useNavigation();
     const renderAssociations = () => (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
