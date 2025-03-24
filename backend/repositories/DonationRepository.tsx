@@ -1,5 +1,5 @@
 import { MariaDBConnection } from '../database/MariaDBConnection';
-import {IAssociation} from "@/backend/interfaces/IAssociation";
+import { IAssociation } from "../interfaces/IAssociation";
 import { IDon } from '../interfaces/IDon';
 
 export class DonationRepository {
