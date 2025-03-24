@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 200,
         height: 45,
+        marginBottom: 90,
     },
     buttonText: {
         color: Colors.primary_dark.text,

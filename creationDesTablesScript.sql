@@ -360,3 +360,207 @@ from don inner join don_unique on don.idDon = don_unique.idDon
 ;
 
 select * from V_DONS;
+
+-- Insertion de 35 dons uniques
+
+-- Don 1
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (25.00, '2023-01-15', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 2
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (15.50, '2023-02-03', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 3
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (10.00, '2023-02-28', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 4
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (5.75, '2023-03-17', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 5
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (500.00, '2023-04-01', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 6
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (20.00, '2023-04-22', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 7
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (35.00, '2023-05-14', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 8
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (12.25, '2023-06-07', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 9
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (7.50, '2023-07-19', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 10
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (1000.00, '2023-08-02', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 11
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (18.75, '2023-09-13', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 12
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (30.00, '2023-10-25', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 13
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (9.99, '2023-11-11', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 14
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (250.00, '2023-12-24', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 15
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (40.00, '2024-01-03', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 16
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (15.00, '2024-01-22', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 17
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (8.25, '2024-02-14', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 18
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (750.00, '2024-03-08', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 19
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (22.50, '2024-04-15', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 20
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (17.75, '2024-05-02', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 21
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (45.00, '2024-06-19', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 22
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (6.50, '2024-07-07', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 23
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (1200.00, '2024-08-22', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 24
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (33.33, '2024-09-10', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 25
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (19.25, '2024-10-04', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 26
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (5.25, '2024-11-27', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 27
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (300.00, '2024-12-25', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 28
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (27.50, '2025-01-08', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 29
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (14.75, '2025-01-30', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 30
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (9.25, '2025-02-17', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 31
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (600.00, '2025-03-01', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 32
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (23.15, '2025-03-14', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 33
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (11.10, '2025-03-20', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 34
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (8.80, '2023-07-05', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Don 35
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (42.00, '2024-04-30', 1, 0);
+INSERT INTO Don_Unique (idDon) VALUES (LAST_INSERT_ID());
+
+-- Insertion de 15 dons récurrents
+
+-- Don récurrent 1
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (50.00, '2023-01-05', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2023-01-05', '2023-12-05', 'mensuel');
+
+-- Don récurrent 2
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (100.00, '2023-03-10', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2023-03-10', '2024-03-10', 'trimestriel');
+
+-- Don récurrent 3
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (25.00, '2023-06-01', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2023-06-01', '2024-06-01', 'mensuel');
+
+-- Don récurrent 4
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (200.00, '2023-09-15', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2023-09-15', '2024-09-15', 'semestriel');
+
+-- Don récurrent 5
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (75.00, '2024-01-01', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2024-01-01', '2025-01-01', 'mensuel');
+
+-- Don récurrent 6
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (150.00, '2024-02-20', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2024-02-20', '2025-02-20', 'trimestriel');
+
+-- Don récurrent 7
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (30.00, '2024-04-05', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2024-04-05', '2025-04-05', 'mensuel');
+
+-- Don récurrent 8
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (500.00, '2024-07-10', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2024-07-10', '2025-07-10', 'annuel');
+
+-- Don récurrent 9
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (40.00, '2024-09-22', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2024-09-22', '2025-09-22', 'mensuel');
+
+-- Don récurrent 10
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (120.00, '2024-11-15', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2024-11-15', '2025-11-15', 'trimestriel');
+
+-- Don récurrent 11
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (60.00, '2025-01-05', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2025-01-05', '2026-01-05', 'mensuel');
+
+-- Don récurrent 12
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (250.00, '2025-02-10', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2025-02-10', '2026-02-10', 'semestriel');
+
+-- Don récurrent 13
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (35.00, '2025-03-15', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2025-03-15', '2026-03-15', 'mensuel');
+
+-- Don récurrent 14
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (300.00, '2025-03-20', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2025-03-20', '2026-03-20', 'trimestriel');
+
+-- Don récurrent 15
+INSERT INTO Don (montant, dateDon, idAssociation, idUtilisateur) VALUES (20.00, '2025-03-25', 1, 0);
+INSERT INTO Don_Recurrent (idDon, date_Debut, date_Fin, frequence) VALUES (LAST_INSERT_ID(), '2025-03-25', '2026-03-25', 'mensuel');

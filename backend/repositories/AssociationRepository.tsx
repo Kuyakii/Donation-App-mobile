@@ -60,9 +60,9 @@ export class AssociationRepository {
         const connection = await this.db.getConnection();
         try {
             const { nom, description,descriptionCourte,nomImage, localisation, idType } = association;
-            await connection.query(
-                'UPDATE Association SET nom = ?, description = ?,descriptionCourte = ? ,nomImage = ?, localisation = ?, idType = ? WHERE idAssociation = ?',
-                [nom, description,descriptionCourte,nomImage, localisation, idType, idAssociation]
+                await connection.query(
+                'UPDATE Association SET nom = ?, description = ?,descriptionCourte = ? WHERE idAssociation = ?',
+                [nom, description,descriptionCourte, idAssociation]
             );
         } finally {
             connection.release(); // Libérer la connexion
@@ -94,4 +94,39 @@ export class AssociationRepository {
             connection.release(); // Libérer la connexion
         }
     }
+
+    // Récupérer toutes les associations favorites d'un admin application
+    async findFavoritesByAssos(email: string): Promise<number> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query(
+                `SELECT COUNT(a.idUtilisateur) AS nbAssosFav
+             FROM associationsfavorites a
+             WHERE a.idAssociation = (
+                 SELECT aa.idAssociation
+                 FROM admin_association aa
+                 INNER JOIN utilisateur u ON aa.idUtilisateur = u.idUtilisateur
+                 WHERE u.email = ?
+             )`,
+                [email]
+            );
+
+            // @ts-ignore
+            return rows[0]?.nbAssosFav || 0;
+        } finally {
+            connection.release();
+        }
+    }
+
+    // Récupérer une association par le mail de son admin
+    async findByAdmin(email: string): Promise<IAssociation | undefined> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query('SELECT a.idAssociation, a.nom, a.description, a.descriptionCourte, a.nomImage, a.localisation, a.idType FROM Association a inner join Admin_association aa on a.idAssociation = aa.idAssociation inner join utilisateur u on u.idUtilisateur = aa.idUtilisateur WHERE u.email = ?', [email]);
+            return (rows as IAssociation[])[0];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
+
 }

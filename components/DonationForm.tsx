@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platform, StatusBar, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {checkLogin, estConnecte, getUtilisateurConectee} from "@/helpers";
+import {checkLogin, estConnecte} from "@/helpers";
 import {BASE_URL} from "@/config";
 
 // @ts-ignore
@@ -80,9 +80,9 @@ export default function DonationForm ({ association })  {
                 <Text style={styles.donateButtonText}>Faire un don</Text>
             </TouchableOpacity>
             {isLoading ? (
-                <Text style={styles.buttonText}>Don en cours...</Text>
+                <Text >Don en cours...</Text>
             ) : (
-                <Text style={styles.buttonText}>Donner</Text>
+                <Text >Donner</Text>
             )}
         </View>
     );

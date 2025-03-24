@@ -59,4 +59,35 @@ export class DonationRepository {
             connection.release(); // Libérer la connexion
         }
     }
+
+    async getAssosByAdminAssos(emailAdmin:string): Promise<IDon[]> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query('select * from V_DONS where idAssociation = (select aa.idAssociation from admin_association aa where aa.idUtilisateur = (select u.idUtilisateur from utilisateur u where u.email = ?) )', [emailAdmin]);
+            return rows as IDon[];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
+
+    async geDonRecurrentByAssos(emailAdmin:string): Promise<IDon[]> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query("select * from v_dons vd where vd.typeDon COLLATE utf8mb4_unicode_ci = 'RECURRENT' and vd.idAssociation = (SELECT idAssociation FROM admin_association inner join utilisateur on utilisateur.idUtilisateur = admin_association.idUtilisateur where utilisateur.email = ?)", [emailAdmin]);
+            return rows as IDon[];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
+
+    async getMeilleurDonateur(emailAdmin:string): Promise<{ idUtilisateur: number, pseudonyme: string, totalMontant: number }[]> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows]: any[] = await connection.query("SELECT u.idUtilisateur, CASE WHEN u.pseudonyme = 'Admin' THEN 'Anonyme' ELSE u.pseudonyme END AS pseudonyme, SUM(d.montant) AS totalMontant FROM utilisateur u INNER JOIN don d ON u.idUtilisateur = d.idUtilisateur WHERE d.idAssociation = (SELECT idAssociation FROM admin_association aa INNER JOIN utilisateur u2 ON aa.idUtilisateur = u2.idUtilisateur WHERE u2.email = ?) GROUP BY u.idUtilisateur, u.pseudonyme order by 3 desc", [emailAdmin]);
+            return rows as { idUtilisateur: number, pseudonyme: string, totalMontant: number }[];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
+
 }
