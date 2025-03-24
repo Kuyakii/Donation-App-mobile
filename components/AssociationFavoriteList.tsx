@@ -4,13 +4,15 @@ import {useFocusEffect, useRouter} from 'expo-router';
 import FavoriteItem from '@/components/FavoriteItem';
 import Section from '@/components/Section';
 import { getUtilisateurConnecte } from '@/helpers';
-import { useFavorites } from '@/context/FavoriteContext';  // Utilisation du hook du contexte
+import { useFavorites } from '@/context/FavoriteContext';
+import {useTranslation} from "react-i18next";
 
 const AssociationFavoriteList: React.FC = () => {
     const { associationsFavorites, loading, fetchFavorites } = useFavorites();  // Accéder au contexte
     const user = getUtilisateurConnecte();
     const userId = user?.idUtilisateur;
     const router = useRouter();
+    const { t } = useTranslation();
 
     const handleNavigate = (idAssos: number) => {
         router.replace({
@@ -28,7 +30,7 @@ const AssociationFavoriteList: React.FC = () => {
     );
 
     return (
-        <Section title="Mes associations favorites" icon="star" onSeeAllPress={undefined}>
+        <Section title={t('favorite_associations')} icon="star" onSeeAllPress={undefined}>
             {loading ? (
                 <ActivityIndicator size="large" color="blue" />
             ) : (
@@ -44,7 +46,7 @@ const AssociationFavoriteList: React.FC = () => {
                         ))
                     ) : (
                         <View style={styles.noFavorites}>
-                            <Text>Aucune association favorite.</Text>
+                            <Text>{t('no_favorite_association')}</Text>
                         </View>
                     )}
                 </ScrollView>

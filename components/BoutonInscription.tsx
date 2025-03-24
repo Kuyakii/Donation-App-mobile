@@ -1,12 +1,10 @@
 import React from 'react';
-import {View, Button, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {router} from "expo-router";
 import Colors from "@/constants/Colors";
-
+import {useTranslation} from "react-i18next";
 const BoutonInscription= () => {
-    const navigation = useNavigation();
+    const { t } = useTranslation();
     const redirect =  () => {
         // @ts-ignore
         router.replace('/register');
@@ -15,7 +13,7 @@ const BoutonInscription= () => {
     return (
         <View>
             <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText} onPress={redirect}>Pas de compte ? S'inscrire !</Text>
+                <Text style={styles.buttonText} onPress={redirect}>{t('noAccountSignUp')}</Text>
             </TouchableOpacity>
         </View>
     );

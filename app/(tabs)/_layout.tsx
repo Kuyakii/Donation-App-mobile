@@ -4,6 +4,8 @@ import { Feather } from '@expo/vector-icons';
 import Colors from '@/constants/Colors';
 import { Image, StyleSheet } from "react-native";
 import { images } from "@/config";
+import { I18nextProvider } from 'react-i18next';
+import { i18n } from '../../i18n';
 
 // Fonction pour générer les icônes de la barre de navigation
 // @ts-ignore
@@ -18,6 +20,7 @@ export default function TabLayout() {
     const isAdminRoute = pathname.includes('AdminAssoScreen');
 
     return (
+        <I18nextProvider i18n={i18n}>
         <Tabs
             screenOptions={{
                 headerShown: false,
@@ -86,6 +89,7 @@ export default function TabLayout() {
                 }}
             />
         </Tabs>
+        </I18nextProvider>
     );
 }
 

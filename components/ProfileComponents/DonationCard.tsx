@@ -2,9 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Colors from "@/constants/Colors";
 import {getBadgeColor, getSeuils} from "@/helpers";
-
+import {useTranslation} from "react-i18next";
 // @ts-ignore
 export default function  DonationCard ({montantDon}){
+    const { t } = useTranslation();
     const seuils = getSeuils();
     let max = seuils[0];
     let indice = 0;
@@ -24,7 +25,7 @@ export default function  DonationCard ({montantDon}){
     }));
     return (
         <View style={styles.donationCard}>
-            <Text style={styles.donationTitle}>Vous avez déjà donné {montantDon}€ !</Text>
+            <Text style={styles.donationTitle}>{t('alreadyDonatedAmount', { montantDon })}</Text>
 
             <View style={styles.progressContainer}>
                 <View style={styles.progressBar}>
@@ -33,7 +34,7 @@ export default function  DonationCard ({montantDon}){
                 <Text style={styles.progressText}>{max}€</Text>
             </View>
 
-            <Text style={styles.badgesTitle}>Vos badges :</Text>
+            <Text style={styles.badgesTitle}>{t('yourBadges')}</Text>
             <View style={styles.badgesContainer}>
                 {badges.map((badge) => (
                     <Text key={badge.id} style={[styles.badge, { backgroundColor: badge.color }]}>

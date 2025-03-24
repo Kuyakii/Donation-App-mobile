@@ -3,7 +3,7 @@ import {Modal, View, TextInput, Text, TouchableOpacity, ActivityIndicator, Style
 import {BASE_URL} from "@/config";
 import {useNavigation} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import {useTranslation} from "react-i18next";
 interface ChangePseudoModal {
     visible: boolean;
     onClose: () => void;
@@ -16,6 +16,7 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
     const navigation = useNavigation();
+    const { t } = useTranslation();
 
     const handleChangePseudonyme = async () => {
         setLoading(true);
@@ -41,7 +42,7 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
                 throw new Error(data.message || "Erreur lors du changement du pseudonyme.");
             }
 
-            Alert.alert("Succès", "Votre Pseudonyme a été changé avec succès !");
+            Alert.alert(t("success"), t("usernameChangedSuccess"));
             onClose();
         } catch (err) {
             // @ts-ignore
@@ -57,7 +58,7 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
         <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
             <View style={styles.modalOverlay}>
                 <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>Changer de pseudonyme</Text>
+                    Alert.alert(t("success"), t("usernameChangedSuccess"));
 
                     <TextInput
                         style={styles.input}
@@ -81,10 +82,10 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
                     ) : (
                         <View style={styles.modalButtons}>
                             <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
-                                <Text style={styles.cancelButtonText}>Annuler</Text>
+                                <Text style={styles.cancelButtonText}>{t('cancel_button')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handleChangePseudonyme} style={styles.confirmButton}>
-                                <Text style={styles.confirmButtonText}>Confirmer</Text>
+                                <Text style={styles.confirmButtonText}>{t('confirm_button')}</Text>
                             </TouchableOpacity>
                         </View>
                     )}

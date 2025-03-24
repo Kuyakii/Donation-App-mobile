@@ -7,8 +7,9 @@ import BoutonInscription from '@/components/BoutonInscription';
 import { BASE_URL } from '@/config';
 import Colors from "@/constants/Colors";
 import Header from "@/components/header";
-
+import {useTranslation} from "react-i18next";
 const LoginScreen = () => {
+    const { t } = useTranslation();
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,7 +17,7 @@ const LoginScreen = () => {
 
     const handleLogin = async () => {
         if (!email || !password) {
-            Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
+            Alert.alert(t('error'), t('error_fill_fields'));
             return;
         }
 
@@ -37,14 +38,14 @@ const LoginScreen = () => {
             await AsyncStorage.setItem('utilisateur', JSON.stringify(data.user));
             await AsyncStorage.setItem('role', JSON.stringify(data.role));
 
-            Alert.alert('Succès', 'Connexion réussie !');
+            Alert.alert(t('success'), t('login_success'));
             // @ts-ignore
             navigation.navigate('(tabs)', {
                 screen: 'userPage',
             });
         } catch (error) {
             // @ts-ignore
-            Alert.alert('Erreur', error.message);
+            Alert.alert(t('error'), error.message);
         } finally {
             setIsLoading(false);
         }
@@ -56,11 +57,11 @@ const LoginScreen = () => {
             <Header/>
             <BoutonAccueil />
             <ScrollView contentContainerStyle={styles.scroll}>
-                <Text style={styles.title}>Connexion</Text>
+                <Text style={styles.title}>{t('login_title')}</Text>
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Email"
+                    placeholder={t('email_placeholder')}
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
@@ -69,7 +70,7 @@ const LoginScreen = () => {
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder="Mot de passe"
+                    placeholder={t('password_placeholder')}
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
@@ -83,7 +84,7 @@ const LoginScreen = () => {
                     {isLoading ? (
                         <ActivityIndicator size="small" color="#FFF" />
                     ) : (
-                        <Text style={styles.buttonText}>Se connecter</Text>
+                        <Text style={styles.buttonText}>{t('login_button')}</Text>
                     )}
                 </TouchableOpacity>
                 <BoutonInscription />

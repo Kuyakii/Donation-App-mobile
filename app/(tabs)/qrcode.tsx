@@ -1,8 +1,10 @@
 import {Camera, CameraView, useCameraPermissions} from 'expo-camera';
 import {useState, useEffect, useRef} from 'react';
 import {Button, StyleSheet, Text, View, Animated, TouchableOpacity} from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 export default function QRCodeScanner() {
+    const { t } = useTranslation();
     const [permission, requestPermission] = useCameraPermissions();
     const [scanned, setScanned] = useState(false);
     const [scannedData, setScannedData] = useState<string | null>(null);
@@ -44,8 +46,8 @@ export default function QRCodeScanner() {
     if (!permission.granted) {
         return (
             <View style={styles.container}>
-                <Text style={styles.permissionMessage}>Nous avons besoin de votre permission pour activer la caméra</Text>
-                <Button onPress={requestPermission} title="Accorder la permission" />
+                <Text style={styles.permissionMessage}>{t('camera_permission_required')}</Text>
+                <Button onPress={requestPermission} title={t('grant_permission')} />
             </View>
         );
     }
@@ -58,8 +60,9 @@ export default function QRCodeScanner() {
     return (
         <View style={styles.container}>
             <CameraView
-                barcodeScannerSettings={
-                    {barcodeTypes: ["qr"],}}
+                barcodeScannerSettings={{
+                    barcodeTypes: ["qr"],
+                }}
                 onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
                 style={styles.camera}
                 facing={'back'}
@@ -77,20 +80,19 @@ export default function QRCodeScanner() {
                                     translateY: lineAnimation.interpolate({
                                         inputRange: [0, 1],
                                         outputRange: [0, 200],
-                                    }),},
-                                ],
-                            },]}
-                            />
+                                    }),
+                                }],
+                            }]} />
                         </View>
                     </View>
                 )}
 
                 {scanned && (
                     <View style={styles.resultContainer}>
-                        <Text style={styles.resultText}>QR Code Scanné :</Text>
+                        <Text style={styles.resultText}>{t('scanned_qr_code')}</Text>
                         <Text style={styles.resultData}>{scannedData}</Text>
                         <TouchableOpacity style={styles.rescanButton} onPress={() => setScanned(false)} >
-                            <Text style={styles.rescanButtonText}>Scanner à nouveau</Text>
+                            <Text style={styles.rescanButtonText}>{t('rescan_button')}</Text>
                         </TouchableOpacity>
                     </View>
                 )}

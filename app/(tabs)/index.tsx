@@ -11,17 +11,17 @@ import AssociationFavoriteList from "@/components/AssociationFavoriteList";
 import {FavoriteProvider} from "@/context/FavoriteContext";
 import {useRouter} from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
+import { useTranslation } from 'react-i18next';
 
-// Empêche le splash screen de disparaître automatiquement
 SplashScreen.preventAutoHideAsync();
 
-
 export default function Layout() {
+    const { t } = useTranslation();
     const associations = getAllAssociation();
     const slicedAssociations = associations.slice(0, 3);
     const [modalVisible, setModalVisible] = useState(false);
     const [token, setToken] = useState<string | null>(null);
-    // Vérification de l'état de connexion
+
     const userConnected = estConnecte();
     console.log(userConnected);
 
@@ -54,7 +54,6 @@ export default function Layout() {
 
     const onLayoutRootView = useCallback(async () => {
         if (appIsReady) {
-            // Cela masque le splash screen une fois que l'application est prête
             await SplashScreen.hideAsync();
         }
     }, [appIsReady]);
@@ -63,11 +62,11 @@ export default function Layout() {
         return null;
     }
 
-
     return (
         <View style={styles.container}>
             <StatusBar barStyle="dark-content" />
             <Header />
+
             <SearchBar />
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
@@ -79,13 +78,13 @@ export default function Layout() {
                 ) : (
                     <View style={styles.banner}>
                         <Text style={styles.bannerText}>
-                            Vous devez être connecté pour gérer vos associations favorites de manière plus fine.
+                            {t('login_required_for_favorites')} {/* Clé de traduction */}
                         </Text>
                     </View>
                 )}
 
                 {/* Section des associations disponibles */}
-                <Section title="Toutes les associations" icon="list" onSeeAllPress={() => setModalVisible(true)}>
+                <Section title={t('all_associations')} icon="list" onSeeAllPress={() => setModalVisible(true)}>
                     {slicedAssociations.map((asso: IAssociation) => (
                         <TouchableOpacity key={asso.idAssociation} onPress={() => handleNavigate(asso.idAssociation)}>
                             <AssociationItem name={asso.nom} description={asso.descriptionCourte} imageName={asso.nomImage} />
@@ -94,12 +93,12 @@ export default function Layout() {
                 </Section>
 
                 {/* Autres sections */}
-                <Section title="Associations populaire" icon="trending-up" onSeeAllPress={undefined}>
-                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`} description={`Description asso ${num}`} imageName={undefined} />)}
+                <Section title={t('popular_associations')} icon="trending-up" onSeeAllPress={undefined}>
+                    {[1, 2].map(num => <AssociationItem key={num} name={`${t('asso')} ${num}`} description={`${t('description_asso')} ${num}`} imageName={undefined} />)}
                 </Section>
 
-                <Section title="Associations santé mentale" icon="heart" onSeeAllPress={undefined}>
-                    {[1, 2].map(num => <AssociationItem key={num} name={`Asso ${num}`} description={`Description asso ${num}`} imageName={undefined} />)}
+                <Section title={t('mental_health_associations')} icon="heart" onSeeAllPress={undefined}>
+                    {[1, 2].map(num => <AssociationItem key={num} name={`${t('asso')} ${num}`} description={`${t('description_asso')} ${num}`} imageName={undefined} />)}
                 </Section>
 
             </ScrollView>
@@ -109,7 +108,6 @@ export default function Layout() {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {

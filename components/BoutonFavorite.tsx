@@ -3,11 +3,11 @@ import { View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { BASE_URL } from '@/config';
 import { checkFavorite } from "@/helpers";
-
+import {useTranslation} from "react-i18next";
 // @ts-ignore
 const BoutonFavorite = ({ idAssociation, idUtilisateur }) => {
     const [isFavorite, setIsFavorite] = useState(false);
-
+    const {t} = useTranslation();
     useEffect(() => {
         const fetchFavoriteStatus = async () => {
             if (!idUtilisateur) return;
@@ -21,7 +21,7 @@ const BoutonFavorite = ({ idAssociation, idUtilisateur }) => {
     const toggleFavorite = async () => {
         try {
             if (!idUtilisateur) {
-                Alert.alert("Erreur", "Utilisateur non connecté.");
+                Alert.alert(t('error'), t('userNotConnected'));
                 return;
             }
 
@@ -38,7 +38,7 @@ const BoutonFavorite = ({ idAssociation, idUtilisateur }) => {
 
         } catch (error) {
             // @ts-ignore
-            Alert.alert("Erreur", error.message);
+            Alert.alert(t('error'), error.message);
         }
     };
 

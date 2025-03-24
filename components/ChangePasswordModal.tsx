@@ -3,13 +3,14 @@ import {
     View, Text, TextInput, TouchableOpacity, Modal, Alert, StyleSheet, ActivityIndicator
 } from "react-native";
 import {BASE_URL} from "@/config";
-
+import {useTranslation} from "react-i18next";
 // @ts-ignore
 const ChangePasswordModal = ({ visible, onClose, email }) => {
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const { t } = useTranslation();
 
     const handleChangePassword = async () => {
         setLoading(true);
@@ -32,7 +33,7 @@ const ChangePasswordModal = ({ visible, onClose, email }) => {
                 throw new Error(data.message || "Erreur lors du changement de mot de passe.");
             }
 
-            Alert.alert("Succès", "Votre mot de passe a été changé avec succès !");
+            Alert.alert(t("success"), t("passwordChangedSuccess"));
             onClose();
         } catch (err) {
             // @ts-ignore
@@ -46,7 +47,7 @@ const ChangePasswordModal = ({ visible, onClose, email }) => {
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>Changer le mot de passe</Text>
+                    <Text style={styles.modalTitle}>{t("changePassword")}</Text>
 
                     {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
@@ -68,10 +69,10 @@ const ChangePasswordModal = ({ visible, onClose, email }) => {
                     {loading ? <ActivityIndicator size="large" color="#4CAF50" /> : (
                         <View style={styles.modalButtons}>
                             <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
-                                <Text style={styles.cancelButtonText}>Annuler</Text>
+                                <Text style={styles.cancelButtonText}>{t('cancel_buutton')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handleChangePassword} style={styles.confirmButton}>
-                                <Text style={styles.confirmButtonText}>Confirmer</Text>
+                                <Text style={styles.confirmButtonText}>{t('confirm_button')}</Text>
                             </TouchableOpacity>
                         </View>
                     )}

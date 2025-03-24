@@ -23,7 +23,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "@/config";
 import AssociationListModal from "@/components/DonationListModal";
 import {useFocusEffect} from "expo-router";
-
+import {useTranslation} from "react-i18next";
 export default function UserProfileScreen() {
     const [isLoading, setIsLoading] = useState(true);
     const navigation = useNavigation();
@@ -31,7 +31,7 @@ export default function UserProfileScreen() {
     const [dons, setDons] = useState<IDon[]>([]);
     const [role, setRole] = useState<string>('');
     const [modalVisible, setModalVisible] = useState(false);
-
+    const { t } = useTranslation();
     useFocusEffect(
         useCallback(() => {
             const checkLogin = async () => {
@@ -62,7 +62,6 @@ export default function UserProfileScreen() {
                     if (roles) {
                         setRole(roles);
 
-                        // Redirection vers la page admin si l'utilisateur est un admin d'association
                         if (roles.toString().includes('ADMIN_ASSO')) {
                             // @ts-ignore
                             navigation.replace('(tabs)',{
@@ -128,27 +127,27 @@ export default function UserProfileScreen() {
         <View style={styles.container}>
             <Header />
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
-                <Text style={styles.welcomeTitle}>Bonjour, {user?.pseudonyme}</Text>
+                <Text style={styles.welcomeTitle}>{t('hello')}, {user?.pseudonyme}</Text>
 
                 <View style={styles.actionsContainer}>
                     <TouchableOpacity style={styles.actionButton}>
                         <View style={styles.iconContainer}>
                             <Feather name="user" size={icon_size} color="black" />
-                            <Text style={styles.actionText}>Profil</Text>
+                            <Text style={styles.actionText}>{t('profile')}</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionButton} onPress={() => setModalVisible(true)}>
                         <View style={styles.iconContainer}>
                             <Feather name="gift" size={icon_size} color="black" />
-                            <Text style={styles.actionText}>Dons</Text>
+                            <Text style={styles.actionText}>{t('donations')}</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionButton}>
                         <View style={styles.iconContainer}>
                             <Feather name="star" size={icon_size} color="#FFD700" />
-                            <Text style={styles.actionText}>Favoris</Text>
+                            <Text style={styles.actionText}>{t('favorites')}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>

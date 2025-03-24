@@ -13,9 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 import ChangePasswordModal from "@/components/ChangePasswordModal";
 import {getUtilisateurConnecte} from "@/helpers";
 import ChangePseudoModal from "@/components/ChangePseudoModal";
-
+import {useTranslation} from "react-i18next";
 export default function SettingsScreen() {
-    const [notifications, setNotifications] = useState(true);
+    const { t, i18n } = useTranslation();
+    const [notifications, setNotifications] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
     const [dataSharing, setDataSharing] = useState(true);
     const [location, setLocation] = useState(true);
@@ -35,11 +36,15 @@ export default function SettingsScreen() {
             title: '',
         });
     }, [navigation]);
-
+    const changeLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+    };
     if (!user) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
-                <Text style={{ fontSize: 18, marginBottom: 20 }}>Vous devez être connecté pour accéder aux réglages.</Text>
+                <Text style={{ fontSize: 18, marginBottom: 20 }}>
+                    {t('login_required_for_settings')}
+                </Text>
                 <TouchableOpacity
                     onPress={() => router.push("/login")}
                     style={{
@@ -49,7 +54,7 @@ export default function SettingsScreen() {
                         alignItems: "center",
                     }}
                 >
-                    <Text style={{ color: "white", fontSize: 16 }}>Se connecter</Text>
+                    <Text style={{ color: "white", fontSize: 16 }}>{t('login_button')}</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -60,21 +65,60 @@ export default function SettingsScreen() {
                 <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
                     <Text style={styles.backButtonText}>←</Text>
                 </TouchableOpacity>
-                <Text style={styles.pageTitle}>Réglages</Text>
+                <Text style={styles.pageTitle}>{t('settings')}</Text>
             </View>
 
             <ScrollView style={styles.scrollView}>
                 {/* Account Section */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Compte</Text>
+                    <Text style={styles.sectionTitle}>{t('account')}</Text>
                     <TouchableOpacity style={styles.settingItem} onPress={() => setChangePasswordModalVisible(true)}>
-                        <Text style={styles.settingLabel}>Changer le mot de passe</Text>
+                        <Text style={styles.settingLabel}>{t('changePassword')}</Text>
                         <Text style={styles.settingArrow}>→</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.settingItem} onPress={() => setChangePseudoModalVisible(true)}>
-                        <Text style={styles.settingLabel}>Changer le pseudonyme</Text>
+                        <Text style={styles.settingLabel}>{t('changeUsername')}</Text>
                         <Text style={styles.settingArrow}>→</Text>
                     </TouchableOpacity>
+                </View>
+
+                {/* Notifications Section */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>{t('notifications')}</Text>
+                    <View style={styles.settingItem}>
+                        <Text style={styles.settingLabel}>{t('enable_notifications')}</Text>
+                        <Switch
+                            value={notifications}
+                            onValueChange={setNotifications}
+                            trackColor={{ false: "#d3d3d3", true: "#4CAF50" }}
+                            thumbColor="#ffffff"
+                        />
+                    </View>
+                </View>
+
+                {/* Preferences Section */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>{t('preferences')}</Text>
+                    <View style={styles.settingItem}>
+                        <Text style={styles.settingLabel}>{t('dark_mode')}</Text>
+                        <Switch
+                            value={darkMode}
+                            onValueChange={setDarkMode}
+                            trackColor={{ false: "#d3d3d3", true: "#4CAF50" }}
+                            thumbColor="#ffffff"
+                        />
+                    </View>
+                    <View style={styles.settingItem}>
+                        <Text style={styles.settingLabel}>{t('language')}</Text>
+                        <View style={styles.languageSelector}>
+                            <TouchableOpacity onPress={() => changeLanguage('fr')}>
+                                <Text style={styles.languageOption}>{t('fr')}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => changeLanguage('en')}>
+                                <Text style={styles.languageOption}>{t('en')}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
 
             </ScrollView>
@@ -83,6 +127,8 @@ export default function SettingsScreen() {
             <ChangePasswordModal visible={isChangePasswordModalVisible} onClose={() => setChangePasswordModalVisible(false)} email={user.email} />
             {/* Intégration du modal */}
             <ChangePseudoModal visible={isChangePseudoModalVisible} onClose={() => setChangePseudoModalVisible(false)} email={user.email} />
+
+
         </View>
     );
 }
@@ -128,6 +174,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 15,
         marginBottom: 20,
+        borderWidth: 1,
     },
     sectionTitle: {
         fontSize: 18,
@@ -150,6 +197,18 @@ const styles = StyleSheet.create({
     settingArrow: {
         color: '#999',
         fontSize: 20,
+    },
+    settingValue: {
+        color: '#666',
+        fontSize: 16,
+    },
+    languageSelector: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    languageOption: {
+        fontSize: 16,
+        color: '#333',
     },
 });
 

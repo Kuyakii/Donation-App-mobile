@@ -3,10 +3,12 @@ import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet } from 'react
 import AssociationItem from './AssociationItem';
 import {useRouter} from "expo-router";
 import Colors from "@/constants/Colors";
+import {useTranslation} from "react-i18next";
 
 // @ts-ignore
 export default function AssociationListModal({ visible, onClose, associations }) {
     const router = useRouter();
+    const { t } = useTranslation();
 
     const handleNavigate = (idAssos: number) => {
         onClose();
@@ -20,7 +22,7 @@ export default function AssociationListModal({ visible, onClose, associations })
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>Toutes les associations</Text>
+                    <Text style={styles.modalTitle}>{t('all_associations')}</Text>
 
                     {/* Liste des associations */}
                     <FlatList
@@ -39,7 +41,7 @@ export default function AssociationListModal({ visible, onClose, associations })
 
                     {/* Bouton pour fermer le modal */}
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>Fermer</Text>
+                        <Text style={styles.closeButtonText}>{t('close_button')}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

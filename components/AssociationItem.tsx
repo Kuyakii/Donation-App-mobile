@@ -26,16 +26,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 10,
-        marginBottom: 15, // Ajoutez de l'espace entre les éléments de la liste
+        marginBottom: 15,
     },
     associationImage: {
         width: 120,
         height: 90,
         marginRight: 12,
-        resizeMode: 'contain', // Ajuste l'image pour qu'elle s'adapte à la taille donnée
+        resizeMode: 'contain',
     },
     associationInfo: {
-        flex: 1, // Permet à la description de prendre toute la largeur restante
+        flex: 1,
     },
     associationName: {
         fontSize: 16,
@@ -45,6 +45,6 @@ const styles = StyleSheet.create({
     associationDescription: {
         fontSize: 14,
         color: '#666',
-        flexWrap: 'wrap', // Permet au texte de passer à la ligne suivante s'il est trop long
+        flexWrap: 'wrap',
     },
 });

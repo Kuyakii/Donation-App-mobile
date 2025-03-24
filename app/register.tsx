@@ -6,8 +6,10 @@ import BoutonAccueil from "@/components/BoutonAccueil";
 import { BASE_URL } from "@/config";
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";
+import { useTranslation } from 'react-i18next';
 
 const LoginScreen = () => {
+    const { t } = useTranslation();
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [pseudonyme, setPseudo] = useState('');
@@ -18,11 +20,11 @@ const LoginScreen = () => {
 
     const handleRegister = async () => {
         if (!email || !password || !pseudonyme || !re_password) {
-            Alert.alert('Erreur', 'Veuillez remplir tous les champs.');
+            Alert.alert(t('error'), t('error_fill_fields'));
             return;
         }
         if (password !== re_password) {
-            Alert.alert('Erreur', 'Les mots de passe sont différents.');
+            Alert.alert(t('error'), t('error_password_match'));
             return;
         }
 
@@ -39,12 +41,12 @@ const LoginScreen = () => {
 
             if (!response.ok) throw new Error(data.message || "Erreur lors de l'inscription.");
 
-            Alert.alert('Succès', 'Inscription réussie !');
+            Alert.alert(t('success'), t('register_success'));
             // @ts-ignore
             navigation.navigate('login');
         } catch (error) {
             // @ts-ignore
-            Alert.alert('Erreur', error.message);
+            Alert.alert(t('error'), error.message);
         } finally {
             setIsLoading(false);
         }
@@ -55,10 +57,10 @@ const LoginScreen = () => {
             <Header />
             <BoutonAccueil />
             <ScrollView contentContainerStyle={styles.scroll}>
-                <Text style={styles.title}>Inscription</Text>
+                <Text style={styles.title}>{t('registration_title')}</Text>
                 <TextInput
                     style={styles.input}
-                    placeholder="Email"
+                    placeholder={t('email_placeholder')}
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
@@ -67,7 +69,7 @@ const LoginScreen = () => {
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder="Pseudonyme"
+                    placeholder={t('username_placeholder')}
                     value={pseudonyme}
                     onChangeText={setPseudo}
                     autoCapitalize="none"
@@ -75,7 +77,7 @@ const LoginScreen = () => {
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder="Mot de passe"
+                    placeholder={t('password_placeholder')}
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
@@ -83,7 +85,7 @@ const LoginScreen = () => {
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder="Confirmer votre mot de passe"
+                    placeholder={t('confirm_password_placeholder')}
                     value={re_password}
                     onChangeText={setRePassword}
                     secureTextEntry
@@ -95,15 +97,15 @@ const LoginScreen = () => {
                     disabled={isLoading}
                 >
                     {isLoading ? (
-                        <Text style={styles.buttonText}>Inscription...</Text>
+                        <Text style={styles.buttonText}>{t('registering_button')}</Text>
                     ) : (
-                        <Text style={styles.buttonText}>S'inscrire</Text>
+                        <Text style={styles.buttonText}>{t('register_button')}</Text>
                     )}
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
                     <Text style={styles.rgpdLinkText}>
-                        En vous inscrivant, vous acceptez notre politique de confidentialité.
+                        {t('privacy_policy_text')}
                     </Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -118,18 +120,12 @@ const LoginScreen = () => {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalText}>
-                            En vous inscrivant, vous acceptez que nous recueillions et traitions vos données personnelles, telles que votre nom, adresse e-mail, et autres informations nécessaires à la création de votre compte. Ces données sont utilisées uniquement pour la gestion de votre compte et la fourniture de nos services.
-                            {'\n\n'}
-                            Nous nous engageons à protéger vos informations personnelles conformément au Règlement Général sur la Protection des Données (RGPD). Vos données ne seront jamais partagées avec des tiers sans votre consentement, à moins que cela ne soit requis par la loi.
-                            {'\n\n'}
-                            Vous avez le droit d'accéder à vos données, de les rectifier, de les supprimer, ou de vous opposer à leur traitement, conformément à la réglementation en vigueur. Pour exercer vos droits ou pour toute question concernant la protection de vos données, vous pouvez nous contacter à contact@soteria.fr.
-                            {'\n\n'}
-                            Pour plus d'informations, consultez notre{' '}
-                            <Text style={styles.linkText}>Politique de Confidentialité</Text>.
+                            {t('privacy_policy_modal_text')}
+                            <Text style={styles.linkText}>{t('privacy_policy')}</Text>.
                         </Text>
 
                         <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-                            <Text style={styles.closeButtonText}>Fermer</Text>
+                            <Text style={styles.closeButtonText}>{t('close_button')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

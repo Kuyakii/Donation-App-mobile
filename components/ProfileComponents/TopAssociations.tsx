@@ -4,9 +4,10 @@ import Colors from "@/constants/Colors";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
 import {getAssociation} from "@/helpers";
 import {images} from "@/config";
-
+import {useTranslation} from "react-i18next";
 // @ts-ignore
 export default function TopAssociations({topAssos}) {
+    const { t } = useTranslation();
     const [listeAssos, setListeAssos] = useState<IAssociation[] | null>(null);
     useEffect(() => {
         async function fetchAssociations() {
@@ -23,10 +24,11 @@ export default function TopAssociations({topAssos}) {
     }, [topAssos]);
     return (
         <View style={styles.topAssociationsCard}>
-            <Text style={styles.topAssociationsTitle}>Top 3 associations</Text>
+            <Text style={styles.topAssociationsTitle}>{t('top3Associations')}</Text>
             <Text style={styles.topAssociationsSubtitle}>
-                Les trois associations pour lesquelles vous avez donné le plus donné.
+                {t('top3AssociationsSubtitle')}
             </Text>
+
 
             <View style={styles.associationItem}>
                 <Text style={styles.rankingNumber}>1.</Text>
@@ -39,8 +41,8 @@ export default function TopAssociations({topAssos}) {
                             : images['tmp.png'] // Image par défaut
                     }>
                 </Image>
-                <Text style={styles.associationName}>{(listeAssos && listeAssos[0]) ? listeAssos[0].nom : "Aucune"}</Text>
-                <Text>Montant donné : {(listeAssos && listeAssos[0]) ? topAssos[0][1] : "Aucun"}</Text>
+                <Text style={styles.associationName}>{(listeAssos && listeAssos[0]) ? listeAssos[0].nom : t('none')}</Text>
+                <Text>{t('amountGiven', { amount: (listeAssos && listeAssos[0]) ? topAssos[0][1] : t('none') })}</Text>
             </View>
 
             <View style={styles.associationItem}>
@@ -54,8 +56,8 @@ export default function TopAssociations({topAssos}) {
                     }
                 >
                 </Image>
-                <Text style={styles.associationName}>{(listeAssos && listeAssos[1]) ? listeAssos[1].nom : "Aucune"}</Text>
-                <Text>Montant donné : {(listeAssos && listeAssos[1]) ? topAssos[1][1] : "Aucun"}</Text>
+                <Text style={styles.associationName}>{(listeAssos && listeAssos[1]) ? listeAssos[1].nom : t('none')}</Text>
+                <Text>{t('amountGiven', { amount: (listeAssos && listeAssos[1]) ? topAssos[1][1] : t('none') })}</Text>
             </View>
 
             <View style={styles.associationItem}>
@@ -69,8 +71,8 @@ export default function TopAssociations({topAssos}) {
                     }
                 >
                 </Image>
-                <Text style={styles.associationName}>{(listeAssos && listeAssos[2]) ? listeAssos[2].nom : "Aucune"}</Text>
-                <Text>Montant donné : {(listeAssos && listeAssos[2]) ? topAssos[2][1] : "Aucun"}</Text>
+                <Text style={styles.associationName}>{(listeAssos && listeAssos[2]) ? listeAssos[2].nom : t('none')}</Text>
+                <Text>{t('amountGiven', { amount: (listeAssos && listeAssos[2]) ? topAssos[2][1] : t('none') })}</Text>
             </View>
         </View>
     );

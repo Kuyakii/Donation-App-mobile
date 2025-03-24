@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { images } from "@/config";
-
+import {useTranslation} from "react-i18next";
 interface DetailAssosProps {
     nom: string;
     description: string;
@@ -19,6 +19,7 @@ export default function DetailAssociation({ nom, description, localisation, desc
         }
         return null; // Retourne null si localisation invalide
     };
+    const { t } = useTranslation();
 
     const coordinates = getCoordinates(localisation);
     console.log(localisation, typeof localisation, coordinates);
@@ -64,7 +65,7 @@ export default function DetailAssociation({ nom, description, localisation, desc
                     />
                 </MapView>
             ) : (
-                <Text style={styles.errorText}>Localisation non disponible</Text>
+                <Text style={styles.errorText}>{t("locationUnavailable")}</Text>
             )}
         </View>
     );

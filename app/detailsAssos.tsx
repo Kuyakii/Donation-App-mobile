@@ -10,10 +10,12 @@ import { getUtilisateurConnecte } from "@/helpers";
 import Colors from "@/constants/Colors";
 import BoutonFavorite from "@/components/BoutonFavorite";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
+import {useTranslation} from "react-i18next";
 
 export default function DetailsAssos() {
     const user = getUtilisateurConnecte()
     const userId = user?.idUtilisateur
+    const { t } = useTranslation();
 
     const params = useLocalSearchParams();
     const { id } = params;
@@ -29,7 +31,7 @@ export default function DetailsAssos() {
         fetchAssociation();
     }, [id]);
 
-    if (!association) return <Text>Loading...</Text>;
+    if (!association) return <Text>t('loading')</Text>;
 
     const navigateToDons = () => {
         router.push({
@@ -57,7 +59,7 @@ export default function DetailsAssos() {
             {/* Bouton "Donner" */}
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={styles.donnerButton} onPress={navigateToDons}>
-                    <Text style={styles.donnerButtonText}>Faire un Don</Text>
+                    <Text style={styles.donnerButtonText}>{t('don_title')}</Text>
                 </TouchableOpacity>
                 <BoutonFavorite idAssociation={id} idUtilisateur={userId} />
             </View>

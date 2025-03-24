@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { IDon } from '@/backend/interfaces/IDon';
 import Colors from '@/constants/Colors';
-
+import {useTranslation} from "react-i18next";
 // @ts-ignore
 export default function AssociationListModal({ visible, onClose, dons, total }) {
+    const { t } = useTranslation();
+
     const [filterType, setFilterType] = useState<'TOUS' | 'UNIQUE' | 'RECURRENT'>('TOUS');
     const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
 
@@ -47,14 +49,14 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>Vos Dons : {total}€</Text>
-                    <Text style={styles.modalSubTitle}>Vous avez effectuez {dons.length} dons pour un montant total égal à {total}€</Text>
+                    <Text style={styles.modalTitle}>{t("your_donations", { total })}</Text>
+                    <Text style={styles.modalSubTitle}>{t("donations_subtitle", { donCount: dons.length, total })}</Text>
 
                     {/* Filtres et tris */}
                     <View style={styles.filterContainer}>
                         {/* Filtre par type de don */}
                         <View style={styles.dropdownContainer}>
-                            <Text style={styles.dropdownLabel}>Type de don :</Text>
+                            <Text style={styles.dropdownLabel}>{t("filter_type_label")}</Text>
                             <View style={styles.relativeContainer}>
                                 <TouchableOpacity
                                     style={styles.dropdownButton}
@@ -90,7 +92,7 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
 
                         {/* Tri par montant */}
                         <View style={styles.dropdownContainer}>
-                            <Text style={styles.dropdownLabel}>Trier par montant :</Text>
+                            <Text style={styles.dropdownLabel}>{t("filter_sort_label")}</Text>
                             <View style={styles.relativeContainer}>
                                 <TouchableOpacity
                                     style={styles.dropdownButton}
@@ -132,10 +134,10 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
                         renderItem={({ item }) => (
                             <View style={styles.donItem}>
                                 <Text style={styles.donType}>{item.typeDon}</Text>
-                                <Text style={styles.donMontant}>Montant : {item.montant}€</Text>
-                                <Text style={styles.donDate}>Date : {new Date(item.dateDon).toLocaleDateString()}</Text>
+                                <Text style={styles.donMontant}>{t("donation_amount")}: {item.montant}€</Text>
+                                <Text style={styles.donDate}>{t("start_date")}: {new Date(item.dateDon).toLocaleDateString()}</Text>
                                 {item.frequence && (
-                                    <Text style={styles.donFrequence}>Fréquence : {item.frequence}</Text>
+                                    <Text style={styles.donFrequence}>{t('frequency')} {item.frequence}</Text>
                                 )}
                             </View>
                         )}
@@ -143,7 +145,7 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
 
                     {/* Bouton de fermeture */}
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>Fermer</Text>
+                        <Text style={styles.closeButtonText}>{t('close_button')}</Text>
                     </TouchableOpacity>
                 </View>
 

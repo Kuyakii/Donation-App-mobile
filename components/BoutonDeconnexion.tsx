@@ -1,13 +1,12 @@
 import React from 'react';
 import {View, Button, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 import {router} from "expo-router";
 import Colors from "@/constants/Colors";
+import {useTranslation} from "react-i18next";
 
 const BoutonDeconnexion = () => {
-    const navigation = useNavigation();
-
+    const { t } = useTranslation();
     const logout = async () => {
         try {
             // Supprimer le token de AsyncStorage
@@ -24,7 +23,7 @@ const BoutonDeconnexion = () => {
     return (
         <View>
             <TouchableOpacity style={styles.button} onPress={logout}>
-                <Text style={styles.buttonText} >Se déconnecter</Text>
+                <Text style={styles.buttonText}>{t('logout')}</Text>
             </TouchableOpacity>
         </View>
     );

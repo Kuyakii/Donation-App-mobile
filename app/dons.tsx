@@ -9,8 +9,10 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useNavigation } from "@react-navigation/native";
 import Header from "@/components/header";
 import BoutonAccueil from "@/components/BoutonAccueil";
+import {useTranslation} from "react-i18next";
 
 const DonPage = () => {
+    const { t } = useTranslation();
     const { confirmPayment } = useStripe();
     const [montant, setMontant] = useState<string>('20');
     const [montantCustom, setMontantCustom] = useState<boolean>(false);
@@ -42,7 +44,7 @@ const DonPage = () => {
                 setLoading(false);
             } catch (error) {
                 console.error("Erreur lors de la récupération de l'association:", error);
-                Alert.alert("Erreur", "Impossible de charger les données de l'association");
+                Alert.alert(t('error'), t('unable_to_load_association'));
                 setLoading(false);
             }
         };
@@ -62,12 +64,12 @@ const DonPage = () => {
         const today = new Date();
         if (isStartDate) {
             if (selectedDate < today) {
-                Alert.alert("Erreur", "La date de début doit être égale ou postérieure à aujourd'hui.");
+                Alert.alert(t('error'), t('start_date_invalid'));
                 return false;
             }
         } else {
             if (selectedDate <= new Date(startDate)) {
-                Alert.alert("Erreur", "La date de fin doit être postérieure à la date de début.");
+                Alert.alert(t('error'), t('end_date_invalid'));
                 return false;
             }
         }
@@ -118,13 +120,13 @@ const DonPage = () => {
             setProcessingPayment(true);
 
             if (!cardDetails) {
-                Alert.alert('Erreur', 'Veuillez remplir les détails de la carte');
+                Alert.alert(t('error'), t('card_details_required'));
                 setProcessingPayment(false);
                 return;
             }
 
             if (isRecurrent && (!user || idUser === 0)) {
-                Alert.alert('Erreur', 'Vous devez être connecté afin de réaliser un don récurrent !');
+                Alert.alert(t('error'), t('recurrent_don_requires_login'));
                 setShowCardForm(false);
                 setProcessingPayment(false);
                 router.push('/login');
@@ -158,7 +160,7 @@ const DonPage = () => {
 
                 if (error) {
                     console.error("Erreur de confirmation de paiement:", error);
-                    Alert.alert('Erreur de paiement', error.message);
+                    Alert.alert(t('payment_error'), error.message);
                     setProcessingPayment(false);
                     return;
                 }
@@ -196,7 +198,7 @@ const DonPage = () => {
 
                     console.log("Don enregistré avec succès");
 
-                    Alert.alert('Succès', 'Don réussi !', [
+                    Alert.alert(t('success'), t('payment_success'), [
                         {
                             text: 'OK',
                             onPress: () => {
@@ -215,17 +217,17 @@ const DonPage = () => {
                     ]);
                 } catch (donError) {
                     console.error("Erreur lors de l'enregistrement du don:", donError);
-                    Alert.alert('Attention', "Le paiement a été effectué mais nous avons rencontré un problème lors de l'enregistrement du don. Veuillez contacter le support.");
+                    Alert.alert(t('warning'), t('support_contact'));
                     resetFormState();
                 }
             } catch (stripeError) {
                 console.error("Erreur Stripe ou d'API:", stripeError);
                 // @ts-ignore
-                Alert.alert('Erreur', stripeError.message || "Une erreur est survenue lors du traitement du paiement.");
+                Alert.alert(t('error'), stripeError.message || t('payment_error'));
             }
         } catch (globalError) {
             console.error("Erreur globale non gérée:", globalError);
-            Alert.alert('Erreur', 'Un problème inattendu est survenu. Veuillez réessayer.');
+            Alert.alert(t('error'), t('unexpected_error'));
         } finally {
             setProcessingPayment(false);
         }
@@ -233,9 +235,9 @@ const DonPage = () => {
 
     const validateAndProceed = () => {
         if (isRecurrent && (!startDate || !endDate || !frequency)) {
-            Alert.alert("Erreur", "Veuillez remplir tous les champs pour le don récurrent.");
+            Alert.alert(t('error'), t('recurrent_don_missing_fields'));
         } else if (isRecurrent && idUser === 0) {
-            Alert.alert("Erreur", "Vous devez être connecté afin de faire un don récurrent !");
+            Alert.alert(t('error'), t('recurrent_don_requires_login'));
             router.push('/login');
         } else {
             setShowCardForm(true);
@@ -249,7 +251,7 @@ const DonPage = () => {
             <SafeAreaView style={styles.safeArea}>
             <BoutonAccueil></BoutonAccueil>
             <ScrollView ref={scrollViewRef} style={styles.scrollView}>
-                <Text style={styles.title}>Faire un don</Text>
+                <Text style={styles.title}>{t('don_title')}</Text>
 
                 {/* Association Card */}
                 <View style={styles.assoCard}>
@@ -262,24 +264,24 @@ const DonPage = () => {
                 </View>
 
                 {/* Donation Type */}
-                <Text style={styles.sectionTitle}>Type de don :</Text>
+                <Text style={styles.sectionTitle}>{t('donation_type')}</Text>
                 <View style={styles.typeDonContainer}>
                     <TouchableOpacity
                         style={[styles.typeDonButton, !isRecurrent && styles.typeDonSelected]}
                         onPress={() => setIsRecurrent(false)}
                     >
-                        <Text style={styles.typeDonText}>Don unique</Text>
+                        <Text style={styles.typeDonText}>{t('unique_donation')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.typeDonButton, isRecurrent && styles.typeDonSelected]}
                         onPress={() => setIsRecurrent(true)}
                     >
-                        <Text style={styles.typeDonText}>Don récurrent</Text>
+                        <Text style={styles.typeDonText}>{t('recurring_donation')}</Text>
                     </TouchableOpacity>
                 </View>
 
                 {/* Amount Selection */}
-                <Text style={styles.sectionTitle}>Montant du don :</Text>
+                <Text style={styles.sectionTitle}>{t('donation_amount')}</Text>
                 <View style={styles.amountContainer}>
                     <TouchableOpacity
                         style={[styles.amountButton, montant === '5' && styles.amountButtonSelected]}
@@ -315,7 +317,7 @@ const DonPage = () => {
                         style={styles.amountButton}
                         onPress={() => setMontantCustom(true)}
                     >
-                        <Text style={styles.amountText}>Edit</Text>
+                        <Text style={styles.amountText}>{t('edit_amount')}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -330,7 +332,7 @@ const DonPage = () => {
 
                 {isRecurrent && (
                     <>
-                        <Text style={styles.sectionTitle}>Date de début :</Text>
+                        <Text style={styles.sectionTitle}>{t('start_date')}</Text>
                         <TouchableOpacity
                             style={styles.datePickerButton}
                             onPress={() => setStartDatePickerVisible(true)}
@@ -340,7 +342,7 @@ const DonPage = () => {
                             </Text>
                         </TouchableOpacity>
 
-                        <Text style={styles.sectionTitle}>Date de fin :</Text>
+                        <Text style={styles.sectionTitle}>{t('end_date')}</Text>
                         <TouchableOpacity
                             style={styles.datePickerButton}
                             onPress={() => setEndDatePickerVisible(true)}
@@ -350,7 +352,7 @@ const DonPage = () => {
                             </Text>
                         </TouchableOpacity>
 
-                        <Text style={styles.sectionTitle}>Fréquence :</Text>
+                        <Text style={styles.sectionTitle}>{t('frequency')}</Text>
                         <View style={styles.frequencyContainer}>
                             {["semaine", "mois", "trimestre"].map((freq) => (
                                 <TouchableOpacity
@@ -372,7 +374,7 @@ const DonPage = () => {
 
                 {!showCardForm ? (
                     <TouchableOpacity style={styles.donateButton} onPress={validateAndProceed}>
-                        <Text style={styles.donateButtonText}>Donner {montant}€</Text>
+                        <Text style={styles.donateButtonText}>{t('donate_button')} {montant}€</Text>
                     </TouchableOpacity>
                 ) : (
                     <View style={styles.cardFormContainer}>
@@ -387,7 +389,7 @@ const DonPage = () => {
                                 onPress={() => setShowCardForm(false)}
                                 disabled={processingPayment}
                             >
-                                <Text style={styles.cancelButtonText}>Annuler</Text>
+                                <Text style={styles.cancelButtonText}>{t('cancel_button')}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
@@ -396,8 +398,9 @@ const DonPage = () => {
                                 disabled={processingPayment}
                             >
                                 <Text style={styles.confirmButtonText}>
-                                    {processingPayment ? "Traitement..." : "Confirmer"}
+                                    {processingPayment ? t('processing') : t('confirm_button')}
                                 </Text>
+
                             </TouchableOpacity>
                         </View>
 

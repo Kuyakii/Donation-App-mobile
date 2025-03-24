@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-
+import {useTranslation} from "react-i18next";
 export default function SearchBar() {
+    const { t } = useTranslation();
     return (
         <View style={styles.searchContainer}>
             <View style={styles.searchBar}>
                 <Feather name="search" size={18} color="gray" style={styles.searchIcon} />
-                <TextInput style={styles.searchInput} placeholder="Rechercher" placeholderTextColor="#999" />
+                <TextInput style={styles.searchInput} placeholder={t('searchBar_placeholder')} placeholderTextColor="#999" />
             </View>
         </View>
     );
