@@ -114,6 +114,7 @@ PUT /associations/:id : Met à jour une association existante. \
 POST /register : inscription avec en body email, password et pseudo. \
 POST /login : connexion avec en body : email et password. \
 POST /mdpOublie : pour changer de password avec en body : email et password => non encore utilisée. \
+POST /changePassword : pour changer le password via le settings en saisissant l'ancien password \
 POST /favorites : Associe une association à un utilisateur pour la liste des favorites
 DELETE /favorites : Supprime un couple (utilisateur/association) des associations favorites 
 GET /favorites/:id : Récupère toutes les associations favorites d'un utilisiateur par son userID.
