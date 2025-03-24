@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
     View,
     Text,
@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     ActivityIndicator,
 } from 'react-native';
+
 import { Feather } from '@expo/vector-icons';
 import Header from '../../components/header';
 import DonationCard from '../../components/ProfileComponents/DonationCard';
@@ -21,6 +22,7 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "@/config";
 import AssociationListModal from "@/components/DonationListModal";
+import {useFocusEffect} from "expo-router";
 
 export default function UserProfileScreen() {
     const [isLoading, setIsLoading] = useState(true);
@@ -30,54 +32,56 @@ export default function UserProfileScreen() {
     const [role, setRole] = useState<string>('');
     const [modalVisible, setModalVisible] = useState(false);
 
-    useEffect(() => {
-        const checkLogin = async () => {
-            try {
-                const storedToken = await AsyncStorage.getItem('token');
-                console.log('Token récupéré:', storedToken);
+    useFocusEffect(
+        useCallback(() => {
+            const checkLogin = async () => {
+                try {
+                    const storedToken = await AsyncStorage.getItem('token');
+                    console.log('Token récupéré:', storedToken);
 
-                if (!storedToken) {
-                    // @ts-ignore
-                    navigation.navigate('login');
-                    return;
-                }
-
-                const utilisateurString = await AsyncStorage.getItem('utilisateur');
-                if (utilisateurString) {
-                    const utilisateur: IUtilisateur = JSON.parse(utilisateurString);
-                    console.log("Utilisateur récupéré :", utilisateur);
-                    setUser(utilisateur);
-                } else {
-                    // @ts-ignore
-                    navigation.navigate('login');
-                }
-
-                const roles = await AsyncStorage.getItem('role');
-                console.log('Role récupéré:', roles);
-
-                if (roles) {
-                    setRole(roles);
-
-                    // Redirection vers la page admin si l'utilisateur est un admin d'association
-                    if (roles.toString().includes('ADMIN_ASSO')) {
+                    if (!storedToken) {
                         // @ts-ignore
-                        navigation.replace('(tabs)',{
-                            screen : 'AdminAssoScreen'
-                        });
+                        navigation.navigate('login');
                         return;
                     }
-                }
-            } catch (error) {
-                console.error("Erreur lors de la vérification de la connexion:", error);
-                // @ts-ignore
-                navigation.navigate('login');
-            } finally {
-                setIsLoading(false);
-            }
-        };
 
-        checkLogin();
-    }, [navigation]);
+                    const utilisateurString = await AsyncStorage.getItem('utilisateur');
+                    if (utilisateurString) {
+                        const utilisateur: IUtilisateur = JSON.parse(utilisateurString);
+                        console.log("Utilisateur récupéré :", utilisateur);
+
+                        setUser(utilisateur);
+                    } else {
+                        // @ts-ignore
+                        navigation.navigate('login');
+                    }
+
+                    const roles = await AsyncStorage.getItem('role');
+                    console.log('Role récupéré:', roles);
+
+                    if (roles) {
+                        setRole(roles);
+
+                        // Redirection vers la page admin si l'utilisateur est un admin d'association
+                        if (roles.toString().includes('ADMIN_ASSO')) {
+                            // @ts-ignore
+                            navigation.replace('(tabs)',{
+                                screen : 'AdminAssoScreen'
+                            });
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    console.error("Erreur lors de la vérification de la connexion:", error);
+                    // @ts-ignore
+                    navigation.navigate('login');
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            checkLogin();
+        }, [])
+    );
 
     useEffect(() => {
         const fetchDons = async () => {
@@ -100,9 +104,6 @@ export default function UserProfileScreen() {
             </View>
         );
     }
-
-    const { pseudonyme: Pseudo, email } = user;
-    console.log("Pseudo " + Pseudo + " Email " + email);
 
     const donsUser: IDon[] = [];
     let montantDonne: number = 0;
@@ -127,7 +128,7 @@ export default function UserProfileScreen() {
         <View style={styles.container}>
             <Header />
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
-                <Text style={styles.welcomeTitle}>Bonjour, {Pseudo}</Text>
+                <Text style={styles.welcomeTitle}>Bonjour, {user?.pseudonyme}</Text>
 
                 <View style={styles.actionsContainer}>
                     <TouchableOpacity style={styles.actionButton}>

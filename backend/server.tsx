@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import { AssociationRepository } from './repositories/AssociationRepository';
 import { UtilisateurRepository } from './repositories/UtilisateurRepository';
 import {DonationRepository} from "./repositories/DonationRepository";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const app = express();
@@ -203,6 +204,34 @@ app.post('/changePassword', async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Erreur lors du changement de mot de passe', error);
         res.status(500).json({message: 'Erreur serveur', error});
+    }
+});
+
+// @ts-ignore
+app.post('/changePseudonyme', async (req: Request, res: Response) => {
+    const { email, newPseudonyme, password } = req.body;
+
+    try {
+        if (!email || !newPseudonyme) {
+            return res.status(400).json({ message: "Tous les champs sont requis." });
+        }
+        const user = await userRepo.findByEmail(email);
+        if (!user) {
+            return res.status(400).json({ message: "Utilisateur non trouvé." });
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: "Mot de passe incorrect." });
+        }
+        if (newPseudonyme === user.pseudonyme) {
+            return res.status(401).json({ message: "Nouveau pseudonyme identique au pseudonyme actuel." });
+        }
+        await userRepo.updatePseudonyme(email, newPseudonyme);
+
+        res.json({ message: "Pseudonyme mis à jour avec succès." });
+    } catch (error) {
+        console.error("Erreur lors du changement de pseudonyme", error);
+        res.status(500).json({ message: "Erreur serveur", error });
     }
 });
 

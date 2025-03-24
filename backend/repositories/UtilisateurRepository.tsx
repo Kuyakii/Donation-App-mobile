@@ -2,6 +2,7 @@
 import { MariaDBConnection } from '../database/MariaDBConnection';
 import { IUtilisateur } from '../interfaces/IUtilisateur';
 import { RowDataPacket } from 'mysql2';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export class UtilisateurRepository {
     private db: MariaDBConnection;
@@ -54,6 +55,20 @@ export class UtilisateurRepository {
             connection.release();
         }
     }
+
+    async updatePseudonyme(email: string, newPseudonyme: string): Promise<void> {
+        const connection = await this.db.getConnection();
+        try {
+            await connection.query(
+                'UPDATE Utilisateur SET pseudonyme = ? WHERE email = ?',
+                [newPseudonyme, email]
+            );
+
+        } finally {
+            connection.release();
+        }
+    }
+
     async getRole(email: string): Promise<string> {
         const connection = await this.db.getConnection();
         try {

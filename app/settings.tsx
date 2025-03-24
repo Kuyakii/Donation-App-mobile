@@ -12,13 +12,15 @@ import { router } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
 import ChangePasswordModal from "@/components/ChangePasswordModal";
 import {getUtilisateurConnecte} from "@/helpers";
+import ChangePseudoModal from "@/components/ChangePseudoModal";
 
 export default function SettingsScreen() {
     const [notifications, setNotifications] = useState(true);
     const [darkMode, setDarkMode] = useState(false);
     const [dataSharing, setDataSharing] = useState(true);
     const [location, setLocation] = useState(true);
-    const [isModalVisible, setModalVisible] = useState(false);
+    const [isChangePasswordModalVisible, setChangePasswordModalVisible] = useState(false);
+    const [isChangePseudoModalVisible, setChangePseudoModalVisible] = useState(false);
 
     const navigation = useNavigation();
     const user = getUtilisateurConnecte();
@@ -65,15 +67,22 @@ export default function SettingsScreen() {
                 {/* Account Section */}
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Compte</Text>
-                    <TouchableOpacity style={styles.settingItem} onPress={() => setModalVisible(true)}>
+                    <TouchableOpacity style={styles.settingItem} onPress={() => setChangePasswordModalVisible(true)}>
                         <Text style={styles.settingLabel}>Changer le mot de passe</Text>
                         <Text style={styles.settingArrow}>→</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.settingItem} onPress={() => setChangePseudoModalVisible(true)}>
+                        <Text style={styles.settingLabel}>Changer le pseudonyme</Text>
+                        <Text style={styles.settingArrow}>→</Text>
+                    </TouchableOpacity>
                 </View>
+
             </ScrollView>
 
             {/* Intégration du modal */}
-            <ChangePasswordModal visible={isModalVisible} onClose={() => setModalVisible(false)} email={user.email} />
+            <ChangePasswordModal visible={isChangePasswordModalVisible} onClose={() => setChangePasswordModalVisible(false)} email={user.email} />
+            {/* Intégration du modal */}
+            <ChangePseudoModal visible={isChangePseudoModalVisible} onClose={() => setChangePseudoModalVisible(false)} email={user.email} />
         </View>
     );
 }
