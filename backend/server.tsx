@@ -177,6 +177,35 @@ app.post('/mdpOublie', async (req: Request, res: Response) => {
     res.json({ message: 'Mot de passe mis à jour avec succès.' });
 });
 
+// @ts-ignore
+app.post('/changePassword', async (req: Request, res: Response) => {
+    const {email, currentPassword, newPassword} = req.body;
+    console.log(email, currentPassword, newPassword);
+    try {
+        const user = await userRepo.findByEmail(email);
+        console.log("Utilisateur trouvé :", user);  // 🔍 Debug
+        if (!user) {
+            return res.status(400).json({message: 'Utilisateur non trouvé.'});
+        }
+        if (!currentPassword) {
+            return res.status(400).json({ message: "L'ancien mot de passe est requis." });
+        }
+        const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+        if (!isPasswordValid) {
+            return res.status(400).json({message: 'Ancien mot de passe incorrect.'});
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        await userRepo.updatePassword(email, hashedPassword);
+
+        res.json({message: 'Mot de passe mis à jour avec succès.'});
+    } catch (error) {
+        console.error('Erreur lors du changement de mot de passe', error);
+        res.status(500).json({message: 'Erreur serveur', error});
+    }
+});
+
 
 app.post('/favorites', async (req: Request, res: Response) => {
     const { idUtilisateur, idAssociation } = req.body;

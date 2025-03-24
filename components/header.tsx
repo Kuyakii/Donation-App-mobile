@@ -11,7 +11,7 @@ interface HeaderProps {
 
 
 const redirect = () => {
-   router.push('/reglages');
+   router.push('/settings');
 };
 
 export default function Header({title}: HeaderProps) {
