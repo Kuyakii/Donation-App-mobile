@@ -23,6 +23,7 @@ import AssociationItem from "@/components/AssociationItem";
 import {useRouter} from "expo-router";
 import {useNavigation} from "@react-navigation/native";
 import { EditAssociationModal } from '@/components/EditAssociationModal';
+import {UtilisateursList} from "@/components/UtilisateursList";
 
 export default function AdminAppScreen() {
     const router = useRouter();
@@ -373,22 +374,16 @@ export default function AdminAppScreen() {
             <BoutonDeconnexion />
     </View>
     );
+    // @ts-ignore
     const renderUsers = () => (
-        <View>
-            <Text style={styles.title}>Gestion des Utilisateurs</Text>
-
-            <FlatList
-                data={utilisateurs}
-                keyExtractor={(item) => item.idUtilisateur.toString()}
-                renderItem={({ item }) => (
-                    <View style={styles.listItem}>
-                        <Text>{item.pseudonyme} - {item.email}</Text>
-                        {/*<Text>Dons: {item.donations.reduce((a, b) => a + b, 0)}€</Text>*/}
-                    </View>
-                )}
-            />
-
-</View>
+            <View style={styles.container}>
+                <Text style={styles.title}>Gestion des Utilisateurs</Text>
+                <UtilisateursList
+                    utilisateurs={utilisateurs}
+                    onUpdateUsers={(updatedUsers) => setUtilisateurs(updatedUsers)}
+                    user={user}
+                />
+            </View>
     );
     const handleEditAssociation = (association: IAssociation) => {
         setSelectedAssociationForEdit(association);
@@ -501,7 +496,7 @@ export default function AdminAppScreen() {
 
                             <View style={styles.statItem}>
                                 <Text style={styles.statLabel}>Moyenne:</Text>
-                                <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[1]} €</Text>
+                                <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[1] || 0} €</Text>
                             </View>
 
                             <View style={styles.statItem}>
