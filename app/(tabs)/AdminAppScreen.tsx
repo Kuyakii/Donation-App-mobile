@@ -42,7 +42,6 @@ export default function AdminAppScreen() {
     const [activeTab, setActiveTab] = useState('stats');
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [selectedAssociationForEdit, setSelectedAssociationForEdit] = useState<IAssociation | null>(null);
-
     useEffect(() => {
         const loadUser = async () => {
             try {
@@ -561,6 +560,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         marginBottom: 125,
+        minHeight: 500
     },
     loadingContainer: {
         flex: 1,
@@ -837,7 +837,7 @@ const styles = StyleSheet.create({
     tabButton: { padding: 10, backgroundColor: '#ddd', borderRadius: 5 },
     title: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
     listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc'},
-    container2: {backgroundColor: Colors.light.background},
+    container2: {backgroundColor: 'white'},
 
     addButton: {
         backgroundColor: '#4CAF50',

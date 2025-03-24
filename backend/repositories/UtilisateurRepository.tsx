@@ -113,4 +113,36 @@ export class UtilisateurRepository {
             connection.release();
         }
     }
+
+    async deleteUseret(idUtilisateur: number) {
+        const connection = await this.db.getConnection();
+        try {
+            await connection.query(
+                'UPDATE don set idUtilisateur = 0 WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+            await connection.query(
+                'DELETE FROM associationsfavorites WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+            await connection.query(
+                'DELETE FROM admin_association WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+            await connection.query(
+                'DELETE FROM admin_application WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+            await connection.query(
+                'DELETE FROM citoyen WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+            await connection.query(
+                'DELETE FROM utilisateur WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+        } finally {
+            connection.release();
+        }
+    }
 }

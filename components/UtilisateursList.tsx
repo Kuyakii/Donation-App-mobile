@@ -94,7 +94,7 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
                     style: "destructive",
                     onPress: async () => {
                         try {
-                            const response = await fetch(`${BASE_URL}/deleteUtilisateur/${userToDelete.idUtilisateur}`, {
+                            const response = await fetch(`${BASE_URL}/suppUser/${userToDelete.idUtilisateur}`, {
                                 method: 'DELETE',
                                 headers: {
                                     'Accept': 'application/json',
@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
+        minWidth: "auto",
     },
     userItem: {
         flexDirection: 'row',

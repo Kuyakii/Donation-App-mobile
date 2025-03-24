@@ -348,6 +348,17 @@ app.put('/updateUtilisateur/:id', async (req: Request, res: Response) => {
     }
 });
 
+app.delete('/suppUser/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+        await userRepo.deleteUseret(Number(id));
+        res.status(201).json({ message: 'Supprimé des utilisateurs' });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la suppression de l'utilisateur", error });
+    }
+});
+
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
     console.log(`Serveur backend en écoute sur http://localhost:${port}`);
