@@ -80,7 +80,7 @@ export default function Layout() {
         <View style={styles.container} onLayout={onLayoutRootView}>
             <StatusBar barStyle="dark-content" />
             <Header />
-            <SearchBar />
+            <SearchBar associations={associations} />
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
                 {/* Section des associations favorites - visible uniquement si l'utilisateur est connecté */}
