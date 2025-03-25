@@ -22,6 +22,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "@/config";
 import AssociationListModal from "@/components/DonationListModal";
 import AssociationFavoritesModal from "@/components/AssociationFavoritesModal";
+import UserModal from "@/components/UserModal";
 
 export default function UserProfileScreen() {
     const [isLoading, setIsLoading] = useState(true);
@@ -30,6 +31,7 @@ export default function UserProfileScreen() {
     const [dons, setDons] = useState<IDon[]>([]);
     const [role, setRole] = useState<string>('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [UsermodalVisible, setUserModalVisible] = useState(false);
     const [favoriteModalVisible, setFavoriteModalVisible] = useState(false);
 
 
@@ -140,7 +142,7 @@ export default function UserProfileScreen() {
                 <Text style={styles.welcomeTitle}>Bonjour, {Pseudo}</Text>
 
                 <View style={styles.actionsContainer}>
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity style={styles.actionButton} onPress={() => setUserModalVisible(true)}>
                         <View style={styles.iconContainer}>
                             <Feather name="user" size={icon_size} color="black" />
                             <Text style={styles.actionText}>Profil</Text>
@@ -177,6 +179,7 @@ export default function UserProfileScreen() {
                 visible={favoriteModalVisible}
                 onClose={() => setFavoriteModalVisible(false)}
             />
+            <UserModal visible={UsermodalVisible} onClose={() => setUserModalVisible(false)} user={user} />
         </View>
         </FavoriteProvider>
     );
@@ -228,4 +231,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10
     },
+
 });
