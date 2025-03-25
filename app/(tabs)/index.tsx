@@ -12,6 +12,7 @@ import AssociationFavoriteList from "@/components/AssociationFavoriteList";
 import {FavoriteProvider} from "@/context/FavoriteContext";
 import {useRouter} from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
+import FirstTimeModal from "@/components/FirstTimeModal";
 
 // Empêche le splash screen de disparaître automatiquement
 SplashScreen.preventAutoHideAsync();
@@ -79,7 +80,8 @@ export default function Layout() {
     return (
         <View style={styles.container} onLayout={onLayoutRootView}>
             <StatusBar barStyle="dark-content" />
-            <Header />
+            <FirstTimeModal/>
+            <Header/>
             <SearchBar associations={associations} />
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
