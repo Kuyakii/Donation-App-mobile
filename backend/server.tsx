@@ -78,6 +78,17 @@ app.post('/associations', async (req: Request, res: Response) => {
     }
 });
 
+app.delete('/deleteAssociations/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+        await associationRepository.deleteAsso(Number(id));
+        res.status(201).send('Association Supprimée');
+    } catch (error) {
+        console.error('Erreur lors de la supression de l\'association', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 app.put('/associations/:id', async (req: Request, res: Response) => {
     const { id } = req.params;
     const { nom, description, localisation } = req.body;
@@ -360,6 +371,49 @@ app.get('/getMeilleurDonateur/:email', async (req: Request, res: Response) => {
     } catch (error) {
         console.error('Erreur lors de la récupération des meilleurs donateurs', error);
         res.status(500).send('Erreur serveur');
+    }
+});
+
+app.get('/getMeilleursDonateurs', async (req: Request, res: Response) => {
+    try {
+        const dons = await donsRepo.getMeilleursDonateurs();
+        res.json(dons);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des meilleurs donateurs', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+app.get('/getUtilisateurs', async (req: Request, res: Response) => {
+    try {
+        const dons = await userRepo.getAll();
+        res.json(dons);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des utilisateurs', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+app.put('/updateUtilisateur/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { email, pseudonyme } = req.body;
+    try {
+        const dons = await userRepo.updateUser(email, pseudonyme, Number(id));
+        res.json(dons);
+    } catch (error) {
+        console.error('Erreur lors de l\'update de l\'utilisateur', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
+app.delete('/suppUser/:id', async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    try {
+        await userRepo.deleteUseret(Number(id));
+        res.status(201).json({ message: 'Supprimé des utilisateurs' });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la suppression de l'utilisateur", error });
     }
 });
 

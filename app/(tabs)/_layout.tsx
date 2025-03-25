@@ -18,6 +18,7 @@ export default function TabLayout() {
 
     // Déterminer si nous sommes sur la page admin
     const isAdminRoute = pathname.includes('AdminAssoScreen');
+    const isAdminRoute2 = pathname.includes('AdminAppScreen');
 
     return (
         <I18nextProvider i18n={i18n}>
@@ -57,7 +58,7 @@ export default function TabLayout() {
                 name="questionnaire"
                 options={{
                     title: '',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="credit-card" color={color} />,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="layers" color={color} />,
                 }}
             />
             <Tabs.Screen
@@ -78,11 +79,18 @@ export default function TabLayout() {
                 name="userPage"
                 options={{
                     title: '',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={isAdminRoute ? Colors.primary_dark.background : color} />,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="user" color={isAdminRoute || isAdminRoute2 ? Colors.primary_dark.background : color} />,
                 }}
             />
             <Tabs.Screen
                 name="AdminAssoScreen"
+                options={{
+                    title: '',
+                    href: null,
+                }}
+            />
+            <Tabs.Screen
+                name="AdminAppScreen"
                 options={{
                     title: '',
                     href: null,

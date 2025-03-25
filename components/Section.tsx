@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 // @ts-ignore
 export default function Section({ title, icon, children, onSeeAllPress }) {
@@ -8,7 +8,7 @@ export default function Section({ title, icon, children, onSeeAllPress }) {
         <View style={styles.section}>
             <View style={styles.sectionHeader}>
                 <View style={styles.sectionTitleContainer}>
-                    <Feather name={icon} size={20} color="black" />
+                    <MaterialIcons name={icon} size={20} color="black" />
                     <Text style={styles.sectionTitle}>{title}</Text>
                 </View>
                 {onSeeAllPress && (

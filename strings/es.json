@@ -4,11 +4,19 @@
   "searchBar_placeholder": "Buscar",
   "hello": "Hola",
 
+  "loading_associations": "Cargando asociaciones...",
   "favorite_associations": "Mis asociaciones favoritas",
   "login_required_for_favorites": "Debes iniciar sesión para gestionar tus asociaciones favoritas.",
   "all_associations": "Todas las asociaciones",
   "popular_associations": "Asociaciones populares",
   "mental_health_associations": "Asociaciones de salud mental",
+  "no_addiction_associations": "No hay asociaciones de adicciones disponibles",
+  "no_cancer_associations": "No hay asociaciones de cáncer disponibles",
+  "no_mental_health_associations": "No hay asociaciones de salud mental disponibles",
+  "addiction_associations": "Asociaciones de adicciones",
+  "cancer_associations": "Asociaciones de cáncer",
+  "disability_associations": "Asociaciones de discapacidad",
+  "no_disability_associations": "No hay asociaciones de discapacidad disponibles",
   "asso": "Asociación",
   "description_asso": "Descripción de la asociación",
 
@@ -32,6 +40,10 @@
   "donation_type": "Tipo de donación:",
   "unique_donation": "Donación única",
   "recurring_donation": "Donación recurrente",
+  "filter_sort_label": "Ordenar por cantidad:",
+  "all_donations": "Todas las donaciones",
+  "descending": "Descendente",
+  "ascending": "Ascendente,,
   "donation_amount": "Cantidad de la donación:",
   "edit_amount": "Editar",
   "start_date": "Fecha de inicio:",
@@ -110,5 +122,7 @@
   "top3Associations": "Top 3 asociaciones",
   "top3AssociationsSubtitle": "Las tres asociaciones a las que más has donado.",
   "amountGiven": "Cantidad donada: {{amount}}",
+  "no_donations_yet": "¡Aún no has hecho ninguna donación. ¡Cada donación puede hacer una diferencia!",
+  "make_first_donation": "Haz tu primera donación y apoya una causa que te importe!",
   "none": "Ninguna"
 }

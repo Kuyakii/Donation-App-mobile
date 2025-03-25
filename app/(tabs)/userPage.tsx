@@ -9,9 +9,9 @@ import {
 } from 'react-native';
 
 import { Feather } from '@expo/vector-icons';
-import Header from '../../components/header';
-import DonationCard from '../../components/ProfileComponents/DonationCard';
-import TopAssociations from '../../components/ProfileComponents/TopAssociations';
+import Header from '@/components/header';
+import DonationCard from '@/components/ProfileComponents/DonationCard';
+import TopAssociations from '@/components/ProfileComponents/TopAssociations';
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";
 import { FavoriteProvider } from "@/context/FavoriteContext";
@@ -31,56 +31,65 @@ export default function UserProfileScreen() {
     const [dons, setDons] = useState<IDon[]>([]);
     const [role, setRole] = useState<string>('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [favoriteModalVisible, setFavoriteModalVisible] = useState(false);
+
     const { t } = useTranslation();
-    useFocusEffect(
-        useCallback(() => {
-            const checkLogin = async () => {
-                try {
-                    const storedToken = await AsyncStorage.getItem('token');
-                    console.log('Token récupéré:', storedToken);
 
-                    if (!storedToken) {
-                        // @ts-ignore
-                        navigation.navigate('login');
-                        return;
-                    }
+    useEffect(() => {
+        const checkLogin = async () => {
+            try {
+                const storedToken = await AsyncStorage.getItem('token');
+                console.log('Token récupéré:', storedToken);
 
-                    const utilisateurString = await AsyncStorage.getItem('utilisateur');
-                    if (utilisateurString) {
-                        const utilisateur: IUtilisateur = JSON.parse(utilisateurString);
-                        console.log("Utilisateur récupéré :", utilisateur);
-
-                        setUser(utilisateur);
-                    } else {
-                        // @ts-ignore
-                        navigation.navigate('login');
-                    }
-
-                    const roles = await AsyncStorage.getItem('role');
-                    console.log('Role récupéré:', roles);
-
-                    if (roles) {
-                        setRole(roles);
-
-                        if (roles.toString().includes('ADMIN_ASSO')) {
-                            // @ts-ignore
-                            navigation.replace('(tabs)',{
-                                screen : 'AdminAssoScreen'
-                            });
-                            return;
-                        }
-                    }
-                } catch (error) {
-                    console.error("Erreur lors de la vérification de la connexion:", error);
+                if (!storedToken) {
                     // @ts-ignore
                     navigation.navigate('login');
-                } finally {
-                    setIsLoading(false);
+                    return;
                 }
-            };
-            checkLogin();
-        }, [])
-    );
+
+                const utilisateurString = await AsyncStorage.getItem('utilisateur');
+                if (utilisateurString) {
+                    const utilisateur: IUtilisateur = JSON.parse(utilisateurString);
+                    console.log("Utilisateur récupéré :", utilisateur);
+
+                    setUser(utilisateur);
+                } else {
+                    // @ts-ignore
+                    navigation.navigate('login');
+                }
+
+                const roles = await AsyncStorage.getItem('role');
+                console.log('Role récupéré:', roles);
+
+                if (roles) {
+                    setRole(roles);
+
+                    // Redirection vers la page admin si l'utilisateur est un admin d'association
+                    if (roles.toString().includes('ADMIN_ASSO')) {
+                        // @ts-ignore
+                        navigation.replace('(tabs)',{
+                            screen : 'AdminAssoScreen'
+                        });
+                        return;
+                    } else if(roles.toString().includes('ADMIN_APP')){
+                        // @ts-ignore
+                        navigation.replace('(tabs)',{
+                            screen : 'AdminAppScreen'
+                        });
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error("Erreur lors de la vérification de la connexion:", error);
+                // @ts-ignore
+                navigation.navigate('login');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        checkLogin();
+    }, [navigation]);
 
     useEffect(() => {
         const fetchDons = async () => {
@@ -103,6 +112,9 @@ export default function UserProfileScreen() {
             </View>
         );
     }
+
+    const { pseudonyme: Pseudo, email } = user;
+    console.log("Pseudo " + Pseudo + " Email " + email);
 
     const donsUser: IDon[] = [];
     let montantDonne: number = 0;
@@ -144,7 +156,10 @@ export default function UserProfileScreen() {
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity
+                        style={styles.actionButton}
+                        onPress={() => setFavoriteModalVisible(true)}
+                    >
                         <View style={styles.iconContainer}>
                             <Feather name="star" size={icon_size} color="#FFD700" />
                             <Text style={styles.actionText}>{t('favorites')}</Text>
@@ -191,8 +206,8 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 8,
         backgroundColor: Colors.container_light.backgroundColor,
-        borderWidth: 1,
-        borderColor: 'black',
+        borderWidth: 0.5,
+        borderColor: 'grey',
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 5,

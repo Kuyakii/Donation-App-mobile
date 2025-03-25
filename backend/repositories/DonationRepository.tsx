@@ -90,4 +90,14 @@ export class DonationRepository {
         }
     }
 
+    async getMeilleursDonateurs(): Promise<{ idUtilisateur: number, pseudonyme: string, totalMontant: number }[]> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows]: any[] = await connection.query("SELECT u.idUtilisateur, CASE WHEN u.pseudonyme = 'Admin' THEN 'Anonyme' ELSE u.pseudonyme END AS pseudonyme, SUM(d.montant) AS totalMontant FROM utilisateur u INNER JOIN don d ON u.idUtilisateur = d.idUtilisateur GROUP BY u.idUtilisateur, u.pseudonyme order by 3 desc");
+            return rows as { idUtilisateur: number, pseudonyme: string, totalMontant: number }[];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
+
 }

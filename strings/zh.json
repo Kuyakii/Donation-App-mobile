@@ -4,11 +4,19 @@
   "searchBar_placeholder": "搜索",
   "hello": "你好",
 
+  "loading_associations": "加载协会...",
   "favorite_associations": "我的收藏组织",
   "login_required_for_favorites": "您需要登录才能管理收藏的组织。",
   "all_associations": "所有组织",
   "popular_associations": "热门组织",
   "mental_health_associations": "心理健康组织",
+  "no_addiction_associations": "没有可用的成瘾协会",
+  "no_cancer_associations": "没有可用的癌症协会",
+  "no_mental_health_associations": "没有可用的心理健康协会",
+  "addiction_associations": "成瘾协会",
+  "cancer_associations": "癌症协会",
+  "disability_associations": "残障协会",
+  "no_disability_associations": "没有可用的残障协会",
   "asso": "组织",
   "description_asso": "组织描述",
 
@@ -32,6 +40,10 @@
   "donation_type": "捐赠类型：",
   "unique_donation": "一次性捐赠",
   "recurring_donation": "定期捐赠",
+  "filter_sort_label": "按金额排序：",
+  "all_donations": "所有捐赠",
+  "descending": "降序",
+  "ascending": "升序",
   "donation_amount": "捐赠金额：",
   "edit_amount": "编辑",
   "start_date": "开始日期：",
@@ -110,5 +122,7 @@
   "top3Associations": "最受支持的 3 个组织",
   "top3AssociationsSubtitle": "您捐款最多的三个组织。",
   "amountGiven": "捐款金额：{{amount}}",
+  "no_donations_yet": "您还没有进行任何捐赠。每一笔捐赠都能带来改变！",
+  "make_first_donation": "进行您的第一次捐赠，支持一个您关心的事业！",
   "none": "无"
 }

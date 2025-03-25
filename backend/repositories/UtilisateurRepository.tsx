@@ -2,6 +2,7 @@
 import { MariaDBConnection } from '../database/MariaDBConnection';
 import { IUtilisateur } from '../interfaces/IUtilisateur';
 import { RowDataPacket } from 'mysql2';
+import {IDon} from "@/backend/interfaces/IDon";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export class UtilisateurRepository {
@@ -101,6 +102,62 @@ export class UtilisateurRepository {
             throw error; // Propager l'erreur pour la gestion externe
         } finally {
             connection.release(); // Toujours libérer la connexion
+        }
+    }
+
+
+    async getAll(): Promise<IUtilisateur[]> {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query('SELECT * FROM utilisateur');
+            return rows as IUtilisateur[];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
+
+    // Mettre à jour le mot de passe d'un utilisateur
+    async updateUser(email: string, pseudo: string, idUser: number): Promise<void> {
+        const connection = await this.db.getConnection();
+        try {
+            await connection.query(
+                'UPDATE Utilisateur SET pseudonyme = ?, email = ? WHERE idUtilisateur = ? ',
+                [pseudo, email, idUser]
+            );
+        } finally {
+            connection.release();
+        }
+    }
+
+    async deleteUseret(idUtilisateur: number) {
+        const connection = await this.db.getConnection();
+        try {
+            await connection.query(
+                'UPDATE don set idUtilisateur = 0 WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+            await connection.query(
+                'DELETE FROM associationsfavorites WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+            await connection.query(
+                'DELETE FROM admin_association WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+            await connection.query(
+                'DELETE FROM admin_application WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+            await connection.query(
+                'DELETE FROM citoyen WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+            await connection.query(
+                'DELETE FROM utilisateur WHERE idUtilisateur = ? ',
+                [idUtilisateur]
+            );
+        } finally {
+            connection.release();
         }
     }
 }

@@ -26,9 +26,11 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         backgroundColor: '#f2f2f2',
+        resizeMode: 'contain',
         marginBottom: 4,
         borderRadius: 4,
-        borderWidth: 1,
+        borderWidth: 0.5,
+        borderColor: 'grey',
     },
     favoriteText: {
         fontSize: 12,

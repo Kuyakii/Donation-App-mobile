@@ -2,14 +2,13 @@ import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View, Dimensions, Animated, PanResponder, TouchableOpacity } from 'react-native';
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";
-import {useTranslation} from "react-i18next";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
 const SWIPE_OUT_DURATION = 250;
 
+
 export default function App() {
-    const { t } = useTranslation();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [completed, setCompleted] = useState(false);
@@ -104,12 +103,12 @@ export default function App() {
     if (completed) {
         return (
             <View style={styles.container}>
-                <Text style={styles.title}>{t('results')}</Text>
+                <Text style={styles.title}>Résultats</Text>
                 {answers.map((item, index) => (
                     <View key={index} style={styles.resultItem}>
                         <Text style={styles.questionText}>{item.question}</Text>
                         <Text style={item.answer ? styles.yesText : styles.noText}>
-                            {item.answer ? t('yes') : t('no')}
+                            {item.answer ? 'Oui' : 'Non'}
                         </Text>
                     </View>
                 ))}
@@ -118,7 +117,7 @@ export default function App() {
                     style={styles.restartButton}
                     onPress={restartQuiz}
                 >
-                    <Text style={styles.restartButtonText}>{t('restart')}</Text>
+                    <Text style={styles.restartButtonText}>Recommencer</Text>
                 </TouchableOpacity>
             </View>
         );
@@ -126,57 +125,56 @@ export default function App() {
 
     return (
         <>
-            <Header />
+            <Header/>
             <View style={styles.container}>
-                <Text style={styles.title}>{t('questionnaire')}</Text>
-                <Text style={styles.subtitle}>{t('questionnaire_explanation')}</Text>
-                <Text style={styles.explication}>{t('swipe_right_for_yes')} {t('swipe_left_for_no')}</Text>
-                <Text style={styles.counter}>{currentIndex + 1}/{questions.length}</Text>
+            <Text style={styles.title}>Questionnaire</Text>
+            <Text style={styles.subtitle}>Ce questionnaire vous aidera à trouver quelle association est faite pour vous.</Text>
+            <Text style={styles.explication}>Swipe à droite pour Oui, à gauche pour Non</Text>
+            <Text style={styles.counter}>{currentIndex + 1}/{questions.length}</Text>
 
-                <View style={styles.cardContainer}>
-                    {/* Aura verte (Oui) */}
-                    <Animated.View
-                        style={[
-                            styles.aura,
-                            styles.greenAura,
-                            { opacity: rightGlowOpacity }
-                        ]} />
+            <View style={styles.cardContainer}>
+                {/* Aura verte (Oui) */}
+                <Animated.View
+                    style={[
+                        styles.aura,
+                        styles.greenAura,
+                        {opacity: rightGlowOpacity}
+                    ]}/>
 
-                    {/* Aura rouge (Non) */}
-                    <Animated.View
-                        style={[
-                            styles.aura,
-                            styles.redAura,
-                            { opacity: leftGlowOpacity }
-                        ]} />
+                {/* Aura rouge (Non) */}
+                <Animated.View
+                    style={[
+                        styles.aura,
+                        styles.redAura,
+                        {opacity: leftGlowOpacity}
+                    ]}/>
 
-                    <Animated.View
-                        style={[
-                            styles.cardStyle,
-                            {
-                                transform: [
-                                    { translateX: position.x },
-                                    { translateY: position.y },
-                                    { rotate: rotation }
-                                ]
-                            }
-                        ]}
-                        {...panResponder.panHandlers}
-                    >
-                        <Text style={styles.questionText}>{questions[currentIndex]}</Text>
-                    </Animated.View>
+                <Animated.View
+                    style={[
+                        styles.cardStyle,
+                        {
+                            transform: [
+                                {translateX: position.x},
+                                {translateY: position.y},
+                                {rotate: rotation}
+                            ]
+                        }
+                    ]}
+                    {...panResponder.panHandlers}
+                >
+                    <Text style={styles.questionText}>{questions[currentIndex]}</Text>
+                </Animated.View>
+            </View>
+
+            <View style={styles.actionsContainer}>
+                <View style={styles.actionIndicator}>
+                    <Text style={styles.noText}>Non</Text>
                 </View>
-
-                <View style={styles.actionsContainer}>
-                    <View style={styles.actionIndicator}>
-                        <Text style={styles.noText}>{t('no')}</Text>
-                    </View>
-                    <View style={styles.actionIndicator}>
-                        <Text style={styles.yesText}>{t('yes')}</Text>
-                    </View>
+                <View style={styles.actionIndicator}>
+                    <Text style={styles.yesText}>Oui</Text>
                 </View>
             </View>
-        </>
+        </View></>
     );
 }
 
@@ -214,7 +212,7 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         flex: 1,
-        margin: 20,
+        margin : 20,
         position: 'relative',
         alignItems: 'center',
     },

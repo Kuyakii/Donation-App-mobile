@@ -1,32 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, Alert, Modal, Button, Image} from 'react-native';
+import {View, Text, StyleSheet, Alert, Modal, Image, TouchableOpacity, Dimensions} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import { images} from '@/config';
 import {useRouter} from "expo-router";
 import {getAllAssociation} from "@/helpers";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
-
+import Colors from "@/constants/Colors";
+import {useTranslation} from "react-i18next";
 export default function MapScreen() {
     const [location, setLocation] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedAssociation, setSelectedAssociation] = useState<IAssociation | null>(null);
     const router = useRouter();
+    const { t } = useTranslation();
 
     const handleMarkerPress = (asso : IAssociation) => {
         setSelectedAssociation(asso);
         setModalVisible(true);
     };
+
     useEffect(() => {
         (async () => {
-            // Demande de permission pour la localisation
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 Alert.alert("Permission refusée", "Autorisez la localisation pour voir les associations proches.");
                 return;
             }
 
-            // Récupération de la position actuelle de l'utilisateur
             let userLocation = await Location.getCurrentPositionAsync({});
             setLocation({
                 // @ts-ignore
@@ -35,14 +36,11 @@ export default function MapScreen() {
                 latitudeDelta: 0.05,
                 longitudeDelta: 0.05,
             });
-
-            // Récupération des associations depuis l'API
         })();
     }, []);
 
-
     const associations = getAllAssociation();
-    // @ts-ignore
+
     return (
         <View style={styles.container}>
             <MapView
@@ -57,12 +55,11 @@ export default function MapScreen() {
                         key={index}
                         /* @ts-ignore */
                         coordinate={{ latitude: asso.localisation.y, longitude: asso.localisation.x }}
-                        onPress={() => handleMarkerPress(asso)}  // Ouverture de la modale sur le clic
+                        onPress={() => handleMarkerPress(asso)}
                     />
                 ))}
             </MapView>
 
-            {/* Modale avec les informations */}
             {selectedAssociation && (
                 <Modal
                     visible={modalVisible}
@@ -79,15 +76,26 @@ export default function MapScreen() {
                             </View>
 
                             <Text style={styles.modalDescription}>{selectedAssociation.descriptionCourte}</Text>
-                            <Button title="Aller voir l'association" onPress={() => {
-                                router.push({
-                                    pathname: "/detailsAssos",
-                                    params: { id: selectedAssociation.idAssociation},
-                                });
-                                setModalVisible(false);
-                            }}/>
-                            <View style={{marginBottom: 7,}}></View>
-                            <Button title="Fermer" onPress={() => setModalVisible(false)} />
+
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => {
+                                    router.push({
+                                        pathname: "/detailsAssos",
+                                        params: { id: selectedAssociation.idAssociation},
+                                    });
+                                    setModalVisible(false);
+                                }}
+                            >
+                                <Text style={styles.buttonText}>Aller voir l'association</Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => setModalVisible(false)}
+                            >
+                                <Text style={styles.buttonText}>{t('close_button')}</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
@@ -108,10 +116,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Pour rendre le fond sombre
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalHeader: {
-      flexDirection: "row",
+        flexDirection: "row",
         alignItems: "center",
     },
     modalContent: {
@@ -122,14 +130,14 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     modalTitle: {
-        padding: 17,
+        padding: 15,
         flex: 1,
-        fontSize: 26,
-        textAlign: 'center',
+        fontSize: 20,
+        textAlign: 'left',
         fontWeight: 'bold',
     },
     modalDescription: {
-        marginVertical: 10,
+        marginBottom: 30,
         fontSize: 20,
     },
     image: {
@@ -137,5 +145,23 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 75,
         marginBottom: 10,
+        resizeMode: 'contain',
     },
+    button: {
+        backgroundColor: Colors.primary_dark.background,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        width: 250,
+        height: 45,
+        marginBottom: 10,
+    },
+    buttonText: {
+        color: Colors.primary_dark.text,
+        fontSize: 15,
+        fontWeight: '500',
+    }
 });

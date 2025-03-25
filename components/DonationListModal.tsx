@@ -16,14 +16,14 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
 
     // Options pour les listes déroulantes
     const typeOptions = [
-        { label: "Tous les dons", value: "TOUS" },
-        { label: "Dons uniques", value: "UNIQUE" },
-        { label: "Dons récurrents", value: "RECURRENT" }
+        { label: t('all_donations'), value: "TOUS" },
+        { label: t('unique_donation'), value: "UNIQUE" },
+        { label: t('recurring_donation'), value: "RECURRENT" }
     ];
 
     const sortOptions = [
-        { label: "Décroissant", value: "desc" },
-        { label: "Croissant", value: "asc" }
+        { label: t('descending'), value: "desc" },
+        { label: t('ascending'), value: "asc" }
     ];
 
     // Filtrer les dons par type
@@ -56,7 +56,7 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
                     <View style={styles.filterContainer}>
                         {/* Filtre par type de don */}
                         <View style={styles.dropdownContainer}>
-                            <Text style={styles.dropdownLabel}>{t("filter_type_label")}</Text>
+                            <Text style={styles.dropdownLabel}>{t("donation_type")}</Text>
                             <View style={styles.relativeContainer}>
                                 <TouchableOpacity
                                     style={styles.dropdownButton}

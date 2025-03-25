@@ -9,8 +9,15 @@ import {useTranslation} from "react-i18next";
 export default function TopAssociations({topAssos}) {
     const { t } = useTranslation();
     const [listeAssos, setListeAssos] = useState<IAssociation[] | null>(null);
+
     useEffect(() => {
         async function fetchAssociations() {
+            // Si aucune association n'est fournie, ne rien faire
+            if (!topAssos || topAssos.length === 0) {
+                setListeAssos([]);
+                return;
+            }
+
             const associations: IAssociation[] = [];
             for (const a of topAssos) {
                 console.log("ID remplir liste" + a[0]);
@@ -22,66 +29,67 @@ export default function TopAssociations({topAssos}) {
 
         fetchAssociations();
     }, [topAssos]);
+
+    // Vérifier s'il y a des associations à afficher
+    const hasAssociations = topAssos && topAssos.length > 0;
+
     return (
         <View style={styles.topAssociationsCard}>
             <Text style={styles.topAssociationsTitle}>{t('top3Associations')}</Text>
-            <Text style={styles.topAssociationsSubtitle}>
-                {t('top3AssociationsSubtitle')}
-            </Text>
 
+            {hasAssociations ? (
+                <Text style={styles.topAssociationsSubtitle}>
+                    {t('top3AssociationsSubtitle')}
+                </Text>
+            ) : (
+                <Text style={styles.topAssociationsSubtitle}>
+                    {t('no_donations_yet')}
+                </Text>
+            )}
 
-            <View style={styles.associationItem}>
-                <Text style={styles.rankingNumber}>1.</Text>
+            {/* Afficher les associations si disponibles */}
+            {hasAssociations && listeAssos && (
+                <View style={styles.associationsContainer}>
+                    {topAssos.map((asso, index) => (
+                        listeAssos[index] && (
+                            <View key={index} style={styles.associationItem}>
+                                <Text style={styles.rankingNumber}>{index + 1}.</Text>
+                                <View style={styles.associationContent}>
+                                    <Image
+                                        style={styles.favoriteImage}
+                                        source={
+                                            listeAssos[index].nomImage && images[listeAssos[index].nomImage]
+                                                ? images[listeAssos[index].nomImage]
+                                                : images['tmp.png']
+                                        }
+                                    />
+                                    <View style={styles.associationDetails}>
+                                        <Text style={styles.associationName}>{listeAssos[index].nom}</Text>
+                                        <Text style={styles.donationAmount}>{asso[1]}€</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        )
+                    ))}
+                </View>
+            )}
 
-                <Image
-                    style={styles.favoriteImage}
-                    source={
-                        listeAssos && listeAssos[0] && listeAssos[0].nomImage && images[listeAssos[0].nomImage]
-                            ? images[listeAssos[0].nomImage] // Utiliser l'image de l'association
-                            : images['tmp.png'] // Image par défaut
-                    }>
-                </Image>
-                <Text style={styles.associationName}>{(listeAssos && listeAssos[0]) ? listeAssos[0].nom : t('none')}</Text>
-                <Text>{t('amountGiven', { amount: (listeAssos && listeAssos[0]) ? topAssos[0][1] : t('none') })}</Text>
-            </View>
-
-            <View style={styles.associationItem}>
-                <Text style={styles.rankingNumber}>2.</Text>
-                <Image
-                    style={styles.favoriteImage}
-                    source={
-                        listeAssos && listeAssos[1] && listeAssos[1].nomImage && images[listeAssos[1].nomImage]
-                            ? images[listeAssos[1].nomImage] // Utiliser l'image de l'association
-                            : images['tmp.png'] // Image par défaut
-                    }
-                >
-                </Image>
-                <Text style={styles.associationName}>{(listeAssos && listeAssos[1]) ? listeAssos[1].nom : t('none')}</Text>
-                <Text>{t('amountGiven', { amount: (listeAssos && listeAssos[1]) ? topAssos[1][1] : t('none') })}</Text>
-            </View>
-
-            <View style={styles.associationItem}>
-                <Text style={styles.rankingNumber}>3.</Text>
-                <Image
-                    style={styles.favoriteImage}
-                    source={
-                        listeAssos && listeAssos[2] && listeAssos[2].nomImage && images[listeAssos[2].nomImage]
-                            ? images[listeAssos[2].nomImage] // Utiliser l'image de l'association
-                            : images['tmp.png'] // Image par défaut
-                    }
-                >
-                </Image>
-                <Text style={styles.associationName}>{(listeAssos && listeAssos[2]) ? listeAssos[2].nom : t('none')}</Text>
-                <Text>{t('amountGiven', { amount: (listeAssos && listeAssos[2]) ? topAssos[2][1] : t('none') })}</Text>
-            </View>
+            {/* Message d'encouragement si aucune association */}
+            {(!hasAssociations || (listeAssos && listeAssos.length === 0)) && (
+                <View style={styles.emptyStateContainer}>
+                    <Text style={styles.emptyStateText}>
+                        {t('make_first_donation')}
+                    </Text>
+                </View>
+            )}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     topAssociationsCard: {
-        borderWidth: 1,
-        borderColor: 'black',
+        borderWidth: 0.5,
+        borderColor: 'grey',
         borderRadius: 12,
         padding: 16,
         backgroundColor: Colors.container_light.backgroundColor,
@@ -98,24 +106,49 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         fontWeight: '500',
     },
+    associationsContainer: {
+        gap: 12,
+    },
     associationItem: {
-        flexDirection: 'column',
+        marginBottom: 16,
+    },
+    associationContent: {
+        flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 12,
+        marginTop: 4,
     },
     rankingNumber: {
         fontSize: 16,
         fontWeight: 'bold',
-
+        marginBottom: 4,
+    },
+    associationDetails: {
+        marginLeft: 12,
+        flex: 1,
     },
     associationName: {
         fontSize: 16,
+        fontWeight: '600',
+        marginBottom: 2,
+    },
+    donationAmount: {
+        fontSize: 14,
+        color: '#555',
     },
     favoriteImage: {
         width: 60,
         height: 60,
-        marginBottom: 4,
         borderRadius: 4,
-        resizeMode: 'contain', // Ajuste l'image
+        resizeMode: 'contain',
+    },
+    emptyStateContainer: {
+        alignItems: 'center',
+        paddingVertical: 16,
+    },
+    emptyStateText: {
+        fontSize: 15,
+        color: '#555',
+        textAlign: 'center',
+        fontStyle: 'italic',
     },
 });

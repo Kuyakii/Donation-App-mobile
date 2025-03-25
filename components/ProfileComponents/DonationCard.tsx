@@ -49,7 +49,7 @@ export default function  DonationCard ({montantDon}){
 const styles = StyleSheet.create({
     donationCard: {
         borderWidth: 0.5,
-        borderColor: 'black',
+        borderColor: 'grey',
         backgroundColor: Colors.container_light.backgroundColor,
         borderRadius: 12,
         padding: 16,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     },
     progressFill: {
         height: '100%',
-        backgroundColor: '#7CCC6C',
+        backgroundColor: Colors.primary_dark.background,
         borderRadius: 10,
         borderWidth: 0.5,
     },

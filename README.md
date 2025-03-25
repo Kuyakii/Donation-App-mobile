@@ -106,6 +106,10 @@ Récupération des dons de l'utilisateur, affichage des badges selon des seuils;
 
 Développement front et back (endpoint) de la page admin assos, disponible uniquement pour ces derniers, pour leurs associations.
 
+## pageAdminApplication
+
+Développement front et back de la page admin app : des trois onglets : un onglets stats pour toutes les assos et peuvent être triées, une page pour gérer les utilisateurs et une page pour gérer les associations.
+
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \

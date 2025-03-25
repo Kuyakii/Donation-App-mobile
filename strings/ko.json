@@ -4,11 +4,19 @@
   "searchBar_placeholder": "검색",
   "hello": "안녕하세요",
 
+  "loading_associations": "단체 로딩 중...",
   "favorite_associations": "내가 좋아하는 단체",
   "login_required_for_favorites": "즐겨찾기 관리를 위해 로그인해야 합니다.",
   "all_associations": "모든 단체",
   "popular_associations": "인기 있는 단체",
   "mental_health_associations": "정신 건강 단체",
+  "no_addiction_associations": "중독 협회는 이용할 수 없습니다",
+  "no_cancer_associations": "암 협회는 이용할 수 없습니다",
+  "no_mental_health_associations": "정신 건강 협회는 이용할 수 없습니다",
+  "addiction_associations": "중독 협회",
+  "cancer_associations": "암 협회",
+  "disability_associations": "장애 협회",
+  "no_disability_associations": "장애 협회는 이용할 수 없습니다",
   "asso": "단체",
   "description_asso": "단체 설명",
 
@@ -32,6 +40,10 @@
   "donation_type": "기부 유형:",
   "unique_donation": "일회성 기부",
   "recurring_donation": "정기 기부",
+  "filter_sort_label": "금액별 정렬:",
+  "all_donations": "모든 기부",
+  "descending": "내림차순",
+  "ascending": "오름차순",
   "donation_amount": "기부 금액:",
   "edit_amount": "수정",
   "start_date": "시작 날짜:",
@@ -110,5 +122,7 @@
   "top3Associations": "상위 3개 단체",
   "top3AssociationsSubtitle": "당신이 가장 많이 기부한 상위 3개 단체입니다.",
   "amountGiven": "기부 금액: {{amount}}",
+  "no_donations_yet": "아직 기부를 하지 않았습니다. 모든 기부는 차이를 만들 수 있습니다!",
+  "make_first_donation": "첫 기부를 하고, 당신의 마음에 드는 원인을 지원하세요!",
   "none": "없음"
 }

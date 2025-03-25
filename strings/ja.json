@@ -4,11 +4,19 @@
   "searchBar_placeholder": "検索",
   "hello": "こんにちは",
 
+  "loading_associations": "団体を読み込んでいます...",
   "favorite_associations": "お気に入りの団体",
   "login_required_for_favorites": "お気に入りの団体を管理するには、ログインする必要があります。",
   "all_associations": "すべての団体",
   "popular_associations": "人気の団体",
   "mental_health_associations": "メンタルヘルス団体",
+  "no_addiction_associations": "依存症の団体は利用できません",
+  "no_cancer_associations": "癌の団体は利用できません",
+  "no_mental_health_associations": "メンタルヘルス団体は利用できません",
+  "addiction_associations": "依存症の団体",
+  "cancer_associations": "癌の団体",
+  "disability_associations": "障害者団体",
+  "no_disability_associations": "障害者団体は利用できません",
   "asso": "団体",
   "description_asso": "団体の説明",
 
@@ -32,6 +40,10 @@
   "donation_type": "寄付の種類：",
   "unique_donation": "一回限りの寄付",
   "recurring_donation": "定期寄付",
+  "filter_sort_label": "金額で並べ替え:",
+  "all_donations": "すべての寄付",
+  "descending": "降順",
+  "ascending": "昇順",
   "donation_amount": "寄付金額：",
   "edit_amount": "編集",
   "start_date": "開始日：",
@@ -110,5 +122,7 @@
   "top3Associations": "トップ3の団体",
   "top3AssociationsSubtitle": "最も多く寄付した3つの団体。",
   "amountGiven": "寄付額：{{amount}}",
+  "no_donations_yet": "まだ寄付をしていません。すべての寄付が違いを生むことができます！",
+  "make_first_donation": "最初の寄付をして、あなたの心に響く原因を支援しましょう！",
   "none": "なし"
 }
