@@ -1,13 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, Text, View, Dimensions, Animated, PanResponder, TouchableOpacity, Image } from 'react-native';
-import { ScrollView } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Dimensions,
+    Animated,
+    PanResponder,
+    TouchableOpacity,
+    Image,
+    ScrollView
+} from 'react-native';
 import { router, useRouter } from "expo-router";
 
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";
 import { getAllAssociation } from "@/helpers";
 import { IAssociation } from "@/backend/interfaces/IAssociation";
-import AssociationItem from "@/components/AssociationItem";
+import { images } from "@/config";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
@@ -236,22 +245,28 @@ export default function QuestionnaireScreen() {
             .slice(0, 2); // Prendre les 2 types avec les scores les plus élevés
 
         try {
-            const recommendations = [];
+            const recommendations: IAssociation[] = [];
 
             // Pour chaque type parmi les 2 meilleurs
             for (const [type, score] of sortedTypes) {
                 if (score > 0) { // Ne considérer que les types ayant des points
-                    // Récupérer les associations disponibles pour ce type
-                    const getCurrentTypeValue = () => typeOptions.find(option => option.label === type)?.value
+                    // Récupérer la valeur du type
+                    const typeOption = typeOptions.find(option => option.label === type);
 
-                    const availableAssociations = associations.filter((asso: IAssociation) => asso.idType === parseInt(getCurrentTypeValue() as string));
+                    // Convertir la valeur en nombre
+                    const typeValue = typeOption ? Number(typeOption.value) : null;
+
+                    // Filtre les associations par idType
+                    const availableAssociations = associations.filter((asso: IAssociation) => {
+                        return asso.idType === typeValue;
+                    });
 
                     if (availableAssociations.length > 0) {
                         // Choisir une association aléatoire de ce type
                         const randomIndex = Math.floor(Math.random() * availableAssociations.length);
                         const selectedAssociation = availableAssociations[randomIndex];
 
-                        recommendations.push({selectedAssociation: selectedAssociation});
+                        recommendations.push(selectedAssociation);
                     }
                 }
             }
@@ -263,6 +278,7 @@ export default function QuestionnaireScreen() {
 
         } catch (error) {
             console.error("Erreur lors de la génération des recommandations:", error);
+            setLoadingRecommendations(false);
         }
     };
 
@@ -273,7 +289,7 @@ export default function QuestionnaireScreen() {
         }
     }, [completed]);
 
-    // Créer un nouveau panResponder pour chaque rendu
+    // Panresponder et autres méthodes de swipe (restent inchangées)
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: () => true,
         onPanResponderMove: (event, gesture) => {
@@ -372,18 +388,27 @@ export default function QuestionnaireScreen() {
 
                         {recommendedAssociations.map((asso, index) => (
                             <View key={index} style={styles.associationRecommendation}>
-                                <View style={styles.associationContent}>
-                                    <TouchableOpacity onPress={() => handleNavigate(asso.selectedAssociation.idAssociation)}>
-                                        <AssociationItem
-                                            name={asso.selectedAssociation.nom + ""}
-                                            description={asso.selectedAssociation.descriptionCourte}
-                                            imageName={asso.selectedAssociation.nomImage}
-                                        />
-                                    </TouchableOpacity>
-                                </View>
+                                <TouchableOpacity
+                                    style={styles.associationContent}
+                                    onPress={() => handleNavigate(asso.idAssociation)}
+                                >
+                                    <Image
+                                        style={styles.associationImage}
+                                        //@ts-ignore
+                                        source={images[asso.nomImage]}
+                                    />
+                                    <View style={styles.associationInfo}>
+                                        <Text style={styles.associationName}>
+                                            {asso.nom || "Nom non disponible"}
+                                        </Text>
+                                        <Text style={styles.associationDescription} numberOfLines={2}>
+                                            {asso.descriptionCourte || "Description non disponible"}
+                                        </Text>
+                                    </View>
+                                </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles.donateButton}
-                                    onPress={() => navigateToDons(asso.selectedAssociation.idAssociation)}
+                                    onPress={() => navigateToDons(asso.idAssociation)}
                                 >
                                     <Text style={styles.donateButtonText}>Faire un don</Text>
                                 </TouchableOpacity>
@@ -397,6 +422,7 @@ export default function QuestionnaireScreen() {
                     </Text>
                 )}
 
+                {/* Reste du code pour le résumé des résultats */}
                 <Text style={styles.resultsSummary}>Résumé de vos réponses :</Text>
                 <ScrollView style={styles.resultsContainer}>
                     {answers.map((item, index) => (
@@ -482,7 +508,7 @@ export default function QuestionnaireScreen() {
         </>
     );
 }
-
+// Styles (restent inchangés)
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -670,5 +696,28 @@ const styles = StyleSheet.create({
         color: Colors.primary_dark.text,
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    textcachesinonff: {
+        color:'white',
+        padding:0
+    },
+    associationImage: {
+        width: 120,
+        height: 90,
+        marginRight: 12,
+        resizeMode: 'contain',
+    },
+    associationInfo: {
+        flex: 1,
+    },
+    associationName: {
+        fontSize: 16,
+        fontWeight: '500',
+        marginBottom: 4,
+    },
+    associationDescription: {
+        fontSize: 14,
+        color: '#666',
+        flexWrap: 'wrap',
     },
 });
