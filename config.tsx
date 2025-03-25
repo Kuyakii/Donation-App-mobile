@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://192.168.1.90:3000'; //à changer
+export const BASE_URL = 'http://192.168.1.44:3000'; //à changer
 export const images = {
     "AEJS.png": require("@/assets/images/AEJS.png"),
     "ENDOFRANCE.png": require("@/assets/images/ENDOFRANCE.png"),
@@ -11,7 +11,7 @@ export const images = {
     "ARSLA-logo.jpg": require("@/assets/images/ARSLA-logo.jpg"),
     "AFS-logo.jpg": require("@/assets/images/AFS-logo.jpg"),
     "addiction_alcool_vie_libre.png": require("@/assets/images/addiction_alcool_vie_libre.png"),
-    "adepa.jpg": require("@/assets/images/adepa.png"),
+    "adepa.png": require("@/assets/images/adepa.png"),
     "advocacy.png": require("@/assets/images/advocacy.png"),
     "apajh.png": require("@/assets/images/apajh.png"),
     "apf.png": require("@/assets/images/apf.png"),
@@ -27,5 +27,6 @@ export const images = {
     "unapei.png": require("@/assets/images/unapei.png"),
     "logo-petit.png": require("@/assets/images/logo-petit.png"),
     "tmp.png": require("@/assets/images/adaptive-icon.png"),
+    "france-asso.png": require("@/assets/images/france-asso.png"),
 };
 

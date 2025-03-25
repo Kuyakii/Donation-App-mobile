@@ -6,6 +6,7 @@ import BoutonAccueil from "@/components/BoutonAccueil";
 import { BASE_URL } from "@/config";
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";
+import Partenariat from "@/components/Partenariat";
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -106,6 +107,7 @@ const LoginScreen = () => {
                         En vous inscrivant, vous acceptez notre politique de confidentialité.
                     </Text>
                 </TouchableOpacity>
+                <Partenariat/>
             </ScrollView>
 
             {/* Modal for RGPD Text */}
