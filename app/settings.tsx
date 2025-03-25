@@ -14,6 +14,8 @@ import ChangePasswordModal from "@/components/ChangePasswordModal";
 import {getUtilisateurConnecte} from "@/helpers";
 import ChangePseudoModal from "@/components/ChangePseudoModal";
 import {useTranslation} from "react-i18next";
+import LanguageSelector from "@/components/LanguageSelector";
+
 export default function SettingsScreen() {
     const { t, i18n } = useTranslation();
     const [notifications, setNotifications] = useState(false);
@@ -110,14 +112,7 @@ export default function SettingsScreen() {
                     </View>
                     <View style={styles.settingItem}>
                         <Text style={styles.settingLabel}>{t('language')}</Text>
-                        <View style={styles.languageSelector}>
-                            <TouchableOpacity onPress={() => changeLanguage('fr')}>
-                                <Text style={styles.languageOption}>{t('fr')}</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => changeLanguage('en')}>
-                                <Text style={styles.languageOption}>{t('en')}</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <LanguageSelector />
                     </View>
                 </View>
 
