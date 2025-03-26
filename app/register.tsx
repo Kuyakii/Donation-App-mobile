@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, Modal } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import BoutonAccueil from "@/components/BoutonAccueil";
+import BoutonRetour from "@/components/BoutonRetour";
 import { BASE_URL } from "@/config";
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";
@@ -57,7 +57,7 @@ const LoginScreen = () => {
     return (
         <View style={styles.container}>
             <Header />
-            <BoutonAccueil />
+            <BoutonRetour />
             <ScrollView contentContainerStyle={styles.scroll}>
                 <Text style={styles.title}>{t('registration_title')}</Text>
                 <TextInput

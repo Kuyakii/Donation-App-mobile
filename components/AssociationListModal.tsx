@@ -47,7 +47,7 @@ export default function AssociationListModal({ visible, onClose, associations })
 
     const handleNavigate = (idAssos: number) => {
         onClose();
-        router.replace({
+        router.push({
             pathname: "/detailsAssos",
             params: { id: idAssos },
         });

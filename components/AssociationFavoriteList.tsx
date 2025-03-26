@@ -15,7 +15,7 @@ const AssociationFavoriteList: React.FC = () => {
     const { t } = useTranslation();
 
     const handleNavigate = (idAssos: number) => {
-        router.replace({
+        router.push({
             pathname: "/detailsAssos",
             params: { id: idAssos},
         });

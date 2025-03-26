@@ -8,7 +8,7 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useNavigation } from "@react-navigation/native";
 import Header from "@/components/header";
-import BoutonAccueil from "@/components/BoutonAccueil";
+import BoutonRetour from "@/components/BoutonRetour";
 import {useTranslation} from "react-i18next";
 
 const DonPage = () => {
@@ -249,7 +249,7 @@ const DonPage = () => {
         <>
             <Header/>
             <SafeAreaView style={styles.safeArea}>
-            <BoutonAccueil></BoutonAccueil>
+            <BoutonRetour></BoutonRetour>
             <ScrollView ref={scrollViewRef} style={styles.scrollView}>
                 <Text style={styles.title}>{t('don_title')}</Text>
 

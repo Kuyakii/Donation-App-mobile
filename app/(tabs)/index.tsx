@@ -41,7 +41,7 @@ export default function Layout() {
     const router = useRouter();
 
     const handleNavigate = (idAssos: number) => {
-        router.replace({
+        router.push({
             pathname: "/detailsAssos",
             params: { id: idAssos},
         });

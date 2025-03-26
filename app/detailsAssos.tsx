@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity, ScrollView, StyleSheet, Platform, StatusBa
 import Header from '@/components/header';
 import { useLocalSearchParams } from 'expo-router';
 import { router } from 'expo-router';
-import BoutonAccueil from "@/components/BoutonAccueil";
+import BoutonRetour from "@/components/BoutonRetour";
 import DetailAssociation from "@/components/DetailAssociation";
 import { getAssociation } from "@/helpers";
 import { getUtilisateurConnecte } from "@/helpers";
@@ -44,7 +44,7 @@ export default function DetailsAssos() {
         <View style={styles.container}>
             <StatusBar barStyle="dark-content" />
             <Header />
-            <BoutonAccueil />
+            <BoutonRetour />
 
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 

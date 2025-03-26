@@ -33,7 +33,7 @@ export default function SearchBar({associations}) {
     };
 
     const handleSelectAssociation = (association: Association) => {
-        router.replace({
+        router.push({
             pathname: "/detailsAssos",
             params: {id: association.idAssociation},
         });
