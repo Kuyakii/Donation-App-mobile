@@ -9,6 +9,7 @@ import Colors from "@/constants/Colors";
 import { useTranslation } from 'react-i18next';
 import Partenariat from "@/components/Partenariat";
 import RGPDModal from "@/components/RGPDModal";
+import BoutonAccueil from "@/components/BoutonAccueil";
 
 const LoginScreen = () => {
     const { t } = useTranslation();
@@ -57,7 +58,7 @@ const LoginScreen = () => {
     return (
         <View style={styles.container}>
             <Header />
-            <BoutonRetour />
+            <BoutonAccueil/>
             <ScrollView contentContainerStyle={styles.scroll}>
                 <Text style={styles.title}>{t('registration_title')}</Text>
                 <TextInput

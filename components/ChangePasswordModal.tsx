@@ -69,7 +69,7 @@ const ChangePasswordModal = ({ visible, onClose, email }) => {
                     {loading ? <ActivityIndicator size="large" color="#4CAF50" /> : (
                         <View style={styles.modalButtons}>
                             <TouchableOpacity onPress={onClose} style={styles.cancelButton}>
-                                <Text style={styles.cancelButtonText}>{t('cancel_buutton')}</Text>
+                                <Text style={styles.cancelButtonText}>{t('cancel_button')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handleChangePassword} style={styles.confirmButton}>
                                 <Text style={styles.confirmButtonText}>{t('confirm_button')}</Text>
@@ -116,14 +116,14 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         flex: 1,
-        backgroundColor: '#ccc',
+        backgroundColor: 'red',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
         marginRight: 5,
     },
     cancelButtonText: {
-        color: 'black',
+        color: 'white',
         fontWeight: 'bold',
     },
     confirmButton: {

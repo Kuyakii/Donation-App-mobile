@@ -18,6 +18,7 @@ import Colors from "@/constants/Colors";
 import Header from "@/components/header";
 import {useTranslation} from "react-i18next";
 import Partenariat from "@/components/Partenariat";
+import BoutonAccueil from "@/components/BoutonAccueil";
 
 const LoginScreen = () => {
     const { t } = useTranslation();
@@ -66,7 +67,7 @@ const LoginScreen = () => {
 
         <View style={styles.container}>
             <Header/>
-            <BoutonRetour />
+            <BoutonAccueil/>
             <ScrollView contentContainerStyle={styles.scroll}>
                 <Text style={styles.title}>{t('login_title')}</Text>
 

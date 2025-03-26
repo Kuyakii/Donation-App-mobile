@@ -58,9 +58,8 @@ export default function AssociationListModal({ visible, onClose, associations })
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
                     <Text style={styles.modalTitle}>{t('all_associations')}</Text>
-                    <Text style={styles.modalTitle}>Toutes les associations</Text>
                     <Text style={styles.modalSubTitle}>
-                        {filteredAssociations.length} association{filteredAssociations.length > 1 ? 's' : ''} disponible{filteredAssociations.length > 1 ? 's' : ''}
+                        {filteredAssociations.length} association {filteredAssociations.length > 1 ? 's' : ''} disponible{filteredAssociations.length > 1 ? 's' : ''}
                     </Text>
 
                     {/* Filtre par type d'association */}

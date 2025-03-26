@@ -1,17 +1,20 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, Alert } from 'react-native';
-import { router } from "expo-router";
+import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Colors from "@/constants/Colors";
 
-const BoutonRetour = () => {
-    const handleGoBack = () => {
-            // Tentative directe de retour
-            router.back();
-    };
+const BoutonAccueil = () => {
+    const navigation = useNavigation();
+    const redirect = () => {
+        // @ts-ignore
+        navigation.navigate('(tabs)', {
+            screen: 'index',
+        });
+    }
 
     return (
         <View>
-            <TouchableOpacity style={styles.button} onPress={handleGoBack}>
+            <TouchableOpacity style={styles.button} onPress={redirect}>
                 <Text style={styles.buttonText}>‹</Text>
             </TouchableOpacity>
         </View>
@@ -36,4 +39,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default BoutonRetour;
+export default BoutonAccueil;

@@ -33,7 +33,7 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
                 })
             });
             const user = await AsyncStorage.getItem("utilisateur");
-            const updatedUser = { ...JSON.parse(user), pseudonyme: newPseudonyme };
+            const updatedUser = { ...JSON.parse(String(user)), pseudonyme: newPseudonyme };
             await AsyncStorage.setItem('utilisateur', JSON.stringify(updatedUser));
 
             const data = await response.json();
