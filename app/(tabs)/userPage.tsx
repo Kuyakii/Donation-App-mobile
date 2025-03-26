@@ -22,7 +22,7 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "@/config";
 import AssociationListModal from "@/components/DonationListModal";
-import {useFocusEffect} from "expo-router";
+import {router, useFocusEffect} from "expo-router";
 import {useTranslation} from "react-i18next";
 import AssociationFavoritesModal from "@/components/AssociationFavoritesModal";
 import UserModal from "@/components/UserModal";
@@ -139,6 +139,11 @@ export default function UserProfileScreen() {
         .sort(([, montantA], [, montantB]) => montantB - montantA)
         .slice(0, 3);
 
+    const goAPropos =  () => {
+        // @ts-ignore
+        router.push('/APropos');
+    };
+
     return (
         <View style={styles.container}>
             <Header />
@@ -178,6 +183,12 @@ export default function UserProfileScreen() {
                 <FavoriteProvider>
                     <AssociationFavoriteList />
                 </FavoriteProvider>
+
+                <View>
+                    <TouchableOpacity style={styles.button} onPress={goAPropos}>
+                        <Text style={styles.buttonText}>{t('info')}</Text>
+                    </TouchableOpacity>
+                </View>
 
                 <BoutonDeconnexion />
             </ScrollView>
@@ -239,6 +250,18 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10
+    },
+    button: {
+        height: 40,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+    },
+    buttonText: {
+        color: Colors.primary_dark.background,
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 
 });

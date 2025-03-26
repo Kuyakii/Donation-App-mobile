@@ -128,6 +128,19 @@
   "no_donations_yet": "Vous n'avez pas encore fait de dons. Chaque don peut faire une différence!",
   "make_first_donation": "Faites votre premier don et soutenez une cause qui vous tient à cœur!",
   "none": "Aucun",
+  "info": "À propos",
+  "a_propos_text1" : "Soteria est une application innovante dédiée à la gestion des dons pour les associations partenaires de France Assos Santé.",
+  "a_propos_text2": "En collaborant étroitement avec cette union nationale, qui regroupe près de 85 associations militant pour les droits des patients et des usagers, Soteria facilite le processus de don en offrant une plateforme centralisée et sécurisée.",
+  "a_propos_text3": "Notre objectif est de renforcer le soutien aux associations membres de France Assos Santé, contribuant ainsi à améliorer la représentation et la défense des droits des usagers du système de santé en France.",
+  "button_france_asso": "\uD83D\uDD17 En savoir plus sur France Assos Santé",
+  "createurs_text" : " L'application Soteria a été développée par une équipe passionnée de designers et développeurs engagés dans l'amélioration de l'accès aux dons pour les associations de santé.",
+  "createur_title": "Les Créateurs de Soteria",
+  "mipam_name": "- Mipam-Dorje BHUTIA",
+  "rosalie_name" : "- Rosalie ACCOCEBERRY",
+  "willien_name" : "- Willien HU",
+  "juliette_name": "- Juliette COURNON",
+  "alicia_name": "- Alicia RANDRIANARIMANANA",
+
 
   "questionnaire_questions": {
     "handicap": "Souhaitez-vous aider les personnes en situation de handicap physique ?",
