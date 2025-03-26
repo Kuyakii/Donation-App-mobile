@@ -113,6 +113,9 @@
   "dark_mode": "Mode sombre",
   "language": "Langue",
   "login_required_for_settings": "Vous devez être connecté pour accéder aux réglages.",
+  "privacy": "Confidentialité",
+  "enable_camera": "Activer la caméra",
+  "enable_location": "Activer la localisation",
 
   "profile": "Profil",
   "donations": "Dons",

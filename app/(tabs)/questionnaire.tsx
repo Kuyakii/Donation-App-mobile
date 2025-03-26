@@ -10,7 +10,7 @@ import {
     Image,
     ScrollView
 } from 'react-native';
-import { router, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";

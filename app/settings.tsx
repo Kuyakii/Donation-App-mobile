@@ -5,7 +5,7 @@ import {
     Text,
     ScrollView,
     Switch,
-    TouchableOpacity
+    TouchableOpacity, Alert
 } from 'react-native';
 import Colors from "@/constants/Colors";
 import { router } from "expo-router";
@@ -15,6 +15,8 @@ import {getUtilisateurConnecte} from "@/helpers";
 import ChangePseudoModal from "@/components/ChangePseudoModal";
 import {useTranslation} from "react-i18next";
 import LanguageSelector from "@/components/LanguageSelector";
+import * as Location from "expo-location";
+import {Camera} from "expo-camera";
 
 export default function SettingsScreen() {
     const { t, i18n } = useTranslation();
@@ -24,6 +26,8 @@ export default function SettingsScreen() {
     const [location, setLocation] = useState(true);
     const [isChangePasswordModalVisible, setChangePasswordModalVisible] = useState(false);
     const [isChangePseudoModalVisible, setChangePseudoModalVisible] = useState(false);
+    const [cameraPermission, setCameraPermission] = useState(false);
+    const [locationPermission, setLocationPermission] = useState(false);
 
     const navigation = useNavigation();
     const user = getUtilisateurConnecte();
@@ -33,14 +37,47 @@ export default function SettingsScreen() {
     };
 
     useEffect(() => {
+        checkPermissions();
+
         navigation.setOptions({
             headerShown: false,
             title: '',
         });
     }, [navigation]);
-    const changeLanguage = (lng: string) => {
-        i18n.changeLanguage(lng);
+
+    const checkPermissions = async () => {
+
     };
+
+    const toggleCameraPermission = async () => {
+        if (cameraPermission) {
+            Alert.alert("Info", "Vous devez désactiver l'autorisation caméra depuis les paramètres de votre téléphone.");
+        } else {
+            let { status } = await Camera.requestCameraPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert("Permission refusée", "Autorisez la caméra pour pouvoir scanner des QR Code.");
+                setCameraPermission(false);
+                return;
+            }
+            setCameraPermission(true);
+        }
+    };
+
+    const toggleLocationPermission = async () => {
+        if (locationPermission) {
+            Alert.alert("Info", "Vous devez désactiver l'autorisation localisation depuis les paramètres de votre téléphone.");
+        } else {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert("Permission refusée", "Autorisez la localisation pour voir les associations proches.");
+                setLocationPermission(false);
+                return;
+            }
+            setLocationPermission(true);
+        }
+    };
+
+
     if (!user) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
@@ -113,6 +150,31 @@ export default function SettingsScreen() {
                     <View style={styles.settingItem}>
                         <Text style={styles.settingLabel}>{t('language')}</Text>
                         <LanguageSelector />
+                    </View>
+                </View>
+
+                {/* Privacy Section */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>{t('privacy')}</Text>
+
+                    <View style={styles.settingItem}>
+                        <Text style={styles.settingLabel}>{t('enable_camera')}</Text>
+                        <Switch
+                            value={cameraPermission}
+                            onValueChange={toggleCameraPermission}
+                            trackColor={{ false: "#d3d3d3", true: "#4CAF50" }}
+                            thumbColor="#ffffff"
+                        />
+                    </View>
+
+                    <View style={styles.settingItem}>
+                        <Text style={styles.settingLabel}>{t('enable_location')}</Text>
+                        <Switch
+                            value={locationPermission}
+                            onValueChange={toggleLocationPermission}
+                            trackColor={{ false: "#d3d3d3", true: "#4CAF50" }}
+                            thumbColor="#ffffff"
+                        />
                     </View>
                 </View>
 

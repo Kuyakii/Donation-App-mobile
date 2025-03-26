@@ -9,7 +9,6 @@ interface HeaderProps {
     title?: string
 }
 
-
 const redirect = () => {
    router.push('/settings');
 };
