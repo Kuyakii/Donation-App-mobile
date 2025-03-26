@@ -112,7 +112,7 @@ Développement front et back de la page admin app : des trois onglets : un ongle
 
 ## pageSettings
 
-Changer Mot de Passe et Pseudonyme fonctionnel, activier/désactiver notifications à voir, Mode sombe pas encore fait, Langue et traduction fonctionnel
+Changer Mot de Passe et Pseudonyme fonctionnel, activier/désactiver notifications à voir, Mode sombe pas encore fait, Langue et traduction fonctionnel, Section a propos fonctionnel, à voir pour le front, bouton suppression du compte fonctionnel
 
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
@@ -123,6 +123,8 @@ POST /register : inscription avec en body email, password et pseudo. \
 POST /login : connexion avec en body : email et password. \
 POST /mdpOublie : pour changer de password avec en body : email et password => non encore utilisée. \
 POST /changePassword : pour changer le password via le settings en saisissant l'ancien password \
+POST /changePseudonyme : pour changer le pseudo via le settings en saisissant le password pour vérifier \
+POST /deleteAccount : pour supprimer le compte en confirmant et saisir le password, déconnexion automatique \
 POST /favorites : Associe une association à un utilisateur pour la liste des favorites
 DELETE /favorites : Supprime un couple (utilisateur/association) des associations favorites 
 GET /favorites/:id : Récupère toutes les associations favorites d'un utilisiateur par son userID.
