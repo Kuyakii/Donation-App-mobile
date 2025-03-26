@@ -2,6 +2,7 @@ import {Camera, CameraView, useCameraPermissions} from 'expo-camera';
 import {useState, useEffect, useRef} from 'react';
 import {Button, StyleSheet, Text, View, Animated, TouchableOpacity} from 'react-native';
 import { useTranslation } from 'react-i18next';
+import {router} from "expo-router";
 
 export default function QRCodeScanner() {
     const { t } = useTranslation();
@@ -39,6 +40,11 @@ export default function QRCodeScanner() {
         }
     }, [scanned]);
 
+    const handleNavigate = (path: string) => {
+        router.push({
+            pathname: path,
+        });
+    };
     if (!permission) {
         return <View />;
     }
@@ -91,6 +97,9 @@ export default function QRCodeScanner() {
                     <View style={styles.resultContainer}>
                         <Text style={styles.resultText}>{t('scanned_qr_code')}</Text>
                         <Text style={styles.resultData}>{scannedData}</Text>
+                        <TouchableOpacity style={styles.rescanButton} onPress={() => handleNavigate(scannedData)} >
+                            <Text style={styles.rescanButtonText}>{t('go_to_scanned_qr')}</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={styles.rescanButton} onPress={() => setScanned(false)} >
                             <Text style={styles.rescanButtonText}>{t('rescan_button')}</Text>
                         </TouchableOpacity>
@@ -186,6 +195,6 @@ const styles = StyleSheet.create({
 
     rescanButtonText: {
         color: 'white',
-    }
+    },
 
 });

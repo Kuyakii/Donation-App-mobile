@@ -1,13 +1,11 @@
 import express, { Request, Response } from 'express';
-
-import bodyParser from 'body-parser';
+import QRCode from "qrcode";
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AssociationRepository } from './repositories/AssociationRepository';
 import { UtilisateurRepository } from './repositories/UtilisateurRepository';
 import {DonationRepository} from "./repositories/DonationRepository";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const app = express();
@@ -195,7 +193,7 @@ app.post('/changePassword', async (req: Request, res: Response) => {
     console.log(email, currentPassword, newPassword);
     try {
         const user = await userRepo.findByEmail(email);
-        console.log("Utilisateur trouvé :", user);  // 🔍 Debug
+        console.log("Utilisateur trouvé :", user);
         if (!user) {
             return res.status(400).json({message: 'Utilisateur non trouvé.'});
         }
@@ -437,6 +435,38 @@ app.delete('/suppUser/:id', async (req: Request, res: Response) => {
         res.status(201).json({ message: 'Supprimé des utilisateurs' });
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la suppression de l'utilisateur", error });
+    }
+});
+
+app.get("/generate-qrcode/:id", async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const url = `https://ton-site.com/detailsAssos?id=${id}`;
+
+    try {
+        const qrCode = await QRCode.toDataURL(url);
+        res.json({ qrCode });
+    } catch (error) {
+        res.status(500).send("Erreur lors de la génération du QR Code");
+    }
+});
+
+app.get("/generate-qrcodes", async (req: Request, res: Response) => {
+    try {
+        const associations = await associationRepository.findAll();
+        const qrCodes = await Promise.all(
+            associations.map(async (asso) => {
+                const url = `/detailsAssos?id=${asso.idAssociation}`;
+                const qrCode = await QRCode.toDataURL(url);
+                return { id: asso.idAssociation, name: asso.nom, qrCode };
+            })
+        );
+
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(qrCodes, null, 2));
+
+    } catch (error) {
+        console.error("Erreur lors de la génération des QR Codes", error);
+        res.status(500).send("Erreur serveur");
     }
 });
 

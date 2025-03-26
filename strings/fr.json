@@ -24,6 +24,7 @@
   "grant_permission": "Accorder la permission",
   "scanned_qr_code": "QR Code Scanné :",
   "rescan_button": "Scanner à nouveau",
+  "go_to_scanned_qr": "Aller à la page correspondante",
 
   "results": "Résultats",
   "yes": "Oui",

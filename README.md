@@ -130,4 +130,6 @@ DELETE /favorites : Supprime un couple (utilisateur/association) des association
 GET /favorites/:id : Récupère toutes les associations favorites d'un utilisiateur par son userID.
 POST /dons : pour faire un don avec en body :  id (idAssos) , idUser, montant, typeDon, startDate, endDate, frequency (avec les params en fonction de si c'est un don unique ou récurrent)
 POST /create-payment-intent : pour paiement avec stripe : générer un "client secret" nécessaire à la confirmation du paiement avec confirmPayment
+GET /generate-qrcodes : permet de générer un QR code pour chaque Association de la base de données
+GET /generate-qrcode/:id permet de générer un QR code pour une association avec son id
 Ces routes permettent de gérer les données de l’application via des requêtes HTTP (GET, POST, PUT).
