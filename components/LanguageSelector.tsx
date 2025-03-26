@@ -62,7 +62,7 @@ export default function LanguageSelector() {
                             onPress={() => setModalVisible(false)}
                         >
                             <Text style={styles.cancelButtonText}>
-                                {t('cancel')}
+                                {t("cancel_button")}
                             </Text>
                         </TouchableOpacity>
                     </View>
