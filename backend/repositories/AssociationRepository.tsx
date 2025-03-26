@@ -148,4 +148,14 @@ export class AssociationRepository {
             connection.release(); // Libérer la connexion
         }
     }
+
+    async getAssosPopulaires() {
+        const connection = await this.db.getConnection();
+        try {
+            const [rows] = await connection.query('select association.idAssociation,association.nom,association.description, association.descriptionCourte, association.nomImage, association.localisation, association.idType, Sum(don.montant) as "Somme des dons" from association inner join don on association.idAssociation = don.idAssociation group by association.idAssociation, association.nom,association.description, association.descriptionCourte, association.nomImage, association.localisation, association.idType order by 8 desc limit 3');
+            return rows as IAssociation[];
+        } finally {
+            connection.release(); // Libérer la connexion
+        }
+    }
 }
