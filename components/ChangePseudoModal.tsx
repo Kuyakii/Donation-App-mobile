@@ -56,9 +56,8 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
 
     return (
         <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
-            <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    Alert.alert(t("success"), t("usernameChangedSuccess"));
 
                     <TextInput
                         style={styles.input}
@@ -96,59 +95,64 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
 };
 
 const styles = StyleSheet.create({
-    modalOverlay: {
+    modalContainer: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalContent: {
-        width: "80%",
-        backgroundColor: "white",
+        backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
-        alignItems: "center",
+        width: '80%',
+        alignItems: 'center',
     },
     modalTitle: {
         fontSize: 20,
-        fontWeight: "bold",
-        marginBottom: 20,
+        fontWeight: 'bold',
+        marginBottom: 15,
     },
     input: {
-        width: "100%",
-        height: 45,
-        borderColor: "#ccc",
+        width: '100%',
+        padding: 10,
         borderWidth: 1,
-        marginBottom: 15,
-        paddingLeft: 10,
+        borderColor: '#ddd',
         borderRadius: 5,
+        marginBottom: 15,
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    cancelButton: {
+        flex: 1,
+        backgroundColor: 'red',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginRight: 5,
+    },
+    cancelButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
+    confirmButton: {
+        flex: 1,
+        backgroundColor: '#4CAF50',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginLeft: 5,
+    },
+    confirmButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
     },
     errorText: {
         color: "red",
-        marginBottom: 10,
-    },
-    modalButtons: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: "100%",
-    },
-    cancelButton: {
-        backgroundColor: "#f44336",
-        padding: 10,
-        borderRadius: 5,
-    },
-    cancelButtonText: {
-        color: "white",
-        fontSize: 16,
-    },
-    confirmButton: {
-        backgroundColor: "#4CAF50",
-        padding: 10,
-        borderRadius: 5,
-    },
-    confirmButtonText: {
-        color: "white",
-        fontSize: 16,
+        marginBottom: 10
     },
 });
 
