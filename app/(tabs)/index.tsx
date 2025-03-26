@@ -5,7 +5,7 @@ import SearchBar from '../../components/SearchBar';
 import Section from '../../components/Section';
 import AssociationItem from '../../components/AssociationItem';
 import { IAssociation } from "@/backend/interfaces/IAssociation";
-import { estConnecte, getAllAssociation, getAssociationsByType } from "@/helpers";
+import {estConnecte, getAllAssociation, getAssociationsByType, getAssosPopulaires} from "@/helpers";
 import AssociationListModal from "@/components/AssociationListModal";
 import AssociationTypeModal from "@/components/AssociationsTypeModal";
 import AssociationFavoriteList from "@/components/AssociationFavoriteList";
@@ -14,6 +14,7 @@ import {useRouter} from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { useTranslation } from 'react-i18next';
 import FirstTimeModal from "@/components/FirstTimeModal";
+import {BASE_URL} from "@/config";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,7 +26,8 @@ export default function Layout() {
     const { associations: CancerAssociations, loading: loadingCancer } = getAssociationsByType(6);
     const { associations: AddictionAssociations, loading: loadingAddiction } = getAssociationsByType(1);
     const { associations: HandicapAssociations, loading: loadingHandicap } = getAssociationsByType(2);
-
+    const assosPopulaires = getAssosPopulaires();
+    console.log("INDEX" + assosPopulaires)
 
     const [modalVisible, setModalVisible] = useState(false);
     const [mentalHealthModalVisible, setMentalHealthModalVisible] = useState(false);
@@ -75,6 +77,8 @@ export default function Layout() {
         return null;
     }
 
+
+
     return (
         <View style={styles.container} onLayout={onLayoutRootView}>
             <StatusBar barStyle="dark-content" />
@@ -106,7 +110,11 @@ export default function Layout() {
 
                 {/* Autres sections */}
                 <Section title={t('popular_associations')} icon="trending-up" onSeeAllPress={undefined}>
-                    {[1, 2].map(num => <AssociationItem key={num} name={`${t('asso')} ${num}`} description={`${t('description_asso')} ${num}`} imageName={undefined} />)}
+                    {assosPopulaires.map((asso: IAssociation) => (
+                        <TouchableOpacity key={asso.idAssociation} onPress={() => handleNavigate(asso.idAssociation)}>
+                            <AssociationItem name={asso.nom} description={asso.descriptionCourte} imageName={asso.nomImage} />
+                        </TouchableOpacity>
+                    ))}
                 </Section>
 
                 {/* Section des associations de santé mentale */}

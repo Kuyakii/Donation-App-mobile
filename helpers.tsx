@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {BASE_URL} from "@/config";
 import {Alert} from "react-native";
+import {IAssociation} from "@/backend/interfaces/IAssociation";
 
 export function getUtilisateurConnecte() {
     const navigation = useNavigation();
@@ -202,3 +203,23 @@ export function getBadgeColor (seuil : number){
     if (seuil < 5000) return '#FFA500'; // Orange
     return '#FFD700'; // Or pour les gros montants
 };
+
+export function getAssosPopulaires() {
+    const [assosPopulaires, setassosPopulaires] = useState([]);
+
+    useEffect(() => {
+        getAssociationPopulaire();
+    }, []);
+
+        const getAssociationPopulaire = async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/assosPopulaires`);
+                const data = await response.json();
+                console.log(data);
+                setassosPopulaires(data);
+            } catch (error) {
+                console.error('Erreur lors de la récupération des associations populaires', error);
+            }
+        };
+    return assosPopulaires;
+}
