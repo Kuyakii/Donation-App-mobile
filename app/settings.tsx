@@ -84,7 +84,7 @@ export default function SettingsScreen() {
     };
 
 
-    if (!user) {
+    /*if (!user) {
         return (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center", padding: 20 }}>
                 <Text style={{ fontSize: 18, marginBottom: 20 }}>
@@ -103,7 +103,7 @@ export default function SettingsScreen() {
                 </TouchableOpacity>
             </View>
         );
-    }
+    }*/
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
@@ -115,7 +115,7 @@ export default function SettingsScreen() {
 
             <ScrollView style={styles.scrollView}>
                 {/* Account Section */}
-                <View style={styles.section}>
+                {user ? (<View style={styles.section}>
                     <Text style={styles.sectionTitle}>{t('account')}</Text>
                     <TouchableOpacity style={styles.settingItem} onPress={() => setChangePasswordModalVisible(true)}>
                         <Text style={styles.settingLabel}>{t('changePassword')}</Text>
@@ -125,7 +125,8 @@ export default function SettingsScreen() {
                         <Text style={styles.settingLabel}>{t('changeUsername')}</Text>
                         <Text style={styles.settingArrow}>→</Text>
                     </TouchableOpacity>
-                </View>
+                </View>) : (<Text/>)}
+
 
                 {/* Notifications Section */}
                 <View style={styles.section}>
@@ -200,17 +201,18 @@ export default function SettingsScreen() {
                         <Text style={styles.settingValue}>{AboutApp.app_version}</Text>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.deleteAccountbutton} onPress={() => setDeleteAccountModalVisible(true)}>
+                {user ? (                <TouchableOpacity style={styles.deleteAccountbutton} onPress={() => setDeleteAccountModalVisible(true)}>
                     <Text style={styles.deleteAccountbuttonText}>{t('delete_account_button')}</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>) : (<Text/>)}
+
             </ScrollView>
 
             {/* Intégration du modal */}
-            <ChangePasswordModal visible={isChangePasswordModalVisible} onClose={() => setChangePasswordModalVisible(false)} email={user.email} />
-            <ChangePseudoModal visible={isChangePseudoModalVisible} onClose={() => setChangePseudoModalVisible(false)} email={user.email} />
+            <ChangePasswordModal visible={isChangePasswordModalVisible} onClose={() => setChangePasswordModalVisible(false)} email={user ? user.email : ""} />
+            <ChangePseudoModal visible={isChangePseudoModalVisible} onClose={() => setChangePseudoModalVisible(false)} email={user ? user.email : ""} />
             <RGPDModal modalVisible={isPrivacyPolicyModalVisible} onClose={() => setPrivacyPolicyModalVisible(false)}/>
             <TermsOfUseModal modalVisible={isTermsOfUseModalVisible} onClose={() => setTermsOfUseModalVisible(false)}/>
-            <DeleteAccountModal visible={isDeleteAccountModalVisible} onClose={() => setDeleteAccountModalVisible(false)} email={user.email} />
+            <DeleteAccountModal visible={isDeleteAccountModalVisible} onClose={() => setDeleteAccountModalVisible(false)} email={user ? user.email : ""} />
         </View>
     );
 }
