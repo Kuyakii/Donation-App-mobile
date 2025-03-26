@@ -43,7 +43,7 @@
   "filter_sort_label": "Ordenar por cantidad:",
   "all_donations": "Todas las donaciones",
   "descending": "Descendente",
-  "ascending": "Ascendente,,
+  "ascending": "Ascendente",
   "donation_amount": "Cantidad de la donación:",
   "edit_amount": "Editar",
   "start_date": "Fecha de inicio:",
@@ -124,5 +124,13 @@
   "amountGiven": "Cantidad donada: {{amount}}",
   "no_donations_yet": "¡Aún no has hecho ninguna donación. ¡Cada donación puede hacer una diferencia!",
   "make_first_donation": "Haz tu primera donación y apoya una causa que te importe!",
-  "none": "Ninguna"
+  "none": "Ninguna",
+
+  "questionnaire_questions": {
+    "handicap": "¿Quiere ayudar a las personas con discapacidades físicas?",
+    "local_association": "¿Prefiere apoyar una asociación cerca de usted?",
+    "mental_health": "¿Quiere apoyar una asociación de salud mental?",
+    "addiction": "¿Quiere ayudar a personas con adicciones?",
+    "caregivers": "¿Quiere ayudar a personas que cuidan de enfermos?"
+  }
 }

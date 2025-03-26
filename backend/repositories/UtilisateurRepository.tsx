@@ -2,8 +2,6 @@
 import { MariaDBConnection } from '../database/MariaDBConnection';
 import { IUtilisateur } from '../interfaces/IUtilisateur';
 import { RowDataPacket } from 'mysql2';
-import {IDon} from "@/backend/interfaces/IDon";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export class UtilisateurRepository {
     private db: MariaDBConnection;

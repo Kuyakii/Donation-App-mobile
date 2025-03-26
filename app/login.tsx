@@ -1,13 +1,24 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, ActivityIndicator } from 'react-native';
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Alert,
+    ScrollView,
+    ActivityIndicator,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import BoutonAccueil from '@/components/BoutonAccueil';
 import BoutonInscription from '@/components/BoutonInscription';
-import { BASE_URL } from '@/config';
+import {BASE_URL, images} from '@/config';
 import Colors from "@/constants/Colors";
 import Header from "@/components/header";
 import {useTranslation} from "react-i18next";
+import Partenariat from "@/components/Partenariat";
+
 const LoginScreen = () => {
     const { t } = useTranslation();
     const navigation = useNavigation();
@@ -88,6 +99,8 @@ const LoginScreen = () => {
                     )}
                 </TouchableOpacity>
                 <BoutonInscription />
+                {/* New Partnership Section */}
+                <Partenariat/>
             </ScrollView>
         </View>
     );
@@ -148,6 +161,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-});
 
+});
 export default LoginScreen;

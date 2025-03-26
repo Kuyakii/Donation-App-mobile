@@ -124,5 +124,13 @@
   "amountGiven": "捐款金额：{{amount}}",
   "no_donations_yet": "您还没有进行任何捐赠。每一笔捐赠都能带来改变！",
   "make_first_donation": "进行您的第一次捐赠，支持一个您关心的事业！",
-  "none": "无"
+  "none": "无",
+
+  "questionnaire_questions": {
+    "handicap": "您想帮助身体残疾人士吗？",
+    "local_association": "您是否更愿意支持离您近的协会？",
+    "mental_health": "您想支持心理健康协会吗？",
+    "addiction": "您想帮助有成瘾问题的人吗？",
+    "caregivers": "您想帮助照顾病人的人吗？"
+  }
 }

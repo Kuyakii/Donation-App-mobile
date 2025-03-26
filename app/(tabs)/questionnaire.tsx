@@ -2,13 +2,14 @@ import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View, Dimensions, Animated, PanResponder, TouchableOpacity } from 'react-native';
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";
-
+import {useTranslation} from "react-i18next";
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
 const SWIPE_OUT_DURATION = 250;
 
 
 export default function App() {
+    const { t } = useTranslation();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [completed, setCompleted] = useState(false);
@@ -21,11 +22,11 @@ export default function App() {
 
     // Questions à poser
     const questions = [
-        "Souhaitez vous aider les personnes en situation d'handicaps physiques ?",
-        "Préférez-vous supporter une association proche de chez vous ? ",
-        "Voulez-vous supporter une association de santé mentale ? ",
-        "Souhaitez vous aider les personnes en situation d'addiction ?",
-        "Souhaitez vous aider les personnes proches de malades ?"
+        t('questionnaire_questions.handicap'),
+        t('questionnaire_questions.local_association'),
+        t('questionnaire_questions.mental_health'),
+        t('questionnaire_questions.addiction'),
+        t('questionnaire_questions.caregivers'),
     ];
 
     // Fonction pour recommencer le questionnaire
@@ -127,9 +128,9 @@ export default function App() {
         <>
             <Header/>
             <View style={styles.container}>
-            <Text style={styles.title}>Questionnaire</Text>
-            <Text style={styles.subtitle}>Ce questionnaire vous aidera à trouver quelle association est faite pour vous.</Text>
-            <Text style={styles.explication}>Swipe à droite pour Oui, à gauche pour Non</Text>
+            <Text style={styles.title}>{t('questionnaire')}</Text>
+            <Text style={styles.subtitle}>{t('questionnaire_explanation')}</Text>
+            <Text style={styles.explication}>{t('swipe_right_for_yes')}, {t('swipe_left_for_no')}</Text>
             <Text style={styles.counter}>{currentIndex + 1}/{questions.length}</Text>
 
             <View style={styles.cardContainer}>
@@ -168,10 +169,10 @@ export default function App() {
 
             <View style={styles.actionsContainer}>
                 <View style={styles.actionIndicator}>
-                    <Text style={styles.noText}>Non</Text>
+                    <Text style={styles.noText}>{t('yes')}</Text>
                 </View>
                 <View style={styles.actionIndicator}>
-                    <Text style={styles.yesText}>Oui</Text>
+                    <Text style={styles.yesText}>{t('no')}</Text>
                 </View>
             </View>
         </View></>

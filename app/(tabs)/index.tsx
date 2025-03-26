@@ -13,6 +13,7 @@ import {FavoriteProvider} from "@/context/FavoriteContext";
 import {useRouter} from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { useTranslation } from 'react-i18next';
+import FirstTimeModal from "@/components/FirstTimeModal";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -77,7 +78,8 @@ export default function Layout() {
     return (
         <View style={styles.container} onLayout={onLayoutRootView}>
             <StatusBar barStyle="dark-content" />
-            <Header />
+            <FirstTimeModal/>
+            <Header/>
             <SearchBar associations={associations} />
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 

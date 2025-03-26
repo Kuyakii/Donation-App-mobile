@@ -124,5 +124,13 @@
   "amountGiven": "寄付額：{{amount}}",
   "no_donations_yet": "まだ寄付をしていません。すべての寄付が違いを生むことができます！",
   "make_first_donation": "最初の寄付をして、あなたの心に響く原因を支援しましょう！",
-  "none": "なし"
+  "none": "なし",
+
+  "questionnaire_questions": {
+    "handicap": "身体障害のある人を助けたいですか？",
+    "local_association": "近くの団体を支援することを好みますか？",
+    "mental_health": "メンタルヘルスの団体を支援したいですか？",
+    "addiction": "依存症に苦しむ人々を助けたいですか？",
+    "caregivers": "病気の人を看病する人を助けたいですか？"
+  }
 }

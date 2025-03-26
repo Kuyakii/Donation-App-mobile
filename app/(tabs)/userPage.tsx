@@ -24,6 +24,9 @@ import { BASE_URL } from "@/config";
 import AssociationListModal from "@/components/DonationListModal";
 import {useFocusEffect} from "expo-router";
 import {useTranslation} from "react-i18next";
+import AssociationFavoritesModal from "@/components/AssociationFavoritesModal";
+import UserModal from "@/components/UserModal";
+
 export default function UserProfileScreen() {
     const [isLoading, setIsLoading] = useState(true);
     const navigation = useNavigation();
@@ -31,6 +34,7 @@ export default function UserProfileScreen() {
     const [dons, setDons] = useState<IDon[]>([]);
     const [role, setRole] = useState<string>('');
     const [modalVisible, setModalVisible] = useState(false);
+    const [UsermodalVisible, setUserModalVisible] = useState(false);
     const [favoriteModalVisible, setFavoriteModalVisible] = useState(false);
 
     const { t } = useTranslation();
@@ -142,7 +146,7 @@ export default function UserProfileScreen() {
                 <Text style={styles.welcomeTitle}>{t('hello')}, {user?.pseudonyme}</Text>
 
                 <View style={styles.actionsContainer}>
-                    <TouchableOpacity style={styles.actionButton}>
+                    <TouchableOpacity style={styles.actionButton} onPress={() => setUserModalVisible(true)}>
                         <View style={styles.iconContainer}>
                             <Feather name="user" size={icon_size} color="black" />
                             <Text style={styles.actionText}>{t('profile')}</Text>
@@ -178,6 +182,14 @@ export default function UserProfileScreen() {
                 <BoutonDeconnexion />
             </ScrollView>
             <AssociationListModal visible={modalVisible} onClose={() => setModalVisible(false)} dons={donsUser} total={montantDonne} />
+            <FavoriteProvider>
+                <AssociationFavoritesModal
+                visible={favoriteModalVisible}
+                onClose={() => setFavoriteModalVisible(false)}
+                />
+            </FavoriteProvider>
+
+            <UserModal visible={UsermodalVisible} onClose={() => setUserModalVisible(false)} user={user} />
         </View>
     );
 }
@@ -228,4 +240,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10
     },
+
 });

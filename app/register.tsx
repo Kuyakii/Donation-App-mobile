@@ -7,6 +7,8 @@ import { BASE_URL } from "@/config";
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";
 import { useTranslation } from 'react-i18next';
+import Partenariat from "@/components/Partenariat";
+import RGPDModal from "@/components/RGPDModal";
 
 const LoginScreen = () => {
     const { t } = useTranslation();
@@ -108,28 +110,11 @@ const LoginScreen = () => {
                         {t('privacy_policy_text')}
                     </Text>
                 </TouchableOpacity>
+                <Partenariat/>
             </ScrollView>
 
             {/* Modal for RGPD Text */}
-            <Modal
-                visible={modalVisible}
-                animationType="slide"
-                transparent={true}
-                onRequestClose={() => setModalVisible(false)}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalText}>
-                            {t('privacy_policy_modal_text')}
-                            <Text style={styles.linkText}>{t('privacy_policy')}</Text>.
-                        </Text>
-
-                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-                            <Text style={styles.closeButtonText}>{t('close_button')}</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
+           <RGPDModal modalVisible={modalVisible} onClose={() => setModalVisible(false)}/>
         </View>
     );
 };
@@ -194,43 +179,7 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         marginTop: 20,
     },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    modalContent: {
-        width: '80%',
-        padding: 20,
-        backgroundColor: '#FFF',
-        borderRadius: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    modalText: {
-        fontSize: 16,
-        color: '#333',
-        lineHeight: 22,
-        marginBottom: 20,
-    },
-    closeButton: {
-        backgroundColor: Colors.primary_dark.background,
-        paddingVertical: 10,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    closeButtonText: {
-        color: '#FFF',
-        fontSize: 16,
-    },
-    linkText: {
-        color: Colors.primary_dark.background,
-        textDecorationLine: 'underline',
-    },
+
 });
 
 export default LoginScreen;

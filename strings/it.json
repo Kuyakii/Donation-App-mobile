@@ -124,5 +124,13 @@
   "amountGiven": "Importo donato: {{amount}}",
   "no_donations_yet": "Non hai ancora fatto donazioni. Ogni donazione può fare la differenza!",
   "make_first_donation": "Fai la tua prima donazione e supporta una causa che ti sta a cuore!",
-  "none": "Nessuno"
+  "none": "Nessuno",
+
+  "questionnaire_questions": {
+    "handicap": "Vuoi aiutare le persone con disabilità fisiche?",
+    "local_association": "Preferisci sostenere un'associazione vicino a te?",
+    "mental_health": "Vuoi sostenere un'associazione per la salute mentale?",
+    "addiction": "Vuoi aiutare le persone che lottano contro le dipendenze?",
+    "caregivers": "Vuoi aiutare le persone che si prendono cura dei malati?"
+  }
 }

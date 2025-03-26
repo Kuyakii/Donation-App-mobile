@@ -29,6 +29,11 @@ export default {
     background: '#E5B6FA'
 
   },
+  primary_lighter: {
+    text: '#fff',
+    background: '#ebd1f6'
+
+  },
   container_light: {
     backgroundColor: '#9E25D51A',
   }

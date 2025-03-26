@@ -124,5 +124,13 @@
   "amountGiven": "Amount donated: {{amount}}",
   "no_donations_yet": "You haven't made any donations yet. Every donation can make a difference!",
   "make_first_donation": "Make your first donation and support a cause close to your heart!",
-  "none": "None"
+  "none": "None",
+
+  "questionnaire_questions": {
+    "handicap": "Do you want to help people with physical disabilities?",
+    "local_association": "Do you prefer to support an association near you?",
+    "mental_health": "Do you want to support a mental health association?",
+    "addiction": "Do you want to help people struggling with addiction?",
+    "caregivers": "Do you want to help people who care for sick individuals?"
+  }
 }
