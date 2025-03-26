@@ -8,6 +8,7 @@ import {
     TouchableOpacity, Alert
 } from 'react-native';
 import Colors from "@/constants/Colors";
+import AboutApp from "@/constants/AboutApp";
 import { router } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
 import ChangePasswordModal from "@/components/ChangePasswordModal";
@@ -17,15 +18,20 @@ import {useTranslation} from "react-i18next";
 import LanguageSelector from "@/components/LanguageSelector";
 import * as Location from "expo-location";
 import {Camera} from "expo-camera";
+import TermsOfUseModal from "@/components/TermsOfUseModal";
+import RGPDModal from "@/components/RGPDModal";
+import DeleteAccountModal from "@/components/DeleteAccountModal";
 
 export default function SettingsScreen() {
     const { t, i18n } = useTranslation();
     const [notifications, setNotifications] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
-    const [dataSharing, setDataSharing] = useState(true);
-    const [location, setLocation] = useState(true);
     const [isChangePasswordModalVisible, setChangePasswordModalVisible] = useState(false);
     const [isChangePseudoModalVisible, setChangePseudoModalVisible] = useState(false);
+    const [isTermsOfUseModalVisible, setTermsOfUseModalVisible] = useState(false);
+    const [isPrivacyPolicyModalVisible, setPrivacyPolicyModalVisible] = useState(false);
+    const [isDeleteAccountModalVisible, setDeleteAccountModalVisible] = useState(false);
+
     const [cameraPermission, setCameraPermission] = useState(false);
     const [locationPermission, setLocationPermission] = useState(false);
 
@@ -178,14 +184,33 @@ export default function SettingsScreen() {
                     </View>
                 </View>
 
+                {/* About Section */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>{t('about_us')}</Text>
+                    <TouchableOpacity style={styles.settingItem} onPress={() => setTermsOfUseModalVisible(true)}>
+                        <Text style={styles.settingLabel}>{t('terms_of_use')}</Text>
+                        <Text style={styles.settingArrow}>→</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.settingItem} onPress={() => setPrivacyPolicyModalVisible(true)}>
+                        <Text style={styles.settingLabel}>{t('privacy_policy')}</Text>
+                        <Text style={styles.settingArrow}>→</Text>
+                    </TouchableOpacity>
+                    <View style={styles.settingItem}>
+                        <Text style={styles.settingLabel}>{t('app_version')}</Text>
+                        <Text style={styles.settingValue}>{AboutApp.app_version}</Text>
+                    </View>
+                </View>
+                <TouchableOpacity style={styles.deleteAccountbutton} onPress={() => setDeleteAccountModalVisible(true)}>
+                    <Text style={styles.deleteAccountbuttonText}>{t('delete_account_button')}</Text>
+                </TouchableOpacity>
             </ScrollView>
 
             {/* Intégration du modal */}
             <ChangePasswordModal visible={isChangePasswordModalVisible} onClose={() => setChangePasswordModalVisible(false)} email={user.email} />
-            {/* Intégration du modal */}
             <ChangePseudoModal visible={isChangePseudoModalVisible} onClose={() => setChangePseudoModalVisible(false)} email={user.email} />
-
-
+            <RGPDModal modalVisible={isPrivacyPolicyModalVisible} onClose={() => setPrivacyPolicyModalVisible(false)}/>
+            <TermsOfUseModal modalVisible={isTermsOfUseModalVisible} onClose={() => setTermsOfUseModalVisible(false)}/>
+            <DeleteAccountModal visible={isDeleteAccountModalVisible} onClose={() => setDeleteAccountModalVisible(false)} email={user.email} />
         </View>
     );
 }
@@ -194,6 +219,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#f7f7f7',
+        justifyContent: 'center',
+        paddingBottom: 20,
     },
     titleContainer: {
         flexDirection: 'row',
@@ -266,6 +293,20 @@ const styles = StyleSheet.create({
     languageOption: {
         fontSize: 16,
         color: '#333',
+    },
+    deleteAccountbutton: {
+        backgroundColor: "#d9534f",
+        padding: 12,
+        borderRadius: 20,
+        width: '60%',
+        alignSelf: "center"
+
+    },
+    deleteAccountbuttonText: {
+        color: "#fff",
+        fontSize: 16,
+        textAlign: 'center',
+        fontWeight: "bold"
     },
 });
 

@@ -22,7 +22,6 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "@/config";
 import AssociationListModal from "@/components/DonationListModal";
-import {useFocusEffect} from "expo-router";
 import {useTranslation} from "react-i18next";
 import AssociationFavoritesModal from "@/components/AssociationFavoritesModal";
 import UserModal from "@/components/UserModal";

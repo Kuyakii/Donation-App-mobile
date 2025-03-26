@@ -246,6 +246,29 @@ app.post('/changePseudonyme', async (req: Request, res: Response) => {
     }
 });
 
+// @ts-ignore
+app.post('/deleteAccount', async (req: Request, res: Response) => {
+    const { email, password } = req.body
+    try {
+        if (!password) {
+            return res.status(400).json({ message: "Tous les champs sont requis." });
+        }
+        const user = await userRepo.findByEmail(email);
+        if (!user) {
+            return res.status(400).json({ message: "Utilisateur non trouvé." });
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: "Mot de passe incorrect." });
+        }
+        await userRepo.deleteUseret(user.idUtilisateur);
+
+        res.json({ message: "Compte supprimé avec succès" });
+    } catch (error) {
+        console.error("Erreur lors de la suppression du compte", error);
+        res.status(500).json({ message: "Erreur serveur", error });
+    }
+})
 
 app.post('/favorites', async (req: Request, res: Response) => {
     const { idUtilisateur, idAssociation } = req.body;
