@@ -28,6 +28,19 @@ Aussi, pour les images, mettre en base dans nomImage le  nom + extension du logo
 Aussi pour les localisation, récupérer latitude et longitude de l'adresse ici par ex : https://geojson.io/#map=16.98/46.657553/0.06602 et utiliser dans le insert  ST_GeomFromText('POINT(0.06604683207572748 46.65740272882837)') => voir exemple.
 #### Il faut l'ajouter dans le tableau associatif ./config.tsx en suivant le modèle
 
+## Pour la génération des QR Codes :
+### QR code de l'application 
+Changer APP_URL et SERVER_URL avec votre IPV4, 
+APP_URL est sous format exp://<ipv4>:8081 (le port est le lien que vous voyez lorsque vous lancer expo start)
+SERVER_URL est sous format http://<ipv4>:3000
+
+Lancez le server backend ET l'application avec expo start, aller sur le web et mettez le lien localhost:3000/generate-qrcode-app
+Un texte brut json vous sera généré et copiez le lien "data:image/png..." et collez le sur le web, vous verrez un qr code apparaître, scannez ce QR Code et vous seriez redirigé vers l'application 
+
+### QR code des associations
+Pour générer les QR Codes de l'application c'est pareil, après avoir lancé le server vous mettez sur le web localhost:3000/generate-qrcodes
+Choisissez le QR Code d'une asso, scanner le QR Code AVEC LE SCANNER DE L'APPLICATION et vous pouvez être redirigé vers l'association 
+
 ## Branches  
 ### FixComponents :
 Ici, les pages index et userPage n'utilisent pas de composants React => on perd l'intérêt du langage et il y aura du code dupliqué et difficile à maintenir.
@@ -63,11 +76,11 @@ La page login et register est un peu mieux mais faudra trouver un couleur autte 
 ### map
 La map est quasiment complète, Marker qui fait ouvrir une View avec Description Courte de l'Asso et bouton "Aller voir l'asso" qui redirige vers DetailAssos
 
-## ajoutNewAssos
+### ajoutNewAssos
 Ajout de nouvelles associations assez pour pouvoir faire des statistiques avec, nouvelle version du script SQL sur trello
 
-## pageDons
-### L'objectif était de permettre aux utilisateurs de faire des dons à des associations directement depuis l'application en utilisant Stripe pour gérer les paiements. Voici un résumé rapide de ce qui a été implémenté :
+### pageDons
+#### L'objectif était de permettre aux utilisateurs de faire des dons à des associations directement depuis l'application en utilisant Stripe pour gérer les paiements. Voici un résumé rapide de ce qui a été implémenté :
 
 #### Utilisation de Stripe pour les paiements :
 
@@ -91,26 +104,26 @@ Validation dynamique des dates pour les dons récurrents :
 Pour les dons récurrents, les utilisateurs sont invités à sélectionner une date de début et une date de fin via un champ de texte. La logique permet de s'assurer que la date de début n'est pas dans le futur et que la date de fin est après la date de début.
 #### Important, les dons unique anonyme sont reliés à l'invité 0, admin, il faut donc le créer
 
-## favoriteAsso
+### favoriteAsso
 
 Ajout de la fonctionnalité ajout dans la liste de favoris une association, un boutojn qui s'actualise dans détailAssos 'star", puis qui ajoute dynamiquement dans AssociationListFavorite de l'index et userPage, BD fonctionne correctement, tout fonctionne
 
-## qrCode
+### qrCode
 Page qrCode fonctionnelle, avec un scanneur corner style et animé, un message s'affiche quand on scan avec le lien du QR Code.
 
-## PageUserDynamique
+### PageUserDynamique
 
 Récupération des dons de l'utilisateur, affichage des badges selon des seuils; une barre de progrssion vers le badge suivant; les 3 assos les plus données et aussi, la modale avec la liste des dons, filtrable en fonction du type de don et du montant. Aussi, récupération des rôles des users et stockage de ça dans le AsyncStorage.
 
-## adminAssosPage
+### adminAssosPage
 
 Développement front et back (endpoint) de la page admin assos, disponible uniquement pour ces derniers, pour leurs associations.
 
-## pageAdminApplication
+### pageAdminApplication
 
 Développement front et back de la page admin app : des trois onglets : un onglets stats pour toutes les assos et peuvent être triées, une page pour gérer les utilisateurs et une page pour gérer les associations.
 
-## pageSettings
+### pageSettings
 
 Changer Mot de Passe et Pseudonyme fonctionnel, activier/désactiver notifications à voir, Mode sombe pas encore fait, Langue et traduction fonctionnel, Section a propos fonctionnel, à voir pour le front, bouton suppression du compte fonctionnel
 
@@ -125,13 +138,13 @@ POST /mdpOublie : pour changer de password avec en body : email et password => n
 POST /changePassword : pour changer le password via le settings en saisissant l'ancien password \
 POST /changePseudonyme : pour changer le pseudo via le settings en saisissant le password pour vérifier \
 POST /deleteAccount : pour supprimer le compte en confirmant et saisir le password, déconnexion automatique \
-POST /favorites : Associe une association à un utilisateur pour la liste des favorites
-DELETE /favorites : Supprime un couple (utilisateur/association) des associations favorites 
-GET /favorites/:id : Récupère toutes les associations favorites d'un utilisiateur par son userID.
-POST /dons : pour faire un don avec en body :  id (idAssos) , idUser, montant, typeDon, startDate, endDate, frequency (avec les params en fonction de si c'est un don unique ou récurrent)
-POST /create-payment-intent : pour paiement avec stripe : générer un "client secret" nécessaire à la confirmation du paiement avec confirmPayment
-GET /generate-qrcodes : permet de générer un QR code pour chaque Association de la base de données
-GET /generate-qrcode/:id permet de générer un QR code pour une association avec son id
-GET /open-expo-app redirige vers l'application Expo Go et lance l'application après avoir scanné le QR Code de l'appli 
-GET /generate-qrcode-app permet de générer un QR code pour accéder à l'application via un scanner externe
+POST /favorites : Associe une association à un utilisateur pour la liste des favorites \
+DELETE /favorites : Supprime un couple (utilisateur/association) des associations favorites \
+GET /favorites/:id : Récupère toutes les associations favorites d'un utilisiateur par son userID. \
+POST /dons : pour faire un don avec en body :  id (idAssos) , idUser, montant, typeDon, startDate, endDate, frequency (avec les params en fonction de si c'est un don unique ou récurrent) \
+POST /create-payment-intent : pour paiement avec stripe : générer un "client secret" nécessaire à la confirmation du paiement avec confirmPayment \
+GET /generate-qrcodes : permet de générer un QR code pour chaque Association de la base de données \
+GET /generate-qrcode/:id permet de générer un QR code pour une association avec son id \
+GET /open-expo-app redirige vers l'application Expo Go et lance l'application après avoir scanné le QR Code de l'appli \
+GET /generate-qrcode-app permet de générer un QR code pour accéder à l'application via un scanner externe \
 Ces routes permettent de gérer les données de l’application via des requêtes HTTP (GET, POST, PUT).
