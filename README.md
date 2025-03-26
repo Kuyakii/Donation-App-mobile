@@ -110,6 +110,10 @@ Développement front et back (endpoint) de la page admin assos, disponible uniqu
 
 Développement front et back de la page admin app : des trois onglets : un onglets stats pour toutes les assos et peuvent être triées, une page pour gérer les utilisateurs et une page pour gérer les associations.
 
+## pageSettings
+
+Changer Mot de Passe et Pseudonyme fonctionnel, activier/désactiver notifications à voir, Mode sombe pas encore fait, Langue et traduction fonctionnel
+
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \
