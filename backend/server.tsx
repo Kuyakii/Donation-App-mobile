@@ -487,6 +487,16 @@ app.get("/generate-qrcode-app", async (req: Request, res: Response) => {
     }
 });
 
+app.get("/assosPopulaires", async (req: Request, res: Response) => {
+    try {
+        const associations = await associationRepository.getAssosPopulaires();
+        res.json(associations);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des associations populaires', error);
+        res.status(500).send('Erreur serveur');
+    }
+});
+
 // Lancer le serveur
 app.listen(port,'0.0.0.0', () => {
     console.log(`Serveur backend en écoute sur http://localhost:${port}`);
