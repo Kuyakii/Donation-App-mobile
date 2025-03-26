@@ -132,4 +132,6 @@ POST /dons : pour faire un don avec en body :  id (idAssos) , idUser, montant, t
 POST /create-payment-intent : pour paiement avec stripe : générer un "client secret" nécessaire à la confirmation du paiement avec confirmPayment
 GET /generate-qrcodes : permet de générer un QR code pour chaque Association de la base de données
 GET /generate-qrcode/:id permet de générer un QR code pour une association avec son id
+GET /open-expo-app redirige vers l'application Expo Go et lance l'application après avoir scanné le QR Code de l'appli 
+GET /generate-qrcode-app permet de générer un QR code pour accéder à l'application via un scanner externe
 Ces routes permettent de gérer les données de l’application via des requêtes HTTP (GET, POST, PUT).

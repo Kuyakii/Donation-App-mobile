@@ -7,9 +7,10 @@ import { AssociationRepository } from './repositories/AssociationRepository';
 import { UtilisateurRepository } from './repositories/UtilisateurRepository';
 import {DonationRepository} from "./repositories/DonationRepository";
 
-
 const app = express();
 const port = 3000;
+const APP_URL = 'exp://192.168.1.134:8082'; // à changer
+const SERVER_URL = `http://192.168.1.134:${port}`; // à changer
 
 // Middleware
 app.use(cors());
@@ -440,7 +441,7 @@ app.delete('/suppUser/:id', async (req: Request, res: Response) => {
 
 app.get("/generate-qrcode/:id", async (req: Request, res: Response) => {
     const { id } = req.params;
-    const url = `https://ton-site.com/detailsAssos?id=${id}`;
+    const url = `/detailsAssos?id=${id}`;
 
     try {
         const qrCode = await QRCode.toDataURL(url);
@@ -466,6 +467,22 @@ app.get("/generate-qrcodes", async (req: Request, res: Response) => {
 
     } catch (error) {
         console.error("Erreur lors de la génération des QR Codes", error);
+        res.status(500).send("Erreur serveur");
+    }
+});
+
+app.get("/open-expo-app", (req: Request, res: Response) => {
+    res.redirect(`${APP_URL}`);
+});
+
+app.get("/generate-qrcode-app", async (req: Request, res: Response) => {
+    try {
+        const redirectUrl = `${SERVER_URL}/open-expo-app`;
+        const qrCode = await QRCode.toDataURL(redirectUrl);
+        res.json({ qrCode });
+
+    } catch (error) {
+        console.error("Erreur lors de la génération du QR Code", error);
         res.status(500).send("Erreur serveur");
     }
 });
