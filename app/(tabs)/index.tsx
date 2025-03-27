@@ -17,6 +17,7 @@ import FirstTimeModal from "@/components/FirstTimeModal";
 import {BASE_URL} from "@/config";
 import useFontStore from "@/store/fontStore";
 import FontSizeButton from "@/components/ProfileComponents/FontSizeButton";
+import AccessibilityButton from "@/components/AccessibilityButton";
 
 SplashScreen.preventAutoHideAsync();
 

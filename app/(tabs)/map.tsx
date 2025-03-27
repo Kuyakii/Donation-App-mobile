@@ -9,6 +9,7 @@ import {IAssociation} from "@/backend/interfaces/IAssociation";
 import Colors from "@/constants/Colors";
 import {useTranslation} from "react-i18next";
 import useFontStore from "@/store/fontStore";
+import AccessibilityButton from "@/components/AccessibilityButton";
 export default function MapScreen() {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 

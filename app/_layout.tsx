@@ -3,12 +3,13 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack, useNavigation } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/components/useColorScheme';
 import useFontStore from "@/store/fontStore";
-import { Button } from 'react-native';
+import { Button, View } from 'react-native';
+import AccessibilityButton from "@/components/AccessibilityButton";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -63,6 +64,9 @@ function RootLayoutNav() {
         <Stack.Screen name="login" options={{ headerShown: false  }} />
         <Stack.Screen name="settings" options={{ headerShown: false  }} />
       </Stack>
+      <View style={[{bottom: 65}]}>
+        <AccessibilityButton></AccessibilityButton>
+      </View>
     </ThemeProvider>
   );
 }

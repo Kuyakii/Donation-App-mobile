@@ -30,9 +30,6 @@ export default function Header({title}: HeaderProps) {
                     <Feather name="settings" size={36} color="black"/>
                 </TouchableOpacity>
             </View>
-            <View style={styles.policeBouton}>
-                <FontSizeButton></FontSizeButton>
-            </View>
         </>
     );
 }

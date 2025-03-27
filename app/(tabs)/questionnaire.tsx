@@ -19,6 +19,8 @@ import { IAssociation } from "@/backend/interfaces/IAssociation";
 import { images } from "@/config";
 import {t} from "i18next";
 import useFontStore from '@/store/fontStore';
+import AccessibilityButton from "@/components/AccessibilityButton";
+import absoluteFill = StyleSheet.absoluteFill;
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
@@ -460,6 +462,7 @@ export default function QuestionnaireScreen() {
                 >
                     <Text style={[styles.restartButtonText, {fontSize : fontSizeSousTitre}]}>{t('restart')}</Text>
                 </TouchableOpacity>
+
             </ScrollView>
         );
     }
@@ -505,9 +508,10 @@ export default function QuestionnaireScreen() {
                     >
                         <Text style={[styles.questionText, {fontSize : fontSizeSousTitre}]}>{questions[currentIndex].text}</Text>
                     </Animated.View>
-                </View>
 
+                </View>
             </View>
+
         </>
     );
 }
@@ -517,19 +521,20 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#f5f5f5',
         paddingTop: 50,
-        paddingHorizontal: 20,
     },
     title: {
       //  fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 10,
+        paddingHorizontal: 20,
     },
     subtitle: {
       //  fontSize: 16,
         textAlign: 'center',
         marginBottom: 20,
         color: 'black',
+        paddingHorizontal: 10,
     },
     explication: {
     //    fontSize: 16,
