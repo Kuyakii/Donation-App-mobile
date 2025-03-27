@@ -127,6 +127,11 @@ Développement front et back de la page admin app : des trois onglets : un ongle
 
 Changer Mot de Passe et Pseudonyme fonctionnel, activier/désactiver notifications à voir, Mode sombe pas encore fait, Langue et traduction fonctionnel, Section a propos fonctionnel, à voir pour le front, bouton suppression du compte fonctionnel
 
+## grosTextes
+
+Taille de polices ajustables avec petit outils d'accessibilité sur toutes les pages => toutes les pages répondent à ça ct dur et long 
+
+
 ## Routes : \
 GET /associations : Récupère toutes les associations. \
 GET /associations/:id : Récupère une association par son ID. \
