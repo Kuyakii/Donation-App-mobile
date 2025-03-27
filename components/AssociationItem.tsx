@@ -5,7 +5,7 @@ import useFontStore from "@/store/fontStore";
 
 // @ts-ignore
 export default function AssociationItem({ name, description, imageName }) {
-    const { fontSize, increaseFontSize, decreaseFontSize } = useFontStore();
+    const {fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     return (
         <View style={styles.associationItem}>
@@ -15,8 +15,8 @@ export default function AssociationItem({ name, description, imageName }) {
                 source={images[imageName]} // Charge l'image dynamique
             />
             <View style={styles.associationInfo}>
-                <Text style={styles.associationName}>{name}</Text>
-                <Text style={[styles.associationDescription, {fontSize}]} numberOfLines={2}>
+                <Text style={[styles.associationName,{fontSize : fontSize}]}>{name}</Text>
+                <Text style={[styles.associationDescription, {fontSize : fontSizePetit}]} numberOfLines={2}>
                     {description}
                 </Text>
             </View>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     associationName: {
-        fontSize: 16,
+        //fontSize: 16,
         fontWeight: '500',
         marginBottom: 4,
     },
