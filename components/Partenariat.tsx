@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import {images} from "@/config";
+import {t} from "i18next";
 
 // @ts-ignore
 export default function Partenariat() {
@@ -12,7 +13,7 @@ export default function Partenariat() {
                 source={images['france-asso.png']}
             />
             <Text style={styles.partnershipText}>
-                Application développée en partenariat avec France Association
+                {t('partenariat')}
             </Text>
         </View>
     );

@@ -17,6 +17,7 @@ import {BASE_URL, images} from "@/config";
 import { BarChart } from "react-native-chart-kit";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
+import {t} from "i18next";
 
 export default function AdminAssoScreen() {
     const { height: screenHeight } = Dimensions.get('window');
@@ -153,7 +154,7 @@ export default function AdminAssoScreen() {
         return (
             <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#0000ff" />
-                <Text>Chargement du profil administrateur...</Text>
+                <Text>{t('loading_admin')}</Text>
             </View>
         );
     }
@@ -242,8 +243,8 @@ export default function AdminAssoScreen() {
                 ref={scrollViewRef}
                 contentContainerStyle={styles.scrollViewContent}
             >
-                <Text style={styles.welcomeTitle}>Bonjour, Admin {user.pseudonyme}</Text>
-                <Text style={styles.welcomeTitle2}>Administrateur de l'association </Text>
+                <Text style={styles.welcomeTitle}>{t('hello_admin')}{user.pseudonyme}</Text>
+                <Text style={styles.welcomeTitle2}>{t('admin_asso')} </Text>
                 {/* Association Card*/}
                 <View style={styles.assoCard}>
                     {association ? (
@@ -256,7 +257,7 @@ export default function AdminAssoScreen() {
                             <Text style={styles.assoName}>{association.nom}</Text>
                         </>
                     ) : (
-                        <Text>Chargement des informations de l'association...</Text>
+                        <Text>{t('loading_asso')}</Text>
                     )}
                 </View>
 
@@ -265,7 +266,7 @@ export default function AdminAssoScreen() {
                     style={styles.adminButton}
                     onPress={() => setModalVisible(true)}
                 >
-                    <Text style={styles.adminButtonText}>Modifier ma page association</Text>
+                    <Text style={styles.adminButtonText}>{t('edit_asso')}</Text>
                 </TouchableOpacity>
 
                 {/* Modal d'édition */}
@@ -281,11 +282,11 @@ export default function AdminAssoScreen() {
                             style={styles.keyboardAvoidingView}
                         >
                             <View style={[styles.modalView, { maxHeight: screenHeight * 0.8 }]}>
-                                <Text style={styles.modalTitle}>Modifier les informations</Text>
+                                <Text style={styles.modalTitle}>{t('edit_info')}</Text>
 
                                 <ScrollView style={styles.modalScrollView} contentContainerStyle={styles.modalScrollViewContent}>
                                     <View style={styles.inputContainer}>
-                                        <Text style={styles.label}>Nom</Text>
+                                        <Text style={styles.label}>{t('name')}</Text>
                                         <TextInput
                                             style={styles.input}
                                             value={editedNom}
@@ -295,7 +296,7 @@ export default function AdminAssoScreen() {
                                     </View>
 
                                     <View style={styles.inputContainer}>
-                                        <Text style={styles.label}>Description</Text>
+                                        <Text style={styles.label}>{t('description')}</Text>
                                         <TextInput
                                             style={[styles.input, styles.textArea]}
                                             value={editedDescription}
@@ -307,7 +308,7 @@ export default function AdminAssoScreen() {
                                     </View>
 
                                     <View style={styles.inputContainer}>
-                                        <Text style={styles.label}>Description courte</Text>
+                                        <Text style={styles.label}>{t('short_description')}</Text>
                                         <TextInput
                                             style={[styles.input, styles.textArea]}
                                             value={editedDescriptionCourte}
@@ -325,7 +326,7 @@ export default function AdminAssoScreen() {
                                         onPress={() => setModalVisible(false)}
                                         disabled={isSubmitting}
                                     >
-                                        <Text style={styles.buttonCancelText}>Annuler</Text>
+                                        <Text style={styles.buttonCancelText}>{t('cancel_button')}</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         style={[styles.button, styles.buttonSave]}
@@ -335,7 +336,7 @@ export default function AdminAssoScreen() {
                                         {isSubmitting ? (
                                             <ActivityIndicator size="small" color="white" />
                                         ) : (
-                                            <Text style={styles.buttonText}>Enregistrer</Text>
+                                            <Text style={styles.buttonText}>{t('save')}</Text>
                                         )}
                                     </TouchableOpacity>
                                 </View>
@@ -361,20 +362,20 @@ export default function AdminAssoScreen() {
 
                 {/* Statistiques des dons */}
                 <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>Statistiques des dons</Text>
-                    <Text>Total des dons de {selectedYear} : <Text style={styles.highlight}>{totalDons}€</Text></Text>
-                    <Text>Dons récurrents actifs : <Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
+                    <Text style={styles.sectionTitle}>{t('stats_dons')}</Text>
+                    <Text>{t('total_dons')} {selectedYear} : <Text style={styles.highlight}>{totalDons}€</Text></Text>
+                    <Text>{t('dons_recurrents')}<Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
                 </View>
 
                 {/* Favoris */}
                 <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>Favoris</Text>
-                    <Text>Utilisateurs ayant mis en favoris l'association : <Text style={styles.highlight}>{nbAssosFav}</Text></Text>
+                    <Text style={styles.sectionTitle}>{t('favorites')}</Text>
+                    <Text>{t('user_fav')}<Text style={styles.highlight}>{nbAssosFav}</Text></Text>
                 </View>
 
                 {/* Graphique des dons - AMÉLIORÉ */}
                 <View style={styles.chartContainer}>
-                    <Text style={styles.sectionTitle}>Évolution des dons</Text>
+                    <Text style={styles.sectionTitle}>{t('evolution_dons')}</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         <BarChart
                             data={{
@@ -426,15 +427,15 @@ export default function AdminAssoScreen() {
 
                 {/* Activités récentes */}
                 <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>Activités récentes (inf à 30j)</Text>
-                    <Text>Nouveaux dons : <Text style={styles.highlight}>{getRecentDonsCount(donsAssos)}</Text></Text>
-                    <Text>Nouveaux dons récurrents : <Text style={styles.highlight}>{getRecentDonsCount(donsRecurentsAssos)}</Text></Text>
+                    <Text style={styles.sectionTitle}>{t('recent_activity')}</Text>
+                    <Text>{t('new_dons')}<Text style={styles.highlight}>{getRecentDonsCount(donsAssos)}</Text></Text>
+                    <Text>{t('new_recurrent_dons')} <Text style={styles.highlight}>{getRecentDonsCount(donsRecurentsAssos)}</Text></Text>
                 </View>
 
                 {/* Wall of Givers - Meilleurs donateurs */}
                 <View style={styles.adminSection}>
                     <Text style={styles.sectionTitle}>🏆 Wall of Givers 🏆</Text>
-                    <Text style={{marginBottom: 10}}>Meilleurs donateurs de : {association?.nom}</Text>
+                    <Text style={{marginBottom: 10}}>{t('best_donateurs_asso')} {association?.nom}</Text>
                     {meilleursDonateurs.length > 0 ? (
                         meilleursDonateurs.map((donateur, index) => (
                             <View key={donateur.idUtilisateur} style={styles.donateurItem}>
@@ -444,7 +445,7 @@ export default function AdminAssoScreen() {
                             </View>
                         ))
                     ) : (
-                        <Text>Aucun donateur pour l'instant.</Text>
+                        <Text>{t('no_donateurs_yet')}</Text>
                     )}
                 </View>
                 <BoutonDeconnexion />

@@ -17,6 +17,7 @@ import Colors from "@/constants/Colors";
 import { getAllAssociation } from "@/helpers";
 import { IAssociation } from "@/backend/interfaces/IAssociation";
 import { images } from "@/config";
+import {t} from "i18next";
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
@@ -376,14 +377,14 @@ export default function QuestionnaireScreen() {
     if (completed) {
         return (
             <ScrollView style={styles.container}>
-                <Text style={styles.title}>Recommandations pour vous</Text>
+                <Text style={styles.title}>{t('recommandation_fy')}</Text>
 
                 {loadingRecommendations ? (
-                    <Text style={styles.loadingText}>Recherche des associations qui vous correspondent...</Text>
+                    <Text style={styles.loadingText}>{t('recherche_recommandations')}</Text>
                 ) : recommendedAssociations.length > 0 ? (
                     <ScrollView>
                         <Text style={styles.subtitle}>
-                            Basé sur vos réponses, ces associations pourraient vous intéresser :
+                            {t('based_on_answer_recommandations')}
                         </Text>
 
                         {recommendedAssociations.map((asso, index) => (
@@ -410,20 +411,19 @@ export default function QuestionnaireScreen() {
                                     style={styles.donateButton}
                                     onPress={() => navigateToDons(asso.idAssociation)}
                                 >
-                                    <Text style={styles.donateButtonText}>Faire un don</Text>
+                                    <Text style={styles.donateButtonText}>{t('don_title')}</Text>
                                 </TouchableOpacity>
                             </View>
                         ))}
                     </ScrollView>
                 ) : (
                     <Text style={styles.noResultsText}>
-                        Nous n'avons pas pu trouver d'associations correspondant à vos critères.
-                        Essayez de refaire le questionnaire ou explorez toutes nos associations.
+                        {t('no_recommadations')}
                     </Text>
                 )}
 
                 {/* Reste du code pour le résumé des résultats */}
-                <Text style={styles.resultsSummary}>Résumé de vos réponses :</Text>
+                <Text style={styles.resultsSummary}>{t('answers_resume')}</Text>
                 <ScrollView style={styles.resultsContainer}>
                     {answers.map((item, index) => (
                         <View key={index} style={styles.resultItem}>
@@ -455,7 +455,7 @@ export default function QuestionnaireScreen() {
                     style={styles.restartButton}
                     onPress={restartQuiz}
                 >
-                    <Text style={styles.restartButtonText}>Recommencer</Text>
+                    <Text style={styles.restartButtonText}>{t('restart')}</Text>
                 </TouchableOpacity>
             </ScrollView>
         );
@@ -465,9 +465,9 @@ export default function QuestionnaireScreen() {
         <>
             <Header/>
             <View style={styles.container}>
-                <Text style={styles.title}>Questionnaire</Text>
-                <Text style={styles.subtitle}>Ce questionnaire vous aidera à trouver quelle association est faite pour vous.</Text>
-                <Text style={styles.explication}>Swipe à droite pour Oui, à gauche pour Non</Text>
+                <Text style={styles.title}>{t("questionnaire")}</Text>
+                <Text style={styles.subtitle}>{t('questionnaire_explanation')}</Text>
+                <Text style={styles.explication}>{t('swipe_explanation')}</Text>
                 <Text style={styles.counter}>{currentIndex + 1}/{questions.length}</Text>
 
                 <View style={styles.cardContainer}>

@@ -87,7 +87,7 @@ export default function MapScreen() {
                                     setModalVisible(false);
                                 }}
                             >
-                                <Text style={styles.buttonText}>Aller voir l'association</Text>
+                                <Text style={styles.buttonText}>{t('voir_association')}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity

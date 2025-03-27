@@ -24,6 +24,7 @@ import {useRouter} from "expo-router";
 import {useNavigation} from "@react-navigation/native";
 import { EditAssociationModal } from '@/components/EditAssociationModal';
 import {UtilisateursList} from "@/components/UtilisateursList";
+import {t} from "i18next";
 
 export default function AdminAppScreen() {
     const router = useRouter();
@@ -140,7 +141,7 @@ export default function AdminAppScreen() {
         return (
             <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color="#0000ff" />
-                <Text>Chargement du profil administrateur...</Text>
+                <Text>{t('loading_admin')}</Text>
             </View>
         );
     }
@@ -235,7 +236,7 @@ export default function AdminAppScreen() {
             </View>
             {/* Sélecteur d'association - NOUVEAU */}
             <View style={styles.adminSection}>
-                <Text style={styles.sectionTitle}>Choisir une association</Text>
+                <Text style={styles.sectionTitle}>{t('choose_asso')}</Text>
 
                 <TouchableOpacity
                     style={styles.dropdownButton}
@@ -287,19 +288,19 @@ export default function AdminAppScreen() {
 
             {/* Statistiques des dons */}
             <View style={styles.adminSection}>
-                <Text style={styles.sectionTitle}>Statistiques des dons</Text>
-                <Text>Total des dons de {selectedYear} : <Text style={styles.highlight}>{totalDons}€</Text></Text>
-                <Text>Dons récurrents actifs : <Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
+                <Text style={styles.sectionTitle}>{t('stats_dons')}</Text>
+                <Text>{t("total_dons")}{selectedYear} :<Text style={styles.highlight}>{totalDons}€</Text></Text>
+                <Text>{t('dons_recurrents')}<Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
             </View>
 
             {/* Favoris */}
             <View style={styles.adminSection}>
-                <Text style={styles.sectionTitle}>Favoris</Text>
-                <Text>Utilisateurs ayant mis en favoris l'association : <Text style={styles.highlight}>{nbAssosFav}</Text></Text>
+                <Text style={styles.sectionTitle}>{t('favorites')}</Text>
+                <Text>{t('user_fav')}<Text style={styles.highlight}>{nbAssosFav}</Text></Text>
             </View>
             {/* Graphique des dons - AMÉLIORÉ */}
             <View style={styles.chartContainer}>
-                <Text style={styles.sectionTitle}>Évolution des dons</Text>
+                <Text style={styles.sectionTitle}>{t('evolution_dons')}</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <BarChart
                         data={{
@@ -351,15 +352,15 @@ export default function AdminAppScreen() {
 
             {/* Activités récentes */}
             <View style={styles.adminSection}>
-                <Text style={styles.sectionTitle}>Activités récentes (inf à 30j)</Text>
-                <Text>Nouveaux dons : <Text style={styles.highlight}>{getRecentDonsCount(filteredDons)}</Text></Text>
-                <Text>Nouveaux dons récurrents : <Text style={styles.highlight}>{getRecentDonsCountReccurent(filteredDons)}</Text></Text>
+                <Text style={styles.sectionTitle}>{t('recent_activity')}</Text>
+                <Text>{t('new_dons')}<Text style={styles.highlight}>{getRecentDonsCount(filteredDons)}</Text></Text>
+                <Text>{t('new_recurrent_dons')}<Text style={styles.highlight}>{getRecentDonsCountReccurent(filteredDons)}</Text></Text>
             </View>
 
             {/* Wall of Givers - Meilleurs donateurs */}
             <View style={styles.adminSection}>
                 <Text style={styles.sectionTitle}>🏆 Wall of Givers 🏆</Text>
-                <Text style={{marginBottom: 10}}>Meilleurs donateurs de l'application Soteria</Text>
+                <Text style={{marginBottom: 10}}>{t('best_donateurs')}</Text>
                 {meilleursDonateurs.length > 0 ? (
                     meilleursDonateurs.map((donateur, index) => (
                         <View key={donateur.idUtilisateur} style={styles.donateurItem}>
@@ -369,7 +370,7 @@ export default function AdminAppScreen() {
                         </View>
                     ))
                 ) : (
-                    <Text>Aucun donateur pour l'instant.</Text>
+                    <Text>{t('no_donateurs_yet')}</Text>
                 )}
             </View>
             <BoutonDeconnexion />
@@ -378,7 +379,7 @@ export default function AdminAppScreen() {
     // @ts-ignore
     const renderUsers = () => (
             <View style={styles.container}>
-                <Text style={styles.title}>Gestion des Utilisateurs</Text>
+                <Text style={styles.title}>{t('gestion_user')}</Text>
                 <UtilisateursList
                     utilisateurs={utilisateurs}
                     onUpdateUsers={(updatedUsers) => setUtilisateurs(updatedUsers)}
@@ -474,7 +475,7 @@ export default function AdminAppScreen() {
     const renderAssociations = () => (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <Text style={styles.title}>Gestion des Associations</Text>
+                <Text style={styles.title}>{t('gestion_asso')}</Text>
             </View>
             {association.map((asso: IAssociation) => (
                 <View key={asso.idAssociation} style={styles.associationCard}>
@@ -490,17 +491,17 @@ export default function AdminAppScreen() {
 
                         <View style={styles.statsContainer}>
                             <View style={styles.statItem}>
-                                <Text style={styles.statLabel}>Somme des dons:</Text>
+                                <Text style={styles.statLabel}>{t('somme_don')}</Text>
                                 <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[0]} €</Text>
                             </View>
 
                             <View style={styles.statItem}>
-                                <Text style={styles.statLabel}>Moyenne:</Text>
+                                <Text style={styles.statLabel}>{t('moyenne')}</Text>
                                 <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[1] || 0} €</Text>
                             </View>
 
                             <View style={styles.statItem}>
-                                <Text style={styles.statLabel}>Nombre:</Text>
+                                <Text style={styles.statLabel}>{t('nombre')}</Text>
                                 <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[2]}</Text>
                             </View>
                         </View>
@@ -511,14 +512,14 @@ export default function AdminAppScreen() {
                         style={[styles.actionButton, styles.editButton]}
                         onPress={() => handleEditAssociation(asso)}
                     >
-                        <Text style={styles.actionButtonText}>Modifier</Text>
+                        <Text style={styles.actionButtonText}>{t('edit_amount')}</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={[styles.actionButton, styles.deleteButton]}
                         onPress={() => handleDeleteAssociation(asso.idAssociation)}
                     >
-                        <Text style={styles.actionButtonText}>Supprimer</Text>
+                        <Text style={styles.actionButtonText}>{t('delete')}</Text>
                     </TouchableOpacity>
                 </View>
                 </View>
@@ -539,8 +540,8 @@ export default function AdminAppScreen() {
             <ScrollView
                 ref={scrollViewRef}
                 contentContainerStyle={styles.scrollViewContent}>
-                <Text style={styles.welcomeTitle}>Bonjour, Admin {user.pseudonyme}</Text>
-                <Text style={styles.welcomeTitle2}>Administrateur de l'application </Text>
+                <Text style={styles.welcomeTitle}>{t('hello_admin')}{user.pseudonyme}</Text>
+                <Text style={styles.welcomeTitle2}>{t('admin_app')} </Text>
                 <View style={styles.tabs}>
                     <TouchableOpacity
                         onPress={() => setActiveTab('stats')}
@@ -552,7 +553,7 @@ export default function AdminAppScreen() {
                         <Text style={[
                             styles.tabButtonText,
                             activeTab === 'stats' && styles.activeTabButtonText
-                        ]}>Stats</Text>
+                        ]}>{t('stats_tab')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => setActiveTab('users')}
@@ -564,7 +565,7 @@ export default function AdminAppScreen() {
                         <Text style={[
                             styles.tabButtonText,
                             activeTab === 'users' && styles.activeTabButtonText
-                        ]}>Utilisateurs</Text>
+                        ]}>{t('user_tab')}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => setActiveTab('associations')}
@@ -576,7 +577,7 @@ export default function AdminAppScreen() {
                         <Text style={[
                             styles.tabButtonText,
                             activeTab === 'associations' && styles.activeTabButtonText
-                        ]}>Associations</Text>
+                        ]}>{t('asso_tab')}</Text>
                     </TouchableOpacity>
                 </View>
             {activeTab === 'stats' && renderStats()}

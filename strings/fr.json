@@ -26,14 +26,7 @@
   "rescan_button": "Scanner à nouveau",
   "go_to_scanned_qr": "Aller à la page correspondante",
 
-  "results": "Résultats",
-  "yes": "Oui",
-  "no": "Non",
-  "restart": "Recommencer",
-  "questionnaire": "Questionnaire",
-  "questionnaire_explanation": "Ce questionnaire vous aidera à trouver quelle association est faite pour vous.",
-  "swipe_right_for_yes": "Swipe à droite pour Oui",
-  "swipe_left_for_no": "Swipe à gauche pour Non",
+
 
   "your_donations": "Vos Dons : ",
   "donations_subtitle": "Vous avez effectué {{donCount}} dons pour un montant total égal à {{total}}€",
@@ -94,6 +87,12 @@
   "privacy_policy": "Politique de Confidentialité",
   "privacy_policy_text": "En vous inscrivant, vous acceptez notre politique de confidentialité.",
   "privacy_policy_modal_text": "En vous inscrivant, vous acceptez que nous recueillions et traitions vos données personnelles, telles que votre nom, adresse e-mail, et autres informations nécessaires à la création de votre compte. Ces données sont utilisées uniquement pour la gestion de votre compte et la fourniture de nos services.\n\nNous nous engageons à protéger vos informations personnelles conformément au Règlement Général sur la Protection des Données (RGPD). Vos données ne seront jamais partagées avec des tiers sans votre consentement, à moins que cela ne soit requis par la loi.\n\nVous avez le droit d'accéder à vos données, de les rectifier, de les supprimer, ou de vous opposer à leur traitement, conformément à la réglementation en vigueur. Pour exercer vos droits ou pour toute question concernant la protection de vos données, vous pouvez nous contacter à contact@soteria.fr.\n\nPour plus d'informations, consultez notre ",
+  "about_us": "A propos",
+  "terms_of_use": "Conditions d'utilisation",
+  "terms_of_use_text": "Conditions d'utilisation\nDernière mise à jour : 26/03/2025 \n\nBienvenue sur notre application. En utilisant notre service, vous acceptez les présentes conditions d'utilisation. Veuillez les lire attentivement.\n\n1. Acceptation des conditions\nEn accédant à notre application, vous acceptez de vous conformer aux présentes conditions. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre service.\n\n2. Modification des conditions\nNous nous réservons le droit de modifier ces conditions à tout moment. Toute modification sera effective dès sa publication dans l’application. Il est de votre responsabilité de consulter régulièrement cette page pour rester informé.\n\n3. Utilisation de l’application\nVous devez être âgé d’au moins 13 ans pour utiliser notre service.\n\nVous acceptez de ne pas utiliser l’application à des fins illégales ou interdites par ces conditions.\n\nIl est interdit d’utiliser notre service pour nuire à autrui, transmettre des contenus offensants, ou violer les droits d’un tiers.\n\n4. Comptes et sécurité\nVous êtes responsable de la confidentialité de vos identifiants de connexion.\n\nToute activité effectuée sous votre compte relève de votre responsabilité.\n\nEn cas d’accès non autorisé à votre compte, vous devez nous en informer immédiatement.\n\n5. Protection des données\nVotre vie privée est importante pour nous. Consultez notre Politique de confidentialité pour en savoir plus sur la manière dont nous collectons et utilisons vos données.\n\n6. Limitation de responsabilité\nNous ne pouvons être tenus responsables des dommages directs ou indirects résultant de l'utilisation de notre application. Nous ne garantissons pas que le service sera exempt d'erreurs ou d'interruptions.\n\n7. Propriété intellectuelle\nTout le contenu de l’application (textes, images, logos, etc.) est protégé par des droits d’auteur et ne peut être utilisé sans notre autorisation.\n\n8. Résiliation\nNous nous réservons le droit de suspendre ou de supprimer votre accès à l’application en cas de non-respect des présentes conditions.\n\n9. Droit applicable\nCes conditions sont régies par les lois en vigueur dans votre pays de résidence.\n\nEn utilisant notre service, vous reconnaissez avoir lu, compris et accepté ces conditions d’utilisation.\n\nPour toute question, veuillez nous contacter à contact@soteria.fr.",
+  "app_version": "Version de l'application",
+  "delete_account_button": "Supprimer ce compte",
+  "accountDeletedSuccess": "Compte supprimé avec succès",
 
   "no_favorite_association": "Aucune association favorite.",
   "locationUnavailable": "Localisation non disponible",
@@ -150,11 +149,58 @@
     "addiction": "Souhaitez-vous aider les personnes en situation d'addiction ?",
     "caregivers": "Souhaitez-vous aider les personnes proches de malades ?"
   },
+  "recommandation_fy": "Recommandations pour vous",
+  "recherche_recommandations": "Recherche des associations qui vous correspondent...",
+  "based_on_answer_recommandations": " Basé sur vos réponses, ces associations pourraient vous intéresser :",
+  "no_recommadations": " Nous n'avons pas pu trouver d'associations correspondant à vos critères.\n                        Essayez de refaire le questionnaire ou explorez toutes nos associations.",
+  "answers_resume": "Résumé de vos réponses :",
+  "results": "Résultats",
+  "yes": "Oui",
+  "no": "Non",
+  "restart": "Recommencer",
+  "questionnaire": "Questionnaire",
+  "questionnaire_explanation": "Ce questionnaire vous aidera à trouver quelle association est faite pour vous.",
+  "swipe_explanation": "Swipe à droite pour Oui, à gauche pour Non",
 
-  "about_us": "A propos",
-  "terms_of_use": "Conditions d'utilisation",
-  "terms_of_use_text": "Conditions d'utilisation\nDernière mise à jour : 26/03/2025 \n\nBienvenue sur notre application. En utilisant notre service, vous acceptez les présentes conditions d'utilisation. Veuillez les lire attentivement.\n\n1. Acceptation des conditions\nEn accédant à notre application, vous acceptez de vous conformer aux présentes conditions. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre service.\n\n2. Modification des conditions\nNous nous réservons le droit de modifier ces conditions à tout moment. Toute modification sera effective dès sa publication dans l’application. Il est de votre responsabilité de consulter régulièrement cette page pour rester informé.\n\n3. Utilisation de l’application\nVous devez être âgé d’au moins 13 ans pour utiliser notre service.\n\nVous acceptez de ne pas utiliser l’application à des fins illégales ou interdites par ces conditions.\n\nIl est interdit d’utiliser notre service pour nuire à autrui, transmettre des contenus offensants, ou violer les droits d’un tiers.\n\n4. Comptes et sécurité\nVous êtes responsable de la confidentialité de vos identifiants de connexion.\n\nToute activité effectuée sous votre compte relève de votre responsabilité.\n\nEn cas d’accès non autorisé à votre compte, vous devez nous en informer immédiatement.\n\n5. Protection des données\nVotre vie privée est importante pour nous. Consultez notre Politique de confidentialité pour en savoir plus sur la manière dont nous collectons et utilisons vos données.\n\n6. Limitation de responsabilité\nNous ne pouvons être tenus responsables des dommages directs ou indirects résultant de l'utilisation de notre application. Nous ne garantissons pas que le service sera exempt d'erreurs ou d'interruptions.\n\n7. Propriété intellectuelle\nTout le contenu de l’application (textes, images, logos, etc.) est protégé par des droits d’auteur et ne peut être utilisé sans notre autorisation.\n\n8. Résiliation\nNous nous réservons le droit de suspendre ou de supprimer votre accès à l’application en cas de non-respect des présentes conditions.\n\n9. Droit applicable\nCes conditions sont régies par les lois en vigueur dans votre pays de résidence.\n\nEn utilisant notre service, vous reconnaissez avoir lu, compris et accepté ces conditions d’utilisation.\n\nPour toute question, veuillez nous contacter à contact@soteria.fr.",
-  "app_version": "Version de l'application",
-  "delete_account_button": "Supprimer ce compte",
-  "accountDeletedSuccess": "Compte supprimé avec succès"
+  "voir_association": "Aller voir l'association",
+
+  "partenariat": "Application développée en partenariat avec France Association\n",
+
+  "loading_admin": "Chargement du profil administrateur...",
+  "choose_asso": "Choisir une association",
+  "stats_dons" : "Statistiques des dons",
+  "total_dons": "Total des dons de ",
+  "dons_recurrents": "Dons récurrents actifs :",
+  "user_fav": "Utilisateurs ayant mis en favoris l'association :",
+  "evolution_dons": "Évolution des dons",
+  "recent_activity": "Activités récentes (inf à 30j)",
+  "new_dons": "Nouveaux dons :",
+  "new_recurrent_dons": "Nouveaux dons récurrents : ",
+  "best_donateurs": "Meilleurs donateurs de l'application Soteria",
+  "no_donateurs_yet": "Aucun donateur pour l'instant.",
+  "gestion_user": "Gestion des Utilisateurs",
+  "gestion_asso": "Gestion des Associations",
+  "somme_don": "Somme des dons:",
+  "moyenne": "Moyenne:",
+  "nombre": "Nombre:",
+  "delete": "Supprimer",
+  "hello_admin": "Bonjour, Admin ",
+  "admin_app": "Administrateur de l'application",
+  "stats_tab": "Stats",
+  "user_tab": "Utilisateurs",
+  "asso_tab": "Associations",
+
+  "admin_asso": "Administrateur de l'association",
+  "loading_asso": "Chargement des informations de l'association...",
+  "edit_asso": "Modifier ma page association",
+  "edit_info": "Modifier les informations",
+  "name": "Nom",
+  "description": "Description",
+  "short_description": "Description courte",
+  "save": "Enregistrer",
+  "best_donateurs_asso": "Meilleurs donateurs de :"
+
+
+
+
 }
