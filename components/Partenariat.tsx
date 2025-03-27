@@ -3,16 +3,19 @@ import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import {images} from "@/config";
 import {t} from "i18next";
+import useFontStore from "@/store/fontStore";
 
 // @ts-ignore
 export default function Partenariat() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     return (
         <View style={styles.partnershipContainer}>
             <Image
                 style={styles.partnershipLogo}
                 source={images['france-asso.png']}
             />
-            <Text style={styles.partnershipText}>
+            <Text style={[styles.partnershipText, {fontSize : fontSizeTresPetit}]}>
                 {t('partenariat')}
             </Text>
         </View>
@@ -37,7 +40,7 @@ const styles = StyleSheet.create({
     },
     partnershipText: {
         flex: 1,
-        fontSize: 12,
+     //   fontSize: 12,
         color: 'black',
         textAlign: 'left',
     },

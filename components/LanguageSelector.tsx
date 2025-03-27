@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from "react-native";
 import { useTranslation } from "react-i18next";
+import useFontStore from "@/store/fontStore";
 
 export default function LanguageSelector() {
     const { t, i18n } = useTranslation();
@@ -29,9 +30,10 @@ export default function LanguageSelector() {
             style={styles.languageItem}
             onPress={() => changeLanguage(item.code)}
         >
-            <Text style={styles.languageText}>{item.name}</Text>
+            <Text style={[styles.languageText, {fontSize : fontSize}]}>{item.name}</Text>
         </TouchableOpacity>
     );
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     return (
         <View style={styles.container}>
@@ -39,7 +41,7 @@ export default function LanguageSelector() {
                 style={styles.selectButton}
                 onPress={() => setModalVisible(true)}
             >
-                <Text style={styles.selectedLanguageText}>
+                <Text style={[styles.selectedLanguageText, {fontSize : fontSize}]}>
                     {languages.find(lang => lang.code === selectedLanguage)?.name}
                 </Text>
             </TouchableOpacity>
@@ -61,7 +63,7 @@ export default function LanguageSelector() {
                             style={styles.cancelButton}
                             onPress={() => setModalVisible(false)}
                         >
-                            <Text style={styles.cancelButtonText}>
+                            <Text style={[styles.cancelButtonText, {fontSize : fontSize}]}>
                                 {t("cancel_button")}
                             </Text>
                         </TouchableOpacity>
@@ -83,7 +85,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     selectedLanguageText: {
-        fontSize: 16,
+    //    fontSize: 16,
         color: 'black',
     },
     modalContainer: {
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#eee',
     },
     languageText: {
-        fontSize: 16,
+    //    fontSize: 16,
         textAlign: 'center',
     },
     cancelButton: {
@@ -116,7 +118,7 @@ const styles = StyleSheet.create({
     },
     cancelButtonText: {
         textAlign: 'center',
-        fontSize: 16,
+    //    fontSize: 16,
         color: 'black',
     },
 });

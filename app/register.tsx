@@ -10,8 +10,11 @@ import { useTranslation } from 'react-i18next';
 import Partenariat from "@/components/Partenariat";
 import RGPDModal from "@/components/RGPDModal";
 import BoutonAccueil from "@/components/BoutonAccueil";
+import useFontStore from "@/store/fontStore";
 
 const LoginScreen = () => {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const { t } = useTranslation();
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
@@ -100,14 +103,14 @@ const LoginScreen = () => {
                     disabled={isLoading}
                 >
                     {isLoading ? (
-                        <Text style={styles.buttonText}>{t('registering_button')}</Text>
+                        <Text style={[styles.buttonText, {fontSize : fontSizeSousTitre}]}>{t('registering_button')}</Text>
                     ) : (
-                        <Text style={styles.buttonText}>{t('register_button')}</Text>
+                        <Text style={[styles.buttonText, {fontSize : fontSizeSousTitre}]}>{t('register_button')}</Text>
                     )}
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Text style={styles.rgpdLinkText}>
+                    <Text style={[styles.rgpdLinkText, {fontSize : fontSizeTresPetit}]}>
                         {t('privacy_policy_text')}
                     </Text>
                 </TouchableOpacity>
@@ -170,11 +173,11 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: '#FFF',
-        fontSize: 18,
+    //    fontSize: 18,
         fontWeight: 'bold',
     },
     rgpdLinkText: {
-        fontSize: 12,
+    //    fontSize: 12,
         color: Colors.primary_dark.background,
         textAlign: 'center',
         textDecorationLine: 'underline',

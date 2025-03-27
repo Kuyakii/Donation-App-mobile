@@ -11,8 +11,11 @@ import Colors from "@/constants/Colors";
 import BoutonFavorite from "@/components/BoutonFavorite";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
 import {useTranslation} from "react-i18next";
+import useFontStore from "@/store/fontStore";
 
 export default function DetailsAssos() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const user = getUtilisateurConnecte()
     const userId = user?.idUtilisateur
     const { t } = useTranslation();
@@ -59,7 +62,7 @@ export default function DetailsAssos() {
             {/* Bouton "Donner" */}
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={styles.donnerButton} onPress={navigateToDons}>
-                    <Text style={styles.donnerButtonText}>{t('don_title')}</Text>
+                    <Text style={[styles.donnerButtonText, {fontSize : fontSizeSousTitre}]}>{t('don_title')}</Text>
                 </TouchableOpacity>
                 <BoutonFavorite idAssociation={id} idUtilisateur={userId} />
             </View>
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
     },
     donnerButtonText: {
         color: 'white',
-        fontSize: 18,
+    //    fontSize: 18,
         fontWeight: 'bold',
     },
     buttonsContainer: {

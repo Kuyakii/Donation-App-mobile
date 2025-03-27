@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, Dimensions } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { images } from "@/config";
 import {useTranslation} from "react-i18next";
+import useFontStore from "@/store/fontStore";
 interface DetailAssosProps {
     nom: string;
     description: string;
@@ -24,22 +25,23 @@ export default function DetailAssociation({ nom, description, localisation, desc
     const coordinates = getCoordinates(localisation);
     console.log(localisation, typeof localisation, coordinates);
 
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
 
     return (
         <View style={styles.container}>
             {/* Nom de l'association */}
-            <Text style={styles.title}>{nom}</Text>
+            <Text style={[styles.title, {fontSize : fontSizeGrosTitre}]}>{nom}</Text>
 
             {/* Image + Description courte */}
             <View style={styles.imageContainer}>
                 {/* @ts-ignore */}
                 <Image source={images[nomImage]} style={styles.image} />
-                <Text style={styles.shortDescription}>{descriptionCourte}</Text>
+                <Text style={[styles.shortDescription, {fontSize : fontSize}]}>{descriptionCourte}</Text>
             </View>
 
             {/* Description longue */}
-            <Text style={styles.longDescription}>{description}</Text>
+            <Text style={[styles.longDescription, {fontSize : fontSizeSousTitre}]}>{description}</Text>
 
             {/* Carte avec la localisation*/}
             {localisation ? (
@@ -65,7 +67,7 @@ export default function DetailAssociation({ nom, description, localisation, desc
                     />
                 </MapView>
             ) : (
-                <Text style={styles.errorText}>{t("locationUnavailable")}</Text>
+                <Text style={[styles.errorText, {fontSize : fontSize}]}>{t("locationUnavailable")}</Text>
             )}
         </View>
     );
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     title: {
-        fontSize: 26,
+    //    fontSize: 26,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 10,
@@ -96,18 +98,18 @@ const styles = StyleSheet.create({
     },
     titreSection : {
         flexDirection: 'row',
-        fontSize : 20,
+    //    fontSize : 20,
         fontWeight: 'bold',
         padding : 10,
     },
     shortDescription: {
-        fontSize: 16,
+    //    fontSize: 16,
         fontStyle: 'italic',
         textAlign: 'center',
         color: '#666',
     },
     longDescription: {
-        fontSize: 18,
+    //    fontSize: 18,
         lineHeight: 24,
         textAlign: 'justify',
         marginVertical: 20,
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     errorText: {
-        fontSize: 16,
+    //    fontSize: 16,
         color: 'red',
         textAlign: 'center',
         marginTop: 20,

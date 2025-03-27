@@ -4,6 +4,7 @@ import {
 } from "react-native";
 import {BASE_URL} from "@/config";
 import {useTranslation} from "react-i18next";
+import useFontStore from "@/store/fontStore";
 // @ts-ignore
 const ChangePasswordModal = ({ visible, onClose, email }) => {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -42,12 +43,13 @@ const ChangePasswordModal = ({ visible, onClose, email }) => {
             setLoading(false);
         }
     };
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     return (
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>{t("changePassword")}</Text>
+                    <Text style={[styles.modalTitle, {fontSize : fontSizeSousTitre}]}>{t("changePassword")}</Text>
 
                     {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalTitle: {
-        fontSize: 20,
+    //    fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 15,
     },

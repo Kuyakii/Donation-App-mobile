@@ -21,8 +21,11 @@ import {Camera} from "expo-camera";
 import TermsOfUseModal from "@/components/TermsOfUseModal";
 import RGPDModal from "@/components/RGPDModal";
 import DeleteAccountModal from "@/components/DeleteAccountModal";
+import useFontStore from "@/store/fontStore";
 
 export default function SettingsScreen() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const { t, i18n } = useTranslation();
     const [notifications, setNotifications] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
@@ -104,6 +107,7 @@ export default function SettingsScreen() {
             </View>
         );
     }*/
+
     return (
         <View style={styles.container}>
             <View style={styles.titleContainer}>
@@ -116,13 +120,13 @@ export default function SettingsScreen() {
             <ScrollView style={styles.scrollView}>
                 {/* Account Section */}
                 {user ? (<View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('account')}</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('account')}</Text>
                     <TouchableOpacity style={styles.settingItem} onPress={() => setChangePasswordModalVisible(true)}>
-                        <Text style={styles.settingLabel}>{t('changePassword')}</Text>
+                        <Text style={[styles.settingLabel, {fontSize : fontSize}]}>{t('changePassword')}</Text>
                         <Text style={styles.settingArrow}>→</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.settingItem} onPress={() => setChangePseudoModalVisible(true)}>
-                        <Text style={styles.settingLabel}>{t('changeUsername')}</Text>
+                        <Text style={[styles.settingLabel, {fontSize : fontSize}]}>{t('changeUsername')}</Text>
                         <Text style={styles.settingArrow}>→</Text>
                     </TouchableOpacity>
                 </View>) : (<Text/>)}
@@ -130,9 +134,9 @@ export default function SettingsScreen() {
 
                 {/* Notifications Section */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('notifications')}</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('notifications')}</Text>
                     <View style={styles.settingItem}>
-                        <Text style={styles.settingLabel}>{t('enable_notifications')}</Text>
+                        <Text style={[styles.settingLabel, {fontSize : fontSize}]}>{t('enable_notifications')}</Text>
                         <Switch
                             value={notifications}
                             onValueChange={setNotifications}
@@ -144,9 +148,9 @@ export default function SettingsScreen() {
 
                 {/* Preferences Section */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('preferences')}</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('preferences')}</Text>
                     <View style={styles.settingItem}>
-                        <Text style={styles.settingLabel}>{t('dark_mode')}</Text>
+                        <Text style={[styles.settingLabel, {fontSize : fontSize}]}>{t('dark_mode')}</Text>
                         <Switch
                             value={darkMode}
                             onValueChange={setDarkMode}
@@ -155,17 +159,17 @@ export default function SettingsScreen() {
                         />
                     </View>
                     <View style={styles.settingItem}>
-                        <Text style={styles.settingLabel}>{t('language')}</Text>
+                        <Text style={[styles.settingLabel, {fontSize : fontSize}]}>{t('language')}</Text>
                         <LanguageSelector />
                     </View>
                 </View>
 
                 {/* Privacy Section */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('privacy')}</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('privacy')}</Text>
 
                     <View style={styles.settingItem}>
-                        <Text style={styles.settingLabel}>{t('enable_camera')}</Text>
+                        <Text style={[styles.settingLabel, {fontSize : fontSize}]}>{t('enable_camera')}</Text>
                         <Switch
                             value={cameraPermission}
                             onValueChange={toggleCameraPermission}
@@ -175,7 +179,7 @@ export default function SettingsScreen() {
                     </View>
 
                     <View style={styles.settingItem}>
-                        <Text style={styles.settingLabel}>{t('enable_location')}</Text>
+                        <Text style={[styles.settingLabel, {fontSize : fontSize}]}>{t('enable_location')}</Text>
                         <Switch
                             value={locationPermission}
                             onValueChange={toggleLocationPermission}
@@ -187,22 +191,22 @@ export default function SettingsScreen() {
 
                 {/* About Section */}
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('about_us')}</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('about_us')}</Text>
                     <TouchableOpacity style={styles.settingItem} onPress={() => setTermsOfUseModalVisible(true)}>
-                        <Text style={styles.settingLabel}>{t('terms_of_use')}</Text>
+                        <Text style={[styles.settingLabel, {fontSize : fontSize}]}>{t('terms_of_use')}</Text>
                         <Text style={styles.settingArrow}>→</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.settingItem} onPress={() => setPrivacyPolicyModalVisible(true)}>
-                        <Text style={styles.settingLabel}>{t('privacy_policy')}</Text>
+                        <Text style={[styles.settingLabel, {fontSize : fontSize}]}>{t('privacy_policy')}</Text>
                         <Text style={styles.settingArrow}>→</Text>
                     </TouchableOpacity>
                     <View style={styles.settingItem}>
-                        <Text style={styles.settingLabel}>{t('app_version')}</Text>
-                        <Text style={styles.settingValue}>{AboutApp.app_version}</Text>
+                        <Text style={[styles.settingLabel, {fontSize : fontSize}]}>{t('app_version')}</Text>
+                        <Text style={[styles.settingValue, {fontSize : fontSize}]}>{AboutApp.app_version}</Text>
                     </View>
                 </View>
                 {user ? (                <TouchableOpacity style={styles.deleteAccountbutton} onPress={() => setDeleteAccountModalVisible(true)}>
-                    <Text style={styles.deleteAccountbuttonText}>{t('delete_account_button')}</Text>
+                    <Text style={[styles.deleteAccountbuttonText, {fontSize : fontSize}]}>{t('delete_account_button')}</Text>
                 </TouchableOpacity>) : (<Text/>)}
             </ScrollView>
 
@@ -262,7 +266,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     sectionTitle: {
-        fontSize: 18,
+     //   fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 15,
         color: 'black',
@@ -276,7 +280,7 @@ const styles = StyleSheet.create({
         borderBottomColor: Colors.primary_light.background,
     },
     settingLabel: {
-        fontSize: 16,
+    //    fontSize: 16,
         color: '#333',
     },
     settingArrow: {
@@ -285,7 +289,7 @@ const styles = StyleSheet.create({
     },
     settingValue: {
         color: '#666',
-        fontSize: 16,
+    //    fontSize: 16,
     },
     languageSelector: {
         flexDirection: 'row',
@@ -305,7 +309,7 @@ const styles = StyleSheet.create({
     },
     deleteAccountbuttonText: {
         color: "#fff",
-        fontSize: 16,
+     //   fontSize: 16,
         textAlign: 'center',
         fontWeight: "bold"
     },

@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import { BASE_URL } from "@/config";
+import useFontStore from "@/store/fontStore";
 
 interface UtilisateursListProps {
     utilisateurs: IUtilisateur[];
@@ -122,14 +123,15 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
             ]
         );
     };
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     const renderUserItem = (item: IUtilisateur) => (
         <View key={item.idUtilisateur} style={styles.userItem}>
             <View style={styles.userInfo}>
-                <Text style={styles.userName}>
+                <Text style={[styles.userName, {fontSize : fontSize}]}>
                     {item.pseudonyme}{item.idUtilisateur == user.idUtilisateur ? " (Moi)": ""}
                 </Text>
-                <Text style={styles.userEmail}>{item.email}</Text>
+                <Text style={[styles.userEmail, {fontSize : fontSizePetit}]}>{item.email}</Text>
             </View>
             <View style={styles.userActions}>
                 <TouchableOpacity
@@ -154,7 +156,7 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
                 {utilisateurs.length > 0 ? (
                     utilisateurs.map(renderUserItem)
                 ) : (
-                    <Text style={styles.emptyListText}>Aucun utilisateur trouvé</Text>
+                    <Text style={[styles.emptyListText, {fontSize : fontSize}]}>Aucun utilisateur trouvé</Text>
                 )}
             </ScrollView>
 
@@ -170,12 +172,12 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
                     style={styles.modalContainer}
                 >
                     <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>Modifier l'utilisateur</Text>
+                        <Text style={[styles.modalTitle, {fontSize : fontSizeSousTitre}]}>Modifier l'utilisateur</Text>
 
                         <View style={styles.inputContainer}>
-                            <Text style={styles.label}>Pseudonyme</Text>
+                            <Text style={[styles.label, {fontSize : fontSize}]}>Pseudonyme</Text>
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input, {fontSize : fontSize}]}
                                 value={editedPseudonyme}
                                 onChangeText={setEditedPseudonyme}
                                 placeholder="Entrez le pseudonyme"
@@ -183,9 +185,9 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
                         </View>
 
                         <View style={styles.inputContainer}>
-                            <Text style={styles.label}>Email</Text>
+                            <Text style={[styles.label, {fontSize : fontSize}]}>Email</Text>
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input, {fontSize : fontSize}]}
                                 value={editedEmail}
                                 onChangeText={setEditedEmail}
                                 placeholder="Entrez l'email"
@@ -199,13 +201,13 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
                                 style={[styles.button, styles.buttonCancel]}
                                 onPress={() => setIsEditModalVisible(false)}
                             >
-                                <Text style={styles.buttonCancelText}>Annuler</Text>
+                                <Text style={[styles.buttonCancelText, {fontSize : fontSize}]}>Annuler</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.button, styles.buttonSave]}
                                 onPress={handleSaveUser}
                             >
-                                <Text style={styles.buttonText}>Enregistrer</Text>
+                                <Text style={[styles.buttonText, {fontSize : fontSize}]}>Enregistrer</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -234,11 +236,11 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     userName: {
-        fontSize: 16,
+   //     fontSize: 16,
         fontWeight: 'bold',
     },
     userEmail: {
-        fontSize: 14,
+   //     fontSize: 14,
         color: '#666',
     },
     userActions: {
@@ -263,7 +265,7 @@ const styles = StyleSheet.create({
     emptyListText: {
         textAlign: 'center',
         marginTop: 20,
-        fontSize: 16,
+    //    fontSize: 16,
         color: '#666',
     },
     modalContainer: {
@@ -287,7 +289,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     modalTitle: {
-        fontSize: 18,
+    //    fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
@@ -297,7 +299,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     label: {
-        fontSize: 16,
+     //   fontSize: 16,
         marginBottom: 5,
         fontWeight: '600',
     },
@@ -306,7 +308,7 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         borderRadius: 8,
         padding: 10,
-        fontSize: 16,
+     //   fontSize: 16,
     },
     modalButtons: {
         flexDirection: 'row',
@@ -324,7 +326,7 @@ const styles = StyleSheet.create({
     },
     buttonCancelText: {
         fontWeight: 'bold',
-        fontSize: 16,
+    //    fontSize: 16,
         color: '#333',
     },
     buttonSave: {
@@ -332,7 +334,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontWeight: 'bold',
-        fontSize: 16,
+   //     fontSize: 16,
         color: 'white',
     },
 });

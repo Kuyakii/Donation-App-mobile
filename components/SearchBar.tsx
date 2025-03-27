@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 import React, {useState} from 'react';
 import {View, TextInput, StyleSheet, Text, TouchableOpacity, FlatList} from 'react-native';
 import {router} from "expo-router";
+import useFontStore from "@/store/fontStore";
 
 type Association = {
     idAssociation: number;
@@ -19,6 +20,7 @@ export default function SearchBar({associations}) {
     const { t } = useTranslation();
     const [value, setValue] = useState("");
     const [filteredAssociations, setFilteredAssociations] = useState<Association[]>([]);
+    const {fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     const handleChange = (text: string) => {
         setValue(text);
@@ -55,7 +57,7 @@ export default function SearchBar({associations}) {
             <View style={styles.searchBar}>
                 <Feather name="search" size={18} color="gray" style={styles.searchIcon}/>
                 <TextInput
-                    style={styles.searchInput}
+                    style={[styles.searchInput, {fontSize: fontSizePetit}]}
                     value={value}
                     onChangeText={handleChange}
                     placeholder={t('searchBar_placeholder')}
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
     searchInput: {
         flex: 1,
         height: 40,
-        fontSize: 14,
+       // fontSize: 14,
     },
     suggestionsList: {
         backgroundColor: 'white',

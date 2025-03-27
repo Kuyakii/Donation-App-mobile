@@ -5,6 +5,7 @@ import {IAssociation} from "@/backend/interfaces/IAssociation";
 import {getAssociation} from "@/helpers";
 import {images} from "@/config";
 import {useTranslation} from "react-i18next";
+import useFontStore from "@/store/fontStore";
 // @ts-ignore
 export default function TopAssociations({topAssos}) {
     const { t } = useTranslation();
@@ -32,17 +33,18 @@ export default function TopAssociations({topAssos}) {
 
     // Vérifier s'il y a des associations à afficher
     const hasAssociations = topAssos && topAssos.length > 0;
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     return (
         <View style={styles.topAssociationsCard}>
-            <Text style={styles.topAssociationsTitle}>{t('top3Associations')}</Text>
+            <Text style={[styles.topAssociationsTitle, {fontSize : fontSizeSousTitre}]}>{t('top3Associations')}</Text>
 
             {hasAssociations ? (
-                <Text style={styles.topAssociationsSubtitle}>
+                <Text style={[styles.topAssociationsSubtitle, {fontSize : fontSizePetit}]}>
                     {t('top3AssociationsSubtitle')}
                 </Text>
             ) : (
-                <Text style={styles.topAssociationsSubtitle}>
+                <Text style={[styles.topAssociationsSubtitle, {fontSize : fontSizePetit}]}>
                     {t('no_donations_yet')}
                 </Text>
             )}
@@ -53,7 +55,7 @@ export default function TopAssociations({topAssos}) {
                     {topAssos.map((asso, index) => (
                         listeAssos[index] && (
                             <View key={index} style={styles.associationItem}>
-                                <Text style={styles.rankingNumber}>{index + 1}.</Text>
+                                <Text style={[styles.rankingNumber, {fontSize : fontSize}]}>{index + 1}.</Text>
                                 <View style={styles.associationContent}>
                                     <Image
                                         style={styles.favoriteImage}
@@ -64,8 +66,8 @@ export default function TopAssociations({topAssos}) {
                                         }
                                     />
                                     <View style={styles.associationDetails}>
-                                        <Text style={styles.associationName}>{listeAssos[index].nom}</Text>
-                                        <Text style={styles.donationAmount}>{asso[1]}€</Text>
+                                        <Text style={[styles.associationName, {fontSize : fontSize}]}>{listeAssos[index].nom}</Text>
+                                        <Text style={[styles.donationAmount, {fontSize : fontSizePetit}]}>{asso[1]}€</Text>
                                     </View>
                                 </View>
                             </View>
@@ -77,7 +79,7 @@ export default function TopAssociations({topAssos}) {
             {/* Message d'encouragement si aucune association */}
             {(!hasAssociations || (listeAssos && listeAssos.length === 0)) && (
                 <View style={styles.emptyStateContainer}>
-                    <Text style={styles.emptyStateText}>
+                    <Text style={[styles.emptyStateText, {fontSize : fontSizePetit}]}>
                         {t('make_first_donation')}
                     </Text>
                 </View>
@@ -96,12 +98,12 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     topAssociationsTitle: {
-        fontSize: 18,
+      //  fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 8,
     },
     topAssociationsSubtitle: {
-        fontSize: 14,
+     //   fontSize: 14,
         color: '#666',
         marginBottom: 16,
         fontWeight: '500',
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
         marginTop: 4,
     },
     rankingNumber: {
-        fontSize: 16,
+      //  fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 4,
     },
@@ -127,12 +129,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     associationName: {
-        fontSize: 16,
+      //  fontSize: 16,
         fontWeight: '600',
         marginBottom: 2,
     },
     donationAmount: {
-        fontSize: 14,
+      //  fontSize: 14,
         color: '#555',
     },
     favoriteImage: {
@@ -146,7 +148,7 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
     },
     emptyStateText: {
-        fontSize: 15,
+      //  fontSize: 15,
         color: '#555',
         textAlign: 'center',
         fontStyle: 'italic',

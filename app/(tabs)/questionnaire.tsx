@@ -18,6 +18,7 @@ import { getAllAssociation } from "@/helpers";
 import { IAssociation } from "@/backend/interfaces/IAssociation";
 import { images } from "@/config";
 import {t} from "i18next";
+import useFontStore from '@/store/fontStore';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SWIPE_THRESHOLD = 0.25 * SCREEN_WIDTH;
@@ -49,6 +50,8 @@ const typeOptions = [
 ];
 
 export default function QuestionnaireScreen() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const router = useRouter();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState([]);
@@ -377,13 +380,13 @@ export default function QuestionnaireScreen() {
     if (completed) {
         return (
             <ScrollView style={styles.container}>
-                <Text style={styles.title}>{t('recommandation_fy')}</Text>
+                <Text style={[styles.title, {fontSize : fontSizeGrosTitre}]}>{t('recommandation_fy')}</Text>
 
                 {loadingRecommendations ? (
-                    <Text style={styles.loadingText}>{t('recherche_recommandations')}</Text>
+                    <Text style={[styles.loadingText, {fontSize : fontSize}]}>{t('recherche_recommandations')}</Text>
                 ) : recommendedAssociations.length > 0 ? (
                     <ScrollView>
-                        <Text style={styles.subtitle}>
+                        <Text style={[styles.subtitle, {fontSize : fontSize}]}>
                             {t('based_on_answer_recommandations')}
                         </Text>
 
@@ -399,10 +402,10 @@ export default function QuestionnaireScreen() {
                                         source={images[asso.nomImage]}
                                     />
                                     <View style={styles.associationInfo}>
-                                        <Text style={styles.associationName}>
+                                        <Text style={[styles.associationName, {fontSize : fontSize}]}>
                                             {asso.nom || "Nom non disponible"}
                                         </Text>
-                                        <Text style={styles.associationDescription} numberOfLines={2}>
+                                        <Text style={[styles.associationDescription, {fontSize : fontSizePetit}]} numberOfLines={2}>
                                             {asso.descriptionCourte || "Description non disponible"}
                                         </Text>
                                     </View>
@@ -411,23 +414,23 @@ export default function QuestionnaireScreen() {
                                     style={styles.donateButton}
                                     onPress={() => navigateToDons(asso.idAssociation)}
                                 >
-                                    <Text style={styles.donateButtonText}>{t('don_title')}</Text>
+                                    <Text style={[styles.donateButtonText, {fontSize : fontSize}]}>{t('don_title')}</Text>
                                 </TouchableOpacity>
                             </View>
                         ))}
                     </ScrollView>
                 ) : (
-                    <Text style={styles.noResultsText}>
+                    <Text style={[styles.noResultsText, {fontSize : fontSize}]}>
                         {t('no_recommadations')}
                     </Text>
                 )}
 
                 {/* Reste du code pour le résumé des résultats */}
-                <Text style={styles.resultsSummary}>{t('answers_resume')}</Text>
+                <Text style={[styles.resultsSummary, {fontSize : fontSizeSousTitre}]}>{t('answers_resume')}</Text>
                 <ScrollView style={styles.resultsContainer}>
                     {answers.map((item, index) => (
                         <View key={index} style={styles.resultItem}>
-                            <Text style={styles.questionTextResume} numberOfLines={2}>
+                            <Text style={[styles.questionTextResume, {fontSize : fontSizePetit}]} numberOfLines={2}>
                                 {item.question}
                             </Text>
                             <View
@@ -455,7 +458,7 @@ export default function QuestionnaireScreen() {
                     style={styles.restartButton}
                     onPress={restartQuiz}
                 >
-                    <Text style={styles.restartButtonText}>{t('restart')}</Text>
+                    <Text style={[styles.restartButtonText, {fontSize : fontSizeSousTitre}]}>{t('restart')}</Text>
                 </TouchableOpacity>
             </ScrollView>
         );
@@ -465,10 +468,10 @@ export default function QuestionnaireScreen() {
         <>
             <Header/>
             <View style={styles.container}>
-                <Text style={styles.title}>{t("questionnaire")}</Text>
-                <Text style={styles.subtitle}>{t('questionnaire_explanation')}</Text>
-                <Text style={styles.explication}>{t('swipe_explanation')}</Text>
-                <Text style={styles.counter}>{currentIndex + 1}/{questions.length}</Text>
+                <Text style={[styles.title, {fontSize : fontSizeGrosTitre}]}>{t("questionnaire")}</Text>
+                <Text style={[styles.subtitle, {fontSize : fontSize}]}>{t('questionnaire_explanation')}</Text>
+                <Text style={[styles.explication, {fontSize : fontSize}]}>{t('swipe_explanation')}</Text>
+                <Text style={[styles.counter, {fontSize : fontSizePetit}]}>{currentIndex + 1}/{questions.length}</Text>
 
                 <View style={styles.cardContainer}>
                     {/* Aura verte (Oui) */}
@@ -500,7 +503,7 @@ export default function QuestionnaireScreen() {
                         ]}
                         {...panResponder.panHandlers}
                     >
-                        <Text style={styles.questionText}>{questions[currentIndex].text}</Text>
+                        <Text style={[styles.questionText, {fontSize : fontSizeSousTitre}]}>{questions[currentIndex].text}</Text>
                     </Animated.View>
                 </View>
 
@@ -517,26 +520,26 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     title: {
-        fontSize: 24,
+      //  fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 10,
     },
     subtitle: {
-        fontSize: 16,
+      //  fontSize: 16,
         textAlign: 'center',
         marginBottom: 20,
         color: 'black',
     },
     explication: {
-        fontSize: 16,
+    //    fontSize: 16,
         textAlign: 'center',
         marginBottom: 10,
         color: 'gray',
         fontStyle: 'italic',
     },
     counter: {
-        fontSize: 14,
+     //   fontSize: 14,
         textAlign: 'center',
         marginBottom: 10,
         color: '#777',
@@ -576,12 +579,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(244, 67, 54, 0.3)',
     },
     questionText: {
-        fontSize: 18,
+      //  fontSize: 18,
         textAlign: 'center',
         fontWeight: '500',
     },
     questionTextResume: {
-        fontSize: 15,
+     //   fontSize: 15,
         flex: 1,
         marginRight: 10,
         color: '#333',
@@ -605,13 +608,13 @@ const styles = StyleSheet.create({
     },
     loadingText: {
         textAlign: 'center',
-        fontSize: 16,
+    //    fontSize: 16,
         color: '#555',
         marginVertical: 20,
     },
     noResultsText: {
         textAlign: 'center',
-        fontSize: 16,
+    //    fontSize: 16,
         color: '#555',
         marginVertical: 20,
         fontStyle: 'italic',
@@ -621,7 +624,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     resultsSummary: {
-        fontSize: 18,
+    //    fontSize: 18,
         fontWeight: 'bold',
         marginTop: 20,
         marginBottom: 10,
@@ -677,7 +680,7 @@ const styles = StyleSheet.create({
     donateButtonText: {
         color: Colors.primary_dark.text,
         fontWeight: 'bold',
-        fontSize: 16,
+     //   fontSize: 16,
     },
     restartButton: {
         backgroundColor: Colors.primary_dark.background,
@@ -694,7 +697,7 @@ const styles = StyleSheet.create({
     },
     restartButtonText: {
         color: Colors.primary_dark.text,
-        fontSize: 18,
+     //   fontSize: 18,
         fontWeight: 'bold',
     },
     textcachesinonff: {
@@ -711,12 +714,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     associationName: {
-        fontSize: 16,
+    //    fontSize: 16,
         fontWeight: '500',
         marginBottom: 4,
     },
     associationDescription: {
-        fontSize: 14,
+    //    fontSize: 14,
         color: '#666',
         flexWrap: 'wrap',
     },

@@ -8,7 +8,10 @@ import {getAllAssociation} from "@/helpers";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
 import Colors from "@/constants/Colors";
 import {useTranslation} from "react-i18next";
+import useFontStore from "@/store/fontStore";
 export default function MapScreen() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const [location, setLocation] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedAssociation, setSelectedAssociation] = useState<IAssociation | null>(null);
@@ -70,12 +73,12 @@ export default function MapScreen() {
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
                             <View style={styles.modalHeader}>
-                                <Text style={styles.modalTitle}>{selectedAssociation.nom}</Text>
+                                <Text style={[styles.modalTitle, {fontSize : fontSizeTitre}]}>{selectedAssociation.nom}</Text>
                                 {/* @ts-ignore */}
                                 <Image source={images[selectedAssociation.nomImage]} style={styles.image} />
                             </View>
 
-                            <Text style={styles.modalDescription}>{selectedAssociation.descriptionCourte}</Text>
+                            <Text style={[styles.modalDescription, {fontSize : fontSizeSousTitre}]}>{selectedAssociation.descriptionCourte}</Text>
 
                             <TouchableOpacity
                                 style={styles.button}
@@ -87,14 +90,14 @@ export default function MapScreen() {
                                     setModalVisible(false);
                                 }}
                             >
-                                <Text style={styles.buttonText}>{t('voir_association')}</Text>
+                                <Text style={[styles.buttonText, {fontSize : fontSize}]}>{t('voir_association')}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={() => setModalVisible(false)}
                             >
-                                <Text style={styles.buttonText}>{t('close_button')}</Text>
+                                <Text style={[styles.buttonText, {fontSize : fontSize}]}>{t('close_button')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -132,13 +135,13 @@ const styles = StyleSheet.create({
     modalTitle: {
         padding: 15,
         flex: 1,
-        fontSize: 20,
+    //    fontSize: 20,
         textAlign: 'left',
         fontWeight: 'bold',
     },
     modalDescription: {
         marginBottom: 30,
-        fontSize: 20,
+   //     fontSize: 20,
     },
     image: {
         width: 100,
@@ -161,7 +164,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: Colors.primary_dark.text,
-        fontSize: 15,
+      //  fontSize: 15,
         fontWeight: '500',
     }
 });

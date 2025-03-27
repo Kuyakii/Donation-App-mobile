@@ -14,6 +14,7 @@ import {
 import { IAssociation } from "@/backend/interfaces/IAssociation";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import { Picker } from '@react-native-picker/picker';
+import useFontStore from "@/store/fontStore";
 
 interface EditAssociationModalProps {
     isVisible: boolean;
@@ -59,6 +60,7 @@ export const EditAssociationModal: React.FC<EditAssociationModalProps> = ({
         onSave(updatedAssociation);
         onClose();
     };
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     return (
         <Modal
@@ -76,13 +78,13 @@ export const EditAssociationModal: React.FC<EditAssociationModalProps> = ({
                         contentContainerStyle={styles.modalScrollViewContent}
                         keyboardShouldPersistTaps="handled"
                     >
-                        <Text style={styles.modalTitle}>Modifier l'Association</Text>
+                        <Text style={[styles.modalTitle, {fontSize : fontSizeSousTitre}]}>Modifier l'Association</Text>
 
                         {/* Nom de l'association */}
                         <View style={styles.inputContainer}>
-                            <Text style={styles.label}>Nom de l'association</Text>
+                            <Text style={[styles.label, {fontSize : fontSize}]}>Nom de l'association</Text>
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input, {fontSize : fontSize}]}
                                 value={nom}
                                 onChangeText={setNom}
                                 placeholder="Entrez le nom de l'association"
@@ -91,9 +93,9 @@ export const EditAssociationModal: React.FC<EditAssociationModalProps> = ({
 
                         {/* Description courte */}
                         <View style={styles.inputContainer}>
-                            <Text style={styles.label}>Description courte</Text>
+                            <Text style={[styles.label, {fontSize : fontSize}]}>Description courte</Text>
                             <TextInput
-                                style={[styles.input, styles.textArea]}
+                                style={[styles.input, styles.textArea, {fontSize : fontSize}]}
                                 value={descriptionCourte}
                                 onChangeText={setDescriptionCourte}
                                 placeholder="Entrez une description courte"
@@ -103,9 +105,9 @@ export const EditAssociationModal: React.FC<EditAssociationModalProps> = ({
 
                         {/* Description longue */}
                         <View style={styles.inputContainer}>
-                            <Text style={styles.label}>Description longue</Text>
+                            <Text style={[styles.label, {fontSize : fontSize}]}>Description longue</Text>
                             <TextInput
-                                style={[styles.input, styles.textArea]}
+                                style={[styles.input, styles.textArea, {fontSize : fontSize}]}
                                 value={descriptionLongue}
                                 onChangeText={setDescriptionLongue}
                                 placeholder="Entrez une description détaillée"
@@ -139,13 +141,13 @@ export const EditAssociationModal: React.FC<EditAssociationModalProps> = ({
                                 style={[styles.button, styles.buttonCancel]}
                                 onPress={onClose}
                             >
-                                <Text style={styles.buttonCancelText}>Annuler</Text>
+                                <Text style={[styles.buttonCancelText, {fontSize : fontSize}]}>Annuler</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.button, styles.buttonSave]}
                                 onPress={handleSave}
                             >
-                                <Text style={styles.buttonText}>Enregistrer</Text>
+                                <Text style={ [styles.buttonText, {fontSize : fontSize}]}>Enregistrer</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     modalTitle: {
-        fontSize: 20,
+    //    fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
@@ -192,7 +194,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     label: {
-        fontSize: 16,
+    //    fontSize: 16,
         marginBottom: 5,
         fontWeight: '600',
     },
@@ -201,7 +203,7 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         borderRadius: 8,
         padding: 10,
-        fontSize: 16,
+    //    fontSize: 16,
     },
     textArea: {
         minHeight: 100,
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
     },
     buttonCancelText: {
         fontWeight: 'bold',
-        fontSize: 16,
+    //    fontSize: 16,
         color: '#333',
     },
     buttonSave: {
@@ -236,7 +238,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontWeight: 'bold',
-        fontSize: 16,
+    //    fontSize: 16,
         color: 'white',
     },
 });

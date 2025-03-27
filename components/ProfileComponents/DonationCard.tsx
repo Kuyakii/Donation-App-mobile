@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Colors from "@/constants/Colors";
 import {getBadgeColor, getSeuils} from "@/helpers";
 import {useTranslation} from "react-i18next";
+import useFontStore from "@/store/fontStore";
 // @ts-ignore
 export default function  DonationCard ({montantDon}){
     const { t } = useTranslation();
@@ -23,21 +24,23 @@ export default function  DonationCard ({montantDon}){
         label: `Atteint ${seuil}€`,
         color : getBadgeColor(seuil),
     }));
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     return (
         <View style={styles.donationCard}>
-            <Text style={styles.donationTitle}>{t('alreadyDonatedAmount', { montantDon })}</Text>
+            <Text style={[styles.donationTitle, {fontSize : fontSize}]}>{t('alreadyDonatedAmount', { montantDon })}</Text>
 
             <View style={styles.progressContainer}>
                 <View style={styles.progressBar}>
                     <View style={[styles.progressFill, { width: progressWidth }]} />
                 </View>
-                <Text style={styles.progressText}>{max}€</Text>
+                <Text style={[styles.progressText, {fontSize: fontSizePetit}]}>{max}€</Text>
             </View>
 
-            <Text style={styles.badgesTitle}>{t('yourBadges')}</Text>
+            <Text style={[styles.badgesTitle, {fontSize : fontSize}]}>{t('yourBadges')}</Text>
             <View style={styles.badgesContainer}>
                 {badges.map((badge) => (
-                    <Text key={badge.id} style={[styles.badge, { backgroundColor: badge.color }]}>
+                    <Text key={badge.id} style={[styles.badge, { backgroundColor: badge.color },{fontSize : fontSizePetit}]}>
                         🏆 {badge.label}
                     </Text>
                 ))}
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     donationTitle: {
-        fontSize: 16,
+       // fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 16,
     },
@@ -81,11 +84,11 @@ const styles = StyleSheet.create({
     },
     progressText: {
         marginLeft: 8,
-        fontSize: 14,
+      //  fontSize: 14,
         fontWeight: 'bold',
     },
     badgesTitle: {
-        fontSize: 16,
+      //  fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 12,
     },
@@ -95,7 +98,7 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     badge: {
-        fontSize: 14,
+      //  fontSize: 14,
         fontWeight: 'bold',
         backgroundColor: '#FFD700',
         paddingVertical: 4,

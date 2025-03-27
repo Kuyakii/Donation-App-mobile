@@ -12,6 +12,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {images} from "@/config";
 import Colors from "@/constants/Colors";
+import useFontStore from '@/store/fontStore';
 
 const FirstTimeModal = () => {
     const [isVisible, setIsVisible] = useState(true);
@@ -40,6 +41,7 @@ const FirstTimeModal = () => {
             AsyncStorage.setItem('hasLaunchedBefore', 'true');
         });
     };
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     return (
         <Modal
@@ -71,14 +73,14 @@ const FirstTimeModal = () => {
                         />
                     </View>
 
-                    <Text style={styles.modalText}>
+                    <Text style={[styles.modalText, {fontSize : fontSizePetit}]}>
                         Soteria est une application innovante dédiée à la gestion des dons pour les associations partenaires de France Assos Santé.
                         {'\n\n'}
                         En collaborant étroitement avec cette union nationale, qui regroupe près de 85 associations  militant pour les droits des patients et des usagers , Soteria facilite le processus de don en offrant une plateforme centralisée et sécurisée.
                         {'\n\n'}
                         Notre objectif est de renforcer le soutien aux associations membres de France Assos Santé, contribuant ainsi à améliorer la représentation et la défense des droits des usagers du système de santé en France.
                         {'\n\n'}
-                        <Text style={styles.modalTextPlus}> Retrouvez plus d’informations dans l’onglet "Profil" de l’application.
+                        <Text style={[styles.modalTextPlus, {fontSize : fontSizePetit}]}> Retrouvez plus d’informations dans l’onglet "Profil" de l’application.
                         </Text>
                     </Text>
 
@@ -86,7 +88,7 @@ const FirstTimeModal = () => {
                         style={styles.closeButton}
                         onPress={handleClose}
                     >
-                        <Text style={styles.closeButtonText}>Fermer</Text>
+                        <Text style={[styles.closeButtonText, {fontSize : fontSize}]}>Fermer</Text>
                     </TouchableOpacity>
                 </Animated.View>
             </View>
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: 'center',
         color: '#333',
-        fontSize: 14,
+    //    fontSize: 14,
         marginBottom: 20,
         lineHeight: 20,
     },
@@ -134,7 +136,7 @@ const styles = StyleSheet.create({
         textAlign:'center',
         color: Colors.primary_dark.background,
         fontWeight: 'bold',
-        fontSize: 14,
+    //    fontSize: 14,
         marginBottom: 20,
         lineHeight: 20,
     },
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
     closeButtonText: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 16,
+     //   fontSize: 16,
     },
 });
 

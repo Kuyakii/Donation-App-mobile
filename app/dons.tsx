@@ -10,8 +10,11 @@ import { useNavigation } from "@react-navigation/native";
 import Header from "@/components/header";
 import BoutonRetour from "@/components/BoutonRetour";
 import {useTranslation} from "react-i18next";
+import useFontStore from "@/store/fontStore";
 
 const DonPage = () => {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const { t } = useTranslation();
     const { confirmPayment } = useStripe();
     const [montant, setMontant] = useState<string>('20');
@@ -251,7 +254,7 @@ const DonPage = () => {
             <SafeAreaView style={styles.safeArea}>
             <BoutonRetour></BoutonRetour>
             <ScrollView ref={scrollViewRef} style={styles.scrollView}>
-                <Text style={styles.title}>{t('don_title')}</Text>
+                <Text style={[styles.title, {fontSize : fontSizeGrosTitre}]}>{t('don_title')}</Text>
 
                 {/* Association Card */}
                 <View style={styles.assoCard}>
@@ -260,11 +263,11 @@ const DonPage = () => {
                         // @ts-ignore
                         source={images[association.nomImage]} // Charge l'image dynamique
                     />
-                    <Text style={styles.assoName}>{association.nom}</Text>
+                    <Text style={[styles.assoName, {fontSize : fontSizeSousTitre}]}>{association.nom}</Text>
                 </View>
 
                 {/* Donation Type */}
-                <Text style={styles.sectionTitle}>{t('donation_type')}</Text>
+                <Text style={[styles.sectionTitle, {fontSize : fontSize}]}>{t('donation_type')}</Text>
                 <View style={styles.typeDonContainer}>
                     <TouchableOpacity
                         style={[styles.typeDonButton, !isRecurrent && styles.typeDonSelected]}
@@ -281,7 +284,7 @@ const DonPage = () => {
                 </View>
 
                 {/* Amount Selection */}
-                <Text style={styles.sectionTitle}>{t('donation_amount')}</Text>
+                <Text style={[styles.sectionTitle, {fontSize : fontSize}]}>{t('donation_amount')}</Text>
                 <View style={styles.amountContainer}>
                     <TouchableOpacity
                         style={[styles.amountButton, montant === '5' && styles.amountButtonSelected]}
@@ -332,7 +335,7 @@ const DonPage = () => {
 
                 {isRecurrent && (
                     <>
-                        <Text style={styles.sectionTitle}>{t('start_date')}</Text>
+                        <Text style={[styles.sectionTitle, {fontSize : fontSize}]}>{t('start_date')}</Text>
                         <TouchableOpacity
                             style={styles.datePickerButton}
                             onPress={() => setStartDatePickerVisible(true)}
@@ -342,7 +345,7 @@ const DonPage = () => {
                             </Text>
                         </TouchableOpacity>
 
-                        <Text style={styles.sectionTitle}>{t('end_date')}</Text>
+                        <Text style={[styles.sectionTitle, {fontSize : fontSize}]}>{t('end_date')}</Text>
                         <TouchableOpacity
                             style={styles.datePickerButton}
                             onPress={() => setEndDatePickerVisible(true)}
@@ -352,7 +355,7 @@ const DonPage = () => {
                             </Text>
                         </TouchableOpacity>
 
-                        <Text style={styles.sectionTitle}>{t('frequency')}</Text>
+                        <Text style={[styles.sectionTitle, {fontSize : fontSize}]}>{t('frequency')}</Text>
                         <View style={styles.frequencyContainer}>
                             {["semaine", "mois", "trimestre"].map((freq) => (
                                 <TouchableOpacity
@@ -374,7 +377,7 @@ const DonPage = () => {
 
                 {!showCardForm ? (
                     <TouchableOpacity style={styles.donateButton} onPress={validateAndProceed}>
-                        <Text style={styles.donateButtonText}>{t('donate_button')} {montant}€</Text>
+                        <Text style={[styles.donateButtonText, {fontSize : fontSizeSousTitre}]}>{t('donate_button')} {montant}€</Text>
                     </TouchableOpacity>
                 ) : (
                     <View style={styles.cardFormContainer}>
@@ -471,21 +474,21 @@ const styles = StyleSheet.create({
     },
     logoText: {
         color: '#9C27B0',
-        fontSize: 20,
+      //  fontSize: 20,
         fontWeight: 'bold',
     },
     settingsButton: {
         padding: 5,
     },
     settingsIcon: {
-        fontSize: 24,
+     //   fontSize: 24,
     },
     scrollView: {
         flex: 1,
         padding: 20,
     },
     title: {
-        fontSize: 24,
+     //   fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
     },
@@ -504,14 +507,14 @@ const styles = StyleSheet.create({
         marginRight: 15,
     },
     assoName: {
-        fontSize: 18,
+    //    fontSize: 18,
         fontWeight: 'bold',
         flex: 1,
         flexShrink: 1,
         flexWrap: 'wrap',
     },
     sectionTitle: {
-        fontSize: 16,
+    //    fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 10,
         marginTop: 15,
@@ -529,7 +532,7 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     dropdownIcon: {
-        fontSize: 18,
+    //    fontSize: 18,
     },
     typeDonContainer: {
         flexDirection: 'row',
@@ -630,7 +633,7 @@ const styles = StyleSheet.create({
     },
     donateButtonText: {
         color: '#FFF',
-        fontSize: 18,
+    //    fontSize: 18,
         fontWeight: 'bold',
     },
     stripeCardField: {
@@ -689,7 +692,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     navIcon: {
-        fontSize: 24,
+    //    fontSize: 24,
         width: 24,
         height: 24,
         textAlign: 'center',

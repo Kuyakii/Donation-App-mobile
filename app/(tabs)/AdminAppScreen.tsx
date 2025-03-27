@@ -25,8 +25,11 @@ import {useNavigation} from "@react-navigation/native";
 import { EditAssociationModal } from '@/components/EditAssociationModal';
 import {UtilisateursList} from "@/components/UtilisateursList";
 import {t} from "i18next";
+import useFontStore from "@/store/fontStore";
 
 export default function AdminAppScreen() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<IUtilisateur | null>(null);
@@ -236,13 +239,13 @@ export default function AdminAppScreen() {
             </View>
             {/* Sélecteur d'association - NOUVEAU */}
             <View style={styles.adminSection}>
-                <Text style={styles.sectionTitle}>{t('choose_asso')}</Text>
+                <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('choose_asso')}</Text>
 
                 <TouchableOpacity
                     style={styles.dropdownButton}
                     onPress={() => setDropdownVisible(true)}
                 >
-                    <Text style={styles.dropdownButtonText}>{getSelectedAssociationName()}</Text>
+                    <Text style={[styles.dropdownButtonText, {fontSize : fontSize}]}>{getSelectedAssociationName()}</Text>
                     <Text style={styles.dropdownIcon}>▼</Text>
                 </TouchableOpacity>
 
@@ -273,7 +276,7 @@ export default function AdminAppScreen() {
                                         }}
                                     >
                                         <Text style={[
-                                            styles.dropdownItemText,
+                                            styles.dropdownItemText,{fontSize : fontSize},
                                             item.idAssociation+"" === selectedAssociation ? styles.dropdownItemTextSelected : null
                                         ]}>
                                             {item.nom}
@@ -288,19 +291,19 @@ export default function AdminAppScreen() {
 
             {/* Statistiques des dons */}
             <View style={styles.adminSection}>
-                <Text style={styles.sectionTitle}>{t('stats_dons')}</Text>
+                <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('stats_dons')}</Text>
                 <Text>{t("total_dons")}{selectedYear} :<Text style={styles.highlight}>{totalDons}€</Text></Text>
                 <Text>{t('dons_recurrents')}<Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
             </View>
 
             {/* Favoris */}
             <View style={styles.adminSection}>
-                <Text style={styles.sectionTitle}>{t('favorites')}</Text>
+                <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('favorites')}</Text>
                 <Text>{t('user_fav')}<Text style={styles.highlight}>{nbAssosFav}</Text></Text>
             </View>
             {/* Graphique des dons - AMÉLIORÉ */}
             <View style={styles.chartContainer}>
-                <Text style={styles.sectionTitle}>{t('evolution_dons')}</Text>
+                <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('evolution_dons')}</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <BarChart
                         data={{
@@ -330,7 +333,7 @@ export default function AdminAppScreen() {
                             },
                             barPercentage: 0.7,
                             propsForLabels: {
-                                fontSize: 12,
+                                fontSize: fontSizePetit,
                                 fontWeight: 'bold',
                             },
                             propsForBackgroundLines: {
@@ -352,21 +355,21 @@ export default function AdminAppScreen() {
 
             {/* Activités récentes */}
             <View style={styles.adminSection}>
-                <Text style={styles.sectionTitle}>{t('recent_activity')}</Text>
+                <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('recent_activity')}</Text>
                 <Text>{t('new_dons')}<Text style={styles.highlight}>{getRecentDonsCount(filteredDons)}</Text></Text>
                 <Text>{t('new_recurrent_dons')}<Text style={styles.highlight}>{getRecentDonsCountReccurent(filteredDons)}</Text></Text>
             </View>
 
             {/* Wall of Givers - Meilleurs donateurs */}
             <View style={styles.adminSection}>
-                <Text style={styles.sectionTitle}>🏆 Wall of Givers 🏆</Text>
+                <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>🏆 Wall of Givers 🏆</Text>
                 <Text style={{marginBottom: 10}}>{t('best_donateurs')}</Text>
                 {meilleursDonateurs.length > 0 ? (
                     meilleursDonateurs.map((donateur, index) => (
                         <View key={donateur.idUtilisateur} style={styles.donateurItem}>
-                            <Text style={styles.donateurRank}>{index + 1}.</Text>
-                            <Text style={styles.donateurName}>{donateur.pseudonyme}</Text>
-                            <Text style={styles.donateurAmount}>{donateur.totalMontant}€</Text>
+                            <Text style={[styles.donateurRank, {fontSize : fontSize}]}>{index + 1}.</Text>
+                            <Text style={[styles.donateurName, {fontSize : fontSize}]}>{donateur.pseudonyme}</Text>
+                            <Text style={[styles.donateurAmount, {fontSize : fontSize}]}>{donateur.totalMontant}€</Text>
                         </View>
                     ))
                 ) : (
@@ -379,7 +382,7 @@ export default function AdminAppScreen() {
     // @ts-ignore
     const renderUsers = () => (
             <View style={styles.container}>
-                <Text style={styles.title}>{t('gestion_user')}</Text>
+                <Text style={[styles.title, {fontSize : fontSizeSousTitre}]}>{t('gestion_user')}</Text>
                 <UtilisateursList
                     utilisateurs={utilisateurs}
                     onUpdateUsers={(updatedUsers) => setUtilisateurs(updatedUsers)}
@@ -475,7 +478,7 @@ export default function AdminAppScreen() {
     const renderAssociations = () => (
         <View style={styles.container}>
             <View style={styles.headerContainer}>
-                <Text style={styles.title}>{t('gestion_asso')}</Text>
+                <Text style={[styles.title, {fontSize : fontSizeSousTitre}]}>{t('gestion_asso')}</Text>
             </View>
             {association.map((asso: IAssociation) => (
                 <View key={asso.idAssociation} style={styles.associationCard}>
@@ -491,18 +494,18 @@ export default function AdminAppScreen() {
 
                         <View style={styles.statsContainer}>
                             <View style={styles.statItem}>
-                                <Text style={styles.statLabel}>{t('somme_don')}</Text>
-                                <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[0]} €</Text>
+                                <Text style={[styles.statLabel, {fontSize : fontSizeTresPetit}]}>{t('somme_don')}</Text>
+                                <Text style={[styles.statValue, {fontSize : fontSize}]}>{getDonsParAssociation(asso.idAssociation)[0]} €</Text>
                             </View>
 
                             <View style={styles.statItem}>
-                                <Text style={styles.statLabel}>{t('moyenne')}</Text>
-                                <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[1] || 0} €</Text>
+                                <Text style={[styles.statLabel, {fontSize : fontSizeTresPetit}]}>{t('moyenne')}</Text>
+                                <Text style={[styles.statValue, {fontSize : fontSize}]}>{getDonsParAssociation(asso.idAssociation)[1] || 0} €</Text>
                             </View>
 
                             <View style={styles.statItem}>
-                                <Text style={styles.statLabel}>{t('nombre')}</Text>
-                                <Text style={styles.statValue}>{getDonsParAssociation(asso.idAssociation)[2]}</Text>
+                                <Text style={[styles.statLabel, {fontSize : fontSizeTresPetit}]}>{t('nombre')}</Text>
+                                <Text style={[styles.statValue, {fontSize : fontSize}]}>{getDonsParAssociation(asso.idAssociation)[2]}</Text>
                             </View>
                         </View>
                     </TouchableOpacity>
@@ -540,8 +543,8 @@ export default function AdminAppScreen() {
             <ScrollView
                 ref={scrollViewRef}
                 contentContainerStyle={styles.scrollViewContent}>
-                <Text style={styles.welcomeTitle}>{t('hello_admin')}{user.pseudonyme}</Text>
-                <Text style={styles.welcomeTitle2}>{t('admin_app')} </Text>
+                <Text style={[styles.welcomeTitle, {fontSize : fontSizeTitre}]}>{t('hello_admin')}{user.pseudonyme}</Text>
+                <Text style={[styles.welcomeTitle2, {fontSize : fontSizeSousTitre}]}>{t('admin_app')} </Text>
                 <View style={styles.tabs}>
                     <TouchableOpacity
                         onPress={() => setActiveTab('stats')}
@@ -604,12 +607,12 @@ const styles = StyleSheet.create({
         padding: 16
     },
     welcomeTitle: {
-        fontSize: 22,
+     //   fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 10
     },
     welcomeTitle2: {
-        fontSize: 18,
+    //    fontSize: 18,
         marginBottom: 10
     },
     adminSection: {
@@ -630,7 +633,7 @@ const styles = StyleSheet.create({
         paddingRight: 15,
     },
     sectionTitle: {
-        fontSize: 18,
+     //   fontSize: 18,
         fontWeight: "bold",
         marginBottom: 15
     },
@@ -670,7 +673,7 @@ const styles = StyleSheet.create({
     adminButtonText: {
         color: "white",
         fontWeight: "bold",
-        fontSize: 16,
+    //    fontSize: 16,
     },
     propsForLabels: {
         fontSize: 12, // Réduit de 14 à 12
@@ -691,19 +694,19 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     donateurRank: {
-        fontSize: 16,
+    //    fontSize: 16,
         fontWeight: "bold",
         color: "gold",
         width: 30,
     },
     donateurName: {
-        fontSize: 16,
+   //     fontSize: 16,
         fontWeight: "600",
         flex: 1,
         textAlign: "left",
     },
     donateurAmount: {
-        fontSize: 16,
+     //   fontSize: 16,
         fontWeight: "bold",
         color: "purple",
     },
@@ -721,7 +724,7 @@ const styles = StyleSheet.create({
         marginRight: 15,
     },
     assoName: {
-        fontSize: 18,
+    //    fontSize: 18,
         fontWeight: 'bold',
         flex: 1,
         flexShrink: 1,
@@ -758,7 +761,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     modalTitle: {
-        fontSize: 20,
+   //     fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
@@ -768,7 +771,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     label: {
-        fontSize: 16,
+    //    fontSize: 16,
         marginBottom: 5,
         fontWeight: '600',
     },
@@ -777,7 +780,7 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         borderRadius: 8,
         padding: 10,
-        fontSize: 16,
+    //    fontSize: 16,
     },
     textArea: {
         minHeight: 100,
@@ -800,7 +803,7 @@ const styles = StyleSheet.create({
     },
     buttonCancelText: {
         fontWeight: 'bold',
-        fontSize: 16,
+    //    fontSize: 16,
         color: '#333',
     },
     buttonSave: {
@@ -808,7 +811,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontWeight: 'bold',
-        fontSize: 16,
+    //    fontSize: 16,
         color: 'white',
     },
     dropdownButton: {
@@ -822,11 +825,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     dropdownButtonText: {
-        fontSize: 16,
+    //    fontSize: 16,
         color: 'black',
     },
     dropdownIcon: {
-        fontSize: 12,
+    //    fontSize: 12,
         color: 'purple',
     },
     modalOverlay: {
@@ -859,7 +862,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F3E5F5',
     },
     dropdownItemText: {
-        fontSize: 16,
+    //    fontSize: 16,
         color: 'black',
     },
     dropdownItemTextSelected: {
@@ -899,7 +902,8 @@ const styles = StyleSheet.create({
         color: 'purple',
         fontWeight: 'bold',
     },
-    title: { fontSize: 18, fontWeight: 'bold', marginBottom: 10 },
+    title: { //fontSize: 18
+        fontWeight: 'bold', marginBottom: 10 },
     listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc'},
     container2: {backgroundColor: 'white'},
 
@@ -940,12 +944,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     statLabel: {
-        fontSize: 12,
+    //    fontSize: 12,
         color: '#666',
         marginBottom: 2,
     },
     statValue: {
-        fontSize: 16,
+    //    fontSize: 16,
         fontWeight: '600',
         color: '#333',
     },

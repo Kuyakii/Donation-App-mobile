@@ -3,6 +3,7 @@ import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet } from 'react
 import AssociationItem from './AssociationItem';
 import { useRouter } from "expo-router";
 import Colors from "@/constants/Colors";
+import useFontStore from "@/store/fontStore";
 
 // @ts-ignore
 export default function AssociationTypeModal({ visible, onClose, associations, typeTitle }) {
@@ -15,12 +16,13 @@ export default function AssociationTypeModal({ visible, onClose, associations, t
             params: { id: idAssos },
         });
     };
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     return (
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>{typeTitle || "Associations"}</Text>
+                    <Text style={[styles.modalTitle, {fontSize : fontSizeSousTitre}]}>{typeTitle || "Associations"}</Text>
 
                     {/* Liste des associations */}
                     {associations.length > 0 ? (
@@ -39,13 +41,13 @@ export default function AssociationTypeModal({ visible, onClose, associations, t
                         />
                     ) : (
                         <View style={styles.emptyContainer}>
-                            <Text style={styles.emptyText}>Aucune association disponible</Text>
+                            <Text style={[styles.emptyText, {fontSize : fontSize}]}>Aucune association disponible</Text>
                         </View>
                     )}
 
                     {/* Bouton pour fermer le modal */}
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>Fermer</Text>
+                        <Text style={[styles.closeButtonText, {fontSize : fontSize}]}>Fermer</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     modalTitle: {
-        fontSize: 18,
+     //   fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
     },
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
     },
     closeButtonText: {
         color: Colors.primary_dark.text,
-        fontSize: 16,
+     //   fontSize: 16,
     },
     emptyContainer: {
         flex: 1,
@@ -89,7 +91,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     emptyText: {
-        fontSize: 16,
+    //    fontSize: 16,
         color: '#666',
         fontStyle: 'italic',
     },

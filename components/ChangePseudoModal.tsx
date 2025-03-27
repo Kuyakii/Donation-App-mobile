@@ -4,6 +4,7 @@ import {BASE_URL} from "@/config";
 import {useNavigation} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useTranslation} from "react-i18next";
+import useFontStore from "@/store/fontStore";
 interface ChangePseudoModal {
     visible: boolean;
     onClose: () => void;
@@ -53,7 +54,6 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
             navigation.navigate('settings');
         }
     };
-
     return (
         <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
             <View style={styles.modalContainer}>

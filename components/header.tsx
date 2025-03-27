@@ -30,6 +30,9 @@ export default function Header({title}: HeaderProps) {
                     <Feather name="settings" size={36} color="black"/>
                 </TouchableOpacity>
             </View>
+            <View style={styles.policeBouton}>
+                <FontSizeButton></FontSizeButton>
+            </View>
         </>
     );
 }
@@ -72,5 +75,9 @@ const styles = StyleSheet.create({
     placeholder: {
         width: 40,
         height: 40,
-    }
+    },
+    policeBouton: {
+        left: 0,
+        marginTop: 60,
+    },
 });

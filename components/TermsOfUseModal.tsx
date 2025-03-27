@@ -10,10 +10,13 @@ import {
 import Colors from '@/constants/Colors';
 import {boolean} from "yup";
 import {useTranslation} from "react-i18next";
+import useFontStore from '@/store/fontStore';
 
 
 // @ts-ignore
 export default function RGPDModal({modalVisible, onClose}) {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const { t } = useTranslation();
     return (
         <Modal
@@ -24,12 +27,12 @@ export default function RGPDModal({modalVisible, onClose}) {
         >
             <View style={styles.modalContainer}>
                 <ScrollView style={styles.modalContent}>
-                    <Text style={styles.modalText}>
+                    <Text style={[styles.modalText, {fontSize : fontSize}]}>
                         {t('terms_of_use_text')}
                     </Text>
 
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>{t('close_button')}</Text>
+                        <Text style={[styles.closeButtonText, {fontSize : fontSize}]}>{t('close_button')}</Text>
                     </TouchableOpacity>
                 </ScrollView>
             </View>
@@ -56,7 +59,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     modalText: {
-        fontSize: 16,
+     //   fontSize: 16,
         color: '#333',
         lineHeight: 22,
         marginBottom: 20,
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
     },
     closeButtonText: {
         color: '#FFF',
-        fontSize: 16,
+     //   fontSize: 16,
     },
     linkText: {
         color: Colors.primary_dark.background,

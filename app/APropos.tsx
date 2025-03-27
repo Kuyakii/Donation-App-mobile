@@ -14,8 +14,11 @@ import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import Header from "@/components/header";
 import { images } from "@/config";
+import useFontStore from "@/store/fontStore";
 
 export default function APropos() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const { t } = useTranslation();
     const navigation = useNavigation();
 
@@ -41,7 +44,7 @@ export default function APropos() {
                 <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
                     <Text style={styles.backButtonText}>←</Text>
                 </TouchableOpacity>
-                <Text style={styles.pageTitle}>{t('info')}</Text>
+                <Text style={[styles.pageTitle, {fontSize : fontSizeGrosTitre}]}>{t('info')}</Text>
             </View>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.logoContainer}>
@@ -49,7 +52,7 @@ export default function APropos() {
                     <Image source={images["france-asso.png"]} style={styles.franceSanteLogo} resizeMode="contain" />
                 </View>
 
-                <Text style={styles.modalText}>
+                <Text style={[styles.modalText , {fontSize : fontSizePetit}]}>
                     {t('a_propos_text1')}
                     {'\n\n'}
                     {t('a_propos_text2')}
@@ -59,12 +62,12 @@ export default function APropos() {
 
                 {/* Bouton vers le site de France Assos Santé */}
                 <TouchableOpacity style={styles.websiteButton} onPress={openFranceAssosSanteWebsite}>
-                    <Text style={styles.websiteButtonText}> {t('button_france_asso')}</Text>
+                    <Text style={[styles.websiteButtonText, {fontSize : fontSizePetit}]}> {t('button_france_asso')}</Text>
                 </TouchableOpacity>
 
                 {/* Section sur les créateurs */}
                 <View style={styles.creatorsSection}>
-                    <Text style={styles.sectionTitle}>{t('createur_title')}</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeTitre}]}>{t('createur_title')}</Text>
                     <Text style={styles.modalText}>
                         {t('createurs_text')}
                         {'\n\n'}
@@ -109,7 +112,7 @@ const styles = StyleSheet.create({
         color: Colors.primary_dark.background,
     },
     pageTitle: {
-        fontSize: 30,
+    //    fontSize: 30,
         fontWeight: 'bold',
         color: '#000',
         textAlign: 'center',
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
     modalText: {
         textAlign: 'center',
         color: '#333',
-        fontSize: 14,
+    //    fontSize: 14,
         marginBottom: 20,
         lineHeight: 20,
     },
@@ -147,7 +150,7 @@ const styles = StyleSheet.create({
     },
     websiteButtonText: {
         color: '#fff',
-        fontSize: 14,
+   //     fontSize: 14,
         fontWeight: 'bold',
     },
     creatorsSection: {
@@ -163,7 +166,7 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     sectionTitle: {
-        fontSize: 22,
+   //     fontSize: 22,
         fontWeight: 'bold',
         color: Colors.primary_dark.background,
         textAlign: 'center',

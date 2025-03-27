@@ -3,8 +3,11 @@ import {useState, useEffect, useRef} from 'react';
 import {Button, StyleSheet, Text, View, Animated, TouchableOpacity} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import {router} from "expo-router";
+import useFontStore from "@/store/fontStore";
 
 export default function QRCodeScanner() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const { t } = useTranslation();
     const [permission, requestPermission] = useCameraPermissions();
     const [scanned, setScanned] = useState(false);
@@ -95,8 +98,8 @@ export default function QRCodeScanner() {
 
                 {scanned && (
                     <View style={styles.resultContainer}>
-                        <Text style={styles.resultText}>{t('scanned_qr_code')}</Text>
-                        <Text style={styles.resultData}>{scannedData}</Text>
+                        <Text style={[styles.resultText, {fontSize : fontSizeTitre}]}>{t('scanned_qr_code')}</Text>
+                        <Text style={[styles.resultData,{fontSize : fontSize}]}>{scannedData}</Text>
                         <TouchableOpacity style={styles.rescanButton} onPress={() => handleNavigate(scannedData)} >
                             <Text style={styles.rescanButtonText}>{t('go_to_scanned_qr')}</Text>
                         </TouchableOpacity>
@@ -179,12 +182,12 @@ const styles = StyleSheet.create({
     },
     resultText: {
         color: 'white',
-        fontSize: 20,
+     //   fontSize: 20,
         marginBottom: 10,
     },
     resultData: {
         color: 'white',
-        fontSize: 16,
+    //    fontSize: 16,
         marginBottom: 20,
     },
     rescanButton: {

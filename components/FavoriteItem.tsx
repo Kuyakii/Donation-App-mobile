@@ -1,9 +1,12 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {images} from "@/config";
+import useFontStore from "@/store/fontStore";
 
 // @ts-ignore
 export default function FavoriteItem({ name, imageName }) {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     return (
         <View style={styles.favoriteItem}>
             <Image
@@ -11,7 +14,7 @@ export default function FavoriteItem({ name, imageName }) {
                 // @ts-ignore
                 source={images[imageName]}
             />
-            <Text style={styles.favoriteText}>{name}</Text>
+            <Text style={[styles.favoriteText , {fontSize: fontSizeTresPetit}]}>{name}</Text>
         </View>
     );
 }
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
         borderColor: 'grey',
     },
     favoriteText: {
-        fontSize: 12,
+      //  fontSize: 12,
         textAlign: 'center',
     },
 });

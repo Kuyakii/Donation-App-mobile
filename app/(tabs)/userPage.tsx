@@ -26,8 +26,10 @@ import {router, useFocusEffect} from "expo-router";
 import {useTranslation} from "react-i18next";
 import AssociationFavoritesModal from "@/components/AssociationFavoritesModal";
 import UserModal from "@/components/UserModal";
+import useFontStore from "@/store/fontStore";
 
 export default function UserProfileScreen() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
     const [isLoading, setIsLoading] = useState(true);
     const navigation = useNavigation();
     const [user, setUser] = useState<IUtilisateur | null>(null);
@@ -148,20 +150,20 @@ export default function UserProfileScreen() {
         <View style={styles.container}>
             <Header />
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
-                <Text style={styles.welcomeTitle}>{t('hello')}, {user?.pseudonyme}</Text>
+                <Text style={[styles.welcomeTitle, {fontSize : fontSizeGrosTitre}]}>{t('hello')}, {user?.pseudonyme}</Text>
 
                 <View style={styles.actionsContainer}>
                     <TouchableOpacity style={styles.actionButton} onPress={() => setUserModalVisible(true)}>
                         <View style={styles.iconContainer}>
                             <Feather name="user" size={icon_size} color="black" />
-                            <Text style={styles.actionText}>{t('profile')}</Text>
+                            <Text style={[styles.actionText, {fontSize : fontSizePetit}]}>{t('profile')}</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionButton} onPress={() => setModalVisible(true)}>
                         <View style={styles.iconContainer}>
                             <Feather name="gift" size={icon_size} color="black" />
-                            <Text style={styles.actionText}>{t('donations')}</Text>
+                            <Text style={[styles.actionText, {fontSize : fontSizePetit}]}>{t('donations')}</Text>
                         </View>
                     </TouchableOpacity>
 
@@ -171,7 +173,7 @@ export default function UserProfileScreen() {
                     >
                         <View style={styles.iconContainer}>
                             <Feather name="star" size={icon_size} color="#FFD700" />
-                            <Text style={styles.actionText}>{t('favorites')}</Text>
+                            <Text style={[styles.actionText, {fontSize : fontSizePetit}]}>{t('favorites')}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -186,7 +188,7 @@ export default function UserProfileScreen() {
 
                 <View>
                     <TouchableOpacity style={styles.button} onPress={goAPropos}>
-                        <Text style={styles.buttonText}>{t('info')}</Text>
+                        <Text style={[styles.buttonText, {fontSize : fontSize}]}>{t('info')}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -236,7 +238,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     actionText: {
-        fontSize: 14,
+     //   fontSize: 14,
     },
     loadingContainer: {
         flex: 1,
@@ -247,7 +249,7 @@ const styles = StyleSheet.create({
         padding: 16
     },
     welcomeTitle: {
-        fontSize: 24,
+     //   fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 10
     },
@@ -260,7 +262,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: Colors.primary_dark.background,
-        fontSize: 16,
+     //   fontSize: 16,
         fontWeight: 'bold',
     },
 

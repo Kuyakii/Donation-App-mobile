@@ -21,6 +21,8 @@ import FontSizeButton from "@/components/ProfileComponents/FontSizeButton";
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const { t } = useTranslation();
     const associations = getAllAssociation();
     const slicedAssociations = associations.slice(0, 3);
@@ -89,9 +91,7 @@ export default function Layout() {
             <FirstTimeModal/>
             <Header/>
             <SearchBar associations={associations} />
-            <View style={styles.policeBouton}>
-                <FontSizeButton></FontSizeButton>
-            </View>
+
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
                 {/* Section des associations favorites - visible uniquement si l'utilisateur est connecté */}
@@ -101,7 +101,7 @@ export default function Layout() {
                     </FavoriteProvider>
                 ) : (
                     <View style={styles.banner}>
-                        <Text style={styles.bannerText}>
+                        <Text style={[styles.bannerText, {fontSize : fontSize}]}>
                             {t('login_required_for_favorites')} {/* Clé de traduction */}
                         </Text>
                     </View>
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     },
     bannerText: {
         color: 'black',
-        fontSize: 16,
+     //   fontSize: 16,
     },
     loadingText: {
         padding: 10,
@@ -283,10 +283,6 @@ const styles = StyleSheet.create({
         padding: 10,
         fontStyle: 'italic',
         color: '#666',
-    },
-    policeBouton: {
-        left: 0,
-        marginTop: "auto",
-    },
+    }
 
 });

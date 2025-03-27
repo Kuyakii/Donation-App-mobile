@@ -3,17 +3,19 @@ import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {router} from "expo-router";
 import Colors from "@/constants/Colors";
 import {useTranslation} from "react-i18next";
+import useFontStore from '@/store/fontStore';
 const BoutonInscription= () => {
     const { t } = useTranslation();
     const redirect =  () => {
         // @ts-ignore
         router.replace('/register');
     };
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     return (
         <View>
             <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText} onPress={redirect}>{t('noAccountSignUp')}</Text>
+                <Text style={[styles.buttonText, {fontSize : fontSize}]} onPress={redirect}>{t('noAccountSignUp')}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -29,7 +31,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: Colors.primary_dark.background,
-        fontSize: 16,
+    //    fontSize: 16,
         fontWeight: 'bold',
     },
 });

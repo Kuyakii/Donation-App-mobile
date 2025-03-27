@@ -16,6 +16,7 @@ import { getUtilisateurConnecte } from '@/helpers';
 import Colors from '@/constants/Colors';
 import {images} from "@/config";
 import {useTranslation} from "react-i18next";
+import useFontStore from "@/store/fontStore";
 interface AssociationFavoritesModalProps {
     visible: boolean;
     onClose: () => void;
@@ -45,6 +46,7 @@ const AssociationFavoritesModal: React.FC<AssociationFavoritesModalProps> = ({
             fetchFavorites(userId);
         }
     }, [visible, userId]);
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     // @ts-ignore
     return (
@@ -57,7 +59,7 @@ const AssociationFavoritesModal: React.FC<AssociationFavoritesModalProps> = ({
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
                     <View style={styles.modalHeader}>
-                        <Text style={styles.modalTitle}>{t('favorite_associations')}</Text>
+                        <Text style={[styles.modalTitle, {fontSize : fontSizeSousTitre}]}>{t('favorite_associations')}</Text>
                         <TouchableOpacity onPress={onClose} style={styles.closeButton}>
                             <Feather name="x" size={24} color="black" />
                         </TouchableOpacity>
@@ -86,7 +88,7 @@ const AssociationFavoritesModal: React.FC<AssociationFavoritesModalProps> = ({
                                                 style={styles.associationImage}
                                                 resizeMode="cover"
                                             />
-                                            <Text style={styles.associationName} numberOfLines={2}>
+                                            <Text style={[styles.associationName, {fontSize : fontSize}]} numberOfLines={2}>
                                                 {asso.nom}
                                             </Text>
                                         </View>
@@ -128,7 +130,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     modalTitle: {
-        fontSize: 20,
+       // fontSize: 20,
         fontWeight: 'bold',
     },
     closeButton: {
@@ -155,7 +157,7 @@ const styles = StyleSheet.create({
     },
     associationName: {
         flex: 1,
-        fontSize: 16,
+      //  fontSize: 16,
         fontWeight: 'bold',
     },
     loadingContainer: {

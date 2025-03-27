@@ -18,8 +18,11 @@ import { BarChart } from "react-native-chart-kit";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
 import {t} from "i18next";
+import useFontStore from "@/store/fontStore";
 
 export default function AdminAssoScreen() {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const { height: screenHeight } = Dimensions.get('window');
 
     const [isLoading, setIsLoading] = useState(true);
@@ -243,8 +246,8 @@ export default function AdminAssoScreen() {
                 ref={scrollViewRef}
                 contentContainerStyle={styles.scrollViewContent}
             >
-                <Text style={styles.welcomeTitle}>{t('hello_admin')}{user.pseudonyme}</Text>
-                <Text style={styles.welcomeTitle2}>{t('admin_asso')} </Text>
+                <Text style={[styles.welcomeTitle, {fontSize : fontSizeTitre}]}>{t('hello_admin')}{user.pseudonyme}</Text>
+                <Text style={[styles.welcomeTitle2, {fontSize : fontSizeSousTitre}]}>{t('admin_asso')} </Text>
                 {/* Association Card*/}
                 <View style={styles.assoCard}>
                     {association ? (
@@ -254,7 +257,7 @@ export default function AdminAssoScreen() {
                                 // @ts-ignore
                                 source={images[association.nomImage]}
                             />
-                            <Text style={styles.assoName}>{association.nom}</Text>
+                            <Text style={[styles.assoName, {fontSize : fontSizeSousTitre}]}>{association.nom}</Text>
                         </>
                     ) : (
                         <Text>{t('loading_asso')}</Text>
@@ -266,7 +269,7 @@ export default function AdminAssoScreen() {
                     style={styles.adminButton}
                     onPress={() => setModalVisible(true)}
                 >
-                    <Text style={styles.adminButtonText}>{t('edit_asso')}</Text>
+                    <Text style={[styles.adminButtonText, {fontSize : fontSize}]}>{t('edit_asso')}</Text>
                 </TouchableOpacity>
 
                 {/* Modal d'édition */}
@@ -282,13 +285,13 @@ export default function AdminAssoScreen() {
                             style={styles.keyboardAvoidingView}
                         >
                             <View style={[styles.modalView, { maxHeight: screenHeight * 0.8 }]}>
-                                <Text style={styles.modalTitle}>{t('edit_info')}</Text>
+                                <Text style={[styles.modalTitle, {fontSize : fontSizeTitre}]}>{t('edit_info')}</Text>
 
                                 <ScrollView style={styles.modalScrollView} contentContainerStyle={styles.modalScrollViewContent}>
                                     <View style={styles.inputContainer}>
-                                        <Text style={styles.label}>{t('name')}</Text>
+                                        <Text style={[styles.label, {fontSize : fontSize}]}>{t('name')}</Text>
                                         <TextInput
-                                            style={styles.input}
+                                            style={[styles.input, {fontSize : fontSize}]}
                                             value={editedNom}
                                             onChangeText={setEditedNom}
                                             placeholder="Nom de l'association"
@@ -296,9 +299,9 @@ export default function AdminAssoScreen() {
                                     </View>
 
                                     <View style={styles.inputContainer}>
-                                        <Text style={styles.label}>{t('description')}</Text>
+                                        <Text style={[styles.label, {fontSize : fontSize}]}>{t('description')}</Text>
                                         <TextInput
-                                            style={[styles.input, styles.textArea]}
+                                            style={[styles.input, styles.textArea, {fontSize : fontSize}]}
                                             value={editedDescription}
                                             onChangeText={setEditedDescription}
                                             placeholder="Description détaillée"
@@ -308,9 +311,9 @@ export default function AdminAssoScreen() {
                                     </View>
 
                                     <View style={styles.inputContainer}>
-                                        <Text style={styles.label}>{t('short_description')}</Text>
+                                        <Text style={[styles.label, {fontSize : fontSize}]}>{t('short_description')}</Text>
                                         <TextInput
-                                            style={[styles.input, styles.textArea]}
+                                            style={[styles.input, styles.textArea, {fontSize : fontSize}]}
                                             value={editedDescriptionCourte}
                                             onChangeText={setEditedDescriptionCourte}
                                             placeholder="Description courte"
@@ -326,7 +329,7 @@ export default function AdminAssoScreen() {
                                         onPress={() => setModalVisible(false)}
                                         disabled={isSubmitting}
                                     >
-                                        <Text style={styles.buttonCancelText}>{t('cancel_button')}</Text>
+                                        <Text style={[styles.buttonCancelText, {fontSize : fontSize}]}>{t('cancel_button')}</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         style={[styles.button, styles.buttonSave]}
@@ -336,7 +339,7 @@ export default function AdminAssoScreen() {
                                         {isSubmitting ? (
                                             <ActivityIndicator size="small" color="white" />
                                         ) : (
-                                            <Text style={styles.buttonText}>{t('save')}</Text>
+                                            <Text style={[styles.buttonText, {fontSize : fontSize}]}>{t('save')}</Text>
                                         )}
                                     </TouchableOpacity>
                                 </View>
@@ -362,20 +365,20 @@ export default function AdminAssoScreen() {
 
                 {/* Statistiques des dons */}
                 <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>{t('stats_dons')}</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('stats_dons')}</Text>
                     <Text>{t('total_dons')} {selectedYear} : <Text style={styles.highlight}>{totalDons}€</Text></Text>
                     <Text>{t('dons_recurrents')}<Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
                 </View>
 
                 {/* Favoris */}
                 <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>{t('favorites')}</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('favorites')}</Text>
                     <Text>{t('user_fav')}<Text style={styles.highlight}>{nbAssosFav}</Text></Text>
                 </View>
 
                 {/* Graphique des dons - AMÉLIORÉ */}
                 <View style={styles.chartContainer}>
-                    <Text style={styles.sectionTitle}>{t('evolution_dons')}</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('evolution_dons')}</Text>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                         <BarChart
                             data={{
@@ -405,7 +408,7 @@ export default function AdminAssoScreen() {
                                 },
                                 barPercentage: 0.7,
                                 propsForLabels: {
-                                    fontSize: 14,
+                                    fontSize: fontSizePetit,
                                     fontWeight: 'bold',
                                 },
                                 propsForBackgroundLines: {
@@ -427,21 +430,21 @@ export default function AdminAssoScreen() {
 
                 {/* Activités récentes */}
                 <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>{t('recent_activity')}</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('recent_activity')}</Text>
                     <Text>{t('new_dons')}<Text style={styles.highlight}>{getRecentDonsCount(donsAssos)}</Text></Text>
                     <Text>{t('new_recurrent_dons')} <Text style={styles.highlight}>{getRecentDonsCount(donsRecurentsAssos)}</Text></Text>
                 </View>
 
                 {/* Wall of Givers - Meilleurs donateurs */}
                 <View style={styles.adminSection}>
-                    <Text style={styles.sectionTitle}>🏆 Wall of Givers 🏆</Text>
+                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>🏆 Wall of Givers 🏆</Text>
                     <Text style={{marginBottom: 10}}>{t('best_donateurs_asso')} {association?.nom}</Text>
                     {meilleursDonateurs.length > 0 ? (
                         meilleursDonateurs.map((donateur, index) => (
                             <View key={donateur.idUtilisateur} style={styles.donateurItem}>
-                                <Text style={styles.donateurRank}>{index + 1}.</Text>
-                                <Text style={styles.donateurName}>{donateur.pseudonyme}</Text>
-                                <Text style={styles.donateurAmount}>{donateur.totalMontant}€</Text>
+                                <Text style={[styles.donateurRank, {fontSize : fontSize}]}>{index + 1}.</Text>
+                                <Text style={[styles.donateurName, {fontSize : fontSize}]}>{donateur.pseudonyme}</Text>
+                                <Text style={[styles.donateurAmount, {fontSize : fontSize}]}>{donateur.totalMontant}€</Text>
                             </View>
                         ))
                     ) : (
@@ -468,13 +471,13 @@ const styles = StyleSheet.create({
         padding: 16
     },
     welcomeTitle: {
-        fontSize: 22,
+     //   fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 10,
         flexWrap: "nowrap",
     },
     welcomeTitle2: {
-    fontSize: 18,
+  //  fontSize: 18,
         marginBottom: 10
     },
     adminSection: {
@@ -495,7 +498,7 @@ const styles = StyleSheet.create({
         paddingRight: 15,
     },
     sectionTitle: {
-        fontSize: 18,
+    //    fontSize: 18,
         fontWeight: "bold",
         marginBottom: 15
     },
@@ -535,7 +538,7 @@ const styles = StyleSheet.create({
     adminButtonText: {
         color: "white",
         fontWeight: "bold",
-        fontSize: 16,
+    //    fontSize: 16,
     },
     propsForLabels: {
         fontSize: 12, // Réduit de 14 à 12
@@ -556,19 +559,19 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     donateurRank: {
-        fontSize: 16,
+    //    fontSize: 16,
         fontWeight: "bold",
         color: "gold",
         width: 30,
     },
     donateurName: {
-        fontSize: 16,
+  //      fontSize: 16,
         fontWeight: "600",
         flex: 1,
         textAlign: "left",
     },
     donateurAmount: {
-        fontSize: 16,
+    //    fontSize: 16,
         fontWeight: "bold",
         color: "purple",
     },
@@ -586,7 +589,7 @@ const styles = StyleSheet.create({
         marginRight: 15,
     },
     assoName: {
-        fontSize: 18,
+   //     fontSize: 18,
         fontWeight: 'bold',
         flex: 1,
         flexShrink: 1,
@@ -623,7 +626,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     modalTitle: {
-        fontSize: 20,
+    //    fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
@@ -633,7 +636,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     label: {
-        fontSize: 16,
+    //    fontSize: 16,
         marginBottom: 5,
         fontWeight: '600',
     },
@@ -642,7 +645,7 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         borderRadius: 8,
         padding: 10,
-        fontSize: 16,
+    //    fontSize: 16,
     },
     textArea: {
         minHeight: 100,
@@ -665,7 +668,7 @@ const styles = StyleSheet.create({
 },
 buttonCancelText: {
     fontWeight: 'bold',
-        fontSize: 16,
+   //     fontSize: 16,
         color: '#333',
 },
 buttonSave: {
@@ -673,7 +676,7 @@ buttonSave: {
 },
 buttonText: {
     fontWeight: 'bold',
-        fontSize: 16,
+   //     fontSize: 16,
         color: 'white',
 },
 });

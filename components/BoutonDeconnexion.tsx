@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {router} from "expo-router";
 import Colors from "@/constants/Colors";
 import {useTranslation} from "react-i18next";
+import useFontStore from "@/store/fontStore";
 
 const BoutonDeconnexion = () => {
     const { t } = useTranslation();
@@ -19,11 +20,12 @@ const BoutonDeconnexion = () => {
             console.error('Erreur lors de la déconnexion:', error);
         }
     };
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     return (
         <View>
             <TouchableOpacity style={styles.button} onPress={logout}>
-                <Text style={styles.buttonText}>{t('logout')}</Text>
+                <Text style={[styles.buttonText, {fontSize : fontSize}]}>{t('logout')}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: Colors.primary_dark.text,
-        fontSize: 16,
+      //  fontSize: 16,
         fontWeight: '500',
     }
 })

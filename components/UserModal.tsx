@@ -9,9 +9,12 @@ import {
 
 import Colors from '@/constants/Colors';
 import RGPDModal from "@/components/RGPDModal";
+import useFontStore from '@/store/fontStore';
 
 // @ts-ignore
 export default function UserModal({visible, onClose ,user}) {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const [modalVisible, setModalVisible] = useState(false);
     return (
     <Modal
@@ -23,16 +26,16 @@ export default function UserModal({visible, onClose ,user}) {
         <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
                 <View style={styles.modalText}>
-                   <Text> Mon pseudonyme : {user.pseudonyme}</Text>
-                    <Text> Mon adresse mail : {user.email}</Text>
+                   <Text style={{fontSize : fontSize}}> Mon pseudonyme : {user.pseudonyme}</Text>
+                    <Text style={{fontSize : fontSize}}> Mon adresse mail : {user.email}</Text>
                 </View>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Text style={styles.rgpdLinkText}>
+                    <Text style={[styles.rgpdLinkText, {fontSize : fontSizeTresPetit}]}>
                         En vous inscrivant, vous acceptez notre politique de confidentialité.
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                    <Text style={styles.closeButtonText}>Fermer</Text>
+                    <Text style={[styles.closeButtonText, {fontSize : fontSize}]}>Fermer</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -59,7 +62,7 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     modalText: {
-        fontSize: 16,
+     //   fontSize: 16,
         color: '#333',
         lineHeight: 22,
         marginBottom: 10,
@@ -72,10 +75,10 @@ const styles = StyleSheet.create({
     },
     closeButtonText: {
         color: '#FFF',
-        fontSize: 16,
+     //   fontSize: 16,
     },
     rgpdLinkText: {
-        fontSize: 12,
+    //    fontSize: 12,
         color: Colors.primary_dark.background,
         textAlign: 'center',
         textDecorationLine: 'underline',

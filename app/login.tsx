@@ -19,8 +19,11 @@ import Header from "@/components/header";
 import {useTranslation} from "react-i18next";
 import Partenariat from "@/components/Partenariat";
 import BoutonAccueil from "@/components/BoutonAccueil";
+import useFontStore from "@/store/fontStore";
 
 const LoginScreen = () => {
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+
     const { t } = useTranslation();
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
@@ -96,7 +99,7 @@ const LoginScreen = () => {
                     {isLoading ? (
                         <ActivityIndicator size="small" color="#FFF" />
                     ) : (
-                        <Text style={styles.buttonText}>{t('login_button')}</Text>
+                        <Text style={[styles.buttonText, {fontSize : fontSizeSousTitre}]}>{t('login_button')}</Text>
                     )}
                 </TouchableOpacity>
                 <BoutonInscription />
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: '#FFF',
-        fontSize: 18,
+   //     fontSize: 18,
         fontWeight: 'bold',
     },
 

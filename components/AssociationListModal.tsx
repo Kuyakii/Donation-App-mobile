@@ -13,6 +13,7 @@ interface Association {
     nomImage: string;
 }
 import {useTranslation} from "react-i18next";
+import useFontStore from '@/store/fontStore';
 
 // @ts-ignore
 export default function AssociationListModal({ visible, onClose, associations }) {
@@ -52,26 +53,27 @@ export default function AssociationListModal({ visible, onClose, associations })
             params: { id: idAssos },
         });
     };
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
     return (
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={styles.modalTitle}>{t('all_associations')}</Text>
-                    <Text style={styles.modalSubTitle}>
+                    <Text style={[styles.modalTitle, {fontSize : fontSizeTitre}]}>{t('all_associations')}</Text>
+                    <Text style={[styles.modalSubTitle, {fontSize : fontSize}]}>
                         {filteredAssociations.length} association {filteredAssociations.length > 1 ? 's' : ''} disponible{filteredAssociations.length > 1 ? 's' : ''}
                     </Text>
 
                     {/* Filtre par type d'association */}
                     <View style={styles.filterContainer}>
                         <View style={styles.dropdownContainer}>
-                            <Text style={styles.dropdownLabel}>Type d'association :</Text>
+                            <Text style={[styles.dropdownLabel, {fontSize : fontSizePetit}]}>Type d'association :</Text>
                             <View style={styles.relativeContainer}>
                                 <TouchableOpacity
                                     style={styles.dropdownButton}
                                     onPress={() => setTypeDropdownOpen(!typeDropdownOpen)}
                                 >
-                                    <Text style={styles.dropdownButtonText}>{getCurrentTypeLabel()}</Text>
+                                    <Text style={[styles.dropdownButtonText, {fontSize : fontSizePetit}]}>{getCurrentTypeLabel()}</Text>
                                     <Text style={styles.dropdownArrow}>▼</Text>
                                 </TouchableOpacity>
 
@@ -87,7 +89,7 @@ export default function AssociationListModal({ visible, onClose, associations })
                                                         setTypeDropdownOpen(false);
                                                     }}
                                                 >
-                                                    <Text style={styles.dropdownItemText}>{option.label}</Text>
+                                                    <Text style={[styles.dropdownItemText, {fontSize : fontSizePetit}]}>{option.label}</Text>
                                                 </TouchableOpacity>
                                             ))}
                                         </ScrollView>
@@ -114,7 +116,7 @@ export default function AssociationListModal({ visible, onClose, associations })
 
                     {/* Bouton pour fermer le modal */}
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>{t('close_button')}</Text>
+                        <Text style={[styles.closeButtonText, {fontSize : fontSize}]}>{t('close_button')}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -145,14 +147,14 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
     },
     modalTitle: {
-        fontSize: 22,
+      //  fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 5,
         textAlign: 'center',
         color: '#333',
     },
     modalSubTitle: {
-        fontSize: 15,
+       // fontSize: 15,
         marginBottom: 20,
         textAlign: 'center',
         color: '#555',
@@ -164,7 +166,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
     },
     dropdownLabel: {
-        fontSize: 14,
+      //  fontSize: 14,
         color: '#333',
         marginBottom: 5,
         fontWeight: '500',
@@ -186,10 +188,10 @@ const styles = StyleSheet.create({
     },
     dropdownButtonText: {
         color: '#333',
-        fontSize: 14,
+    //    fontSize: 14,
     },
     dropdownArrow: {
-        fontSize: 10,
+     //   fontSize: 10,
         color: '#333',
     },
     dropdownMenu: {
@@ -215,7 +217,7 @@ const styles = StyleSheet.create({
     },
     dropdownItemText: {
         color: '#333',
-        fontSize: 14,
+    //    fontSize: 14,
     },
     overlay: {
         position: 'absolute',
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
     },
     closeButtonText: {
         color: Colors.primary_dark.text,
-        fontSize: 16,
+    //    fontSize: 16,
         fontWeight: 'bold',
     },
 });
