@@ -1,9 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { images } from "@/config";
+import useFontStore from "@/store/fontStore";
 
 // @ts-ignore
 export default function AssociationItem({ name, description, imageName }) {
+    const { fontSize, increaseFontSize, decreaseFontSize } = useFontStore();
+
     return (
         <View style={styles.associationItem}>
             <Image
@@ -13,7 +16,7 @@ export default function AssociationItem({ name, description, imageName }) {
             />
             <View style={styles.associationInfo}>
                 <Text style={styles.associationName}>{name}</Text>
-                <Text style={styles.associationDescription} numberOfLines={2}>
+                <Text style={[styles.associationDescription, {fontSize}]} numberOfLines={2}>
                     {description}
                 </Text>
             </View>
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
         marginBottom: 4,
     },
     associationDescription: {
-        fontSize: 14,
+       // fontSize: 14,
         color: '#666',
         flexWrap: 'wrap',
     },

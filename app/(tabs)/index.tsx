@@ -15,6 +15,8 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useTranslation } from 'react-i18next';
 import FirstTimeModal from "@/components/FirstTimeModal";
 import {BASE_URL} from "@/config";
+import useFontStore from "@/store/fontStore";
+import FontSizeButton from "@/components/ProfileComponents/FontSizeButton";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -36,6 +38,8 @@ export default function Layout() {
     const [HandicapModalVisible, setHandicapModalVisible] = useState(false);
 
     const [token, setToken] = useState<string | null>(null);
+
+
 
     const userConnected = estConnecte();
     console.log(userConnected);
@@ -85,6 +89,9 @@ export default function Layout() {
             <FirstTimeModal/>
             <Header/>
             <SearchBar associations={associations} />
+            <View style={styles.policeBouton}>
+                <FontSizeButton></FontSizeButton>
+            </View>
             <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
 
                 {/* Section des associations favorites - visible uniquement si l'utilisateur est connecté */}
@@ -276,5 +283,10 @@ const styles = StyleSheet.create({
         padding: 10,
         fontStyle: 'italic',
         color: '#666',
-    }
+    },
+    policeBouton: {
+        left: 0,
+        marginTop: "auto",
+    },
+
 });

@@ -4,6 +4,7 @@ import {Feather} from '@expo/vector-icons';
 import {images} from "@/config";
 import Colors from "@/constants/Colors";
 import {router, useRouter} from "expo-router";
+import FontSizeButton from "@/components/ProfileComponents/FontSizeButton";
 
 interface HeaderProps {
     title?: string
@@ -71,5 +72,5 @@ const styles = StyleSheet.create({
     placeholder: {
         width: 40,
         height: 40,
-    },
+    }
 });

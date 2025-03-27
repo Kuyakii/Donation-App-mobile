@@ -204,7 +204,6 @@ export default function SettingsScreen() {
                 {user ? (                <TouchableOpacity style={styles.deleteAccountbutton} onPress={() => setDeleteAccountModalVisible(true)}>
                     <Text style={styles.deleteAccountbuttonText}>{t('delete_account_button')}</Text>
                 </TouchableOpacity>) : (<Text/>)}
-
             </ScrollView>
 
             {/* Intégration du modal */}
