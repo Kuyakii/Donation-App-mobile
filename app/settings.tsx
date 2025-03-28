@@ -33,7 +33,6 @@ export default function SettingsScreen() {
         </ThemeProvider>
     );
 }
-
 function SettingsContent() {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
 
