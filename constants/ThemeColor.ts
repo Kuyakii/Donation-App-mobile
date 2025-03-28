@@ -36,7 +36,7 @@ export const ThemeColors: Record<ColorTheme, ThemeColorsType> = {
         tabIconDefault: Colors.light.tabIconDefault,
         tabIconSelected: Colors.light.tabIconSelected,
         container: {
-            backgroundColor: Colors.container_light.backgroundColor,
+            backgroundColor: Colors.dark.container_dark.backgroundColor,
         },
         primary: {
             text: Colors.primary_light.text,
