@@ -15,14 +15,28 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useTranslation } from 'react-i18next';
 import FirstTimeModal from "@/components/FirstTimeModal";
 import {BASE_URL} from "@/config";
+import Colors from "@/constants/Colors";
 import useFontStore from "@/store/fontStore";
+import { Appearance, useColorScheme } from 'react-native';
 import FontSizeButton from "@/components/ProfileComponents/FontSizeButton";
 import AccessibilityButton from "@/components/AccessibilityButton";
+
+import {useTheme} from "react-native-paper";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
+    return (
+        <ThemeProvider>
+            <LayoutContent />
+        </ThemeProvider>
+    );
+}
+
+function LayoutContent() {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const  theme  = useTheme();
 
     const { t } = useTranslation();
     const associations = getAllAssociation();

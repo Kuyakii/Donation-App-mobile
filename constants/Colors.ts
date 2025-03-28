@@ -4,21 +4,34 @@ const primarydark = '#9e25d5';
 const primarylight = '#E5B6FA';
 
 export default {
+
   light: {
-    text: '#000',
-    background: '#fff',
-    tint: tintColorLight,
-    tabIconDefault: '#ccc',
-    tabIconSelected: tintColorLight,
+      text: '#000',
+      background: '#fff',
+      tint: tintColorLight,
+      tabIconDefault: '#ccc',
+      tabIconSelected: tintColorLight,
+
   },
-  dark: {
-    text: '#fff',
-    background: '#000',
-    tint: tintColorDark,
-    tabIconDefault: '#ccc',
-    tabIconSelected: tintColorDark,
+  container_light: {
+    backgroundColor: '#9E25D51A',
   },
 
+  dark: {
+      text: '#fff',
+      background: '#000',
+      tint: tintColorDark,
+      tabIconDefault: '#ccc',
+      tabIconSelected: tintColorDark,
+
+    primary_darker: {
+      text: '#fff',
+      background: '#201723'
+    },
+    container_dark: {
+      backgroundColor: '#9E25D51A',
+    }
+  },
   primary_dark: {
     text: '#fff',
     background: '#9e25d5',
@@ -34,7 +47,5 @@ export default {
     background: '#ebd1f6'
 
   },
-  container_light: {
-    backgroundColor: '#9E25D51A',
-  }
 }
+export type ColorTheme = 'light' | 'dark';

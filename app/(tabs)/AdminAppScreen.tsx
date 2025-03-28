@@ -26,6 +26,7 @@ import { EditAssociationModal } from '@/components/EditAssociationModal';
 import {UtilisateursList} from "@/components/UtilisateursList";
 import {t} from "i18next";
 import useFontStore from "@/store/fontStore";
+import { Appearance, useColorScheme } from 'react-native';
 
 export default function AdminAppScreen() {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
