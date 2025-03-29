@@ -127,12 +127,7 @@ const DonPage = () => {
                 body: JSON.stringify({
                     amount: parseFloat(montant) * 100,
                     currency: 'eur',
-                    metadata: {
-                        association_id: id,
-                        user_id: idUser,
-                        donation_type: isRecurrent ? "recurrent" : "unique",
-                        ...(isRecurrent && { startDate, endDate, frequency })
-                    }
+                    donation_type: isRecurrent ? "recurrent" : "unique",
                 }),
             });
 
