@@ -387,7 +387,7 @@ export default function QuestionnaireScreen() {
                 {loadingRecommendations ? (
                     <Text style={[styles.loadingText, {fontSize : fontSize}]}>{t('recherche_recommandations')}</Text>
                 ) : recommendedAssociations.length > 0 ? (
-                    <ScrollView>
+                    <ScrollView style={styles.resultatAsso}>
                         <Text style={[styles.subtitle, {fontSize : fontSize}]}>
                             {t('based_on_answer_recommandations')}
                         </Text>
@@ -627,12 +627,14 @@ const styles = StyleSheet.create({
     resultsContainer: {
         marginTop: 10,
         marginBottom: 20,
+        marginHorizontal:10,
     },
     resultsSummary: {
     //    fontSize: 18,
         fontWeight: 'bold',
         marginTop: 20,
         marginBottom: 10,
+        marginHorizontal:20,
     },
     resultItem: {
         backgroundColor: 'white',
@@ -699,6 +701,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 2,
         elevation: 3,
+        marginHorizontal :10,
+
     },
     restartButtonText: {
         color: Colors.primary_dark.text,
@@ -728,4 +732,8 @@ const styles = StyleSheet.create({
         color: '#666',
         flexWrap: 'wrap',
     },
+    resultatAsso: {
+        marginHorizontal: 20,
+    }
+
 });
