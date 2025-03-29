@@ -319,23 +319,77 @@ app.post('/dons', async (req: Request, res: Response) => {
     res.status(201).json({ message: 'Don réalisé avec succès.' });
 });
 const stripe = require('stripe')('sk_test_51R0Q18IsFroIM4A9oGqJkSFPR8IXesbB9k43TNCGafDJq2nTeWQuGieDiwrdQudTBfjSb55nGboOud4Lq9NrglOg00aVADzSkZ');
+
 app.post('/create-payment-intent', async (req, res) => {
-    const { amount, currency } = req.body;
+    const { amount, currency = 'eur', metadata = {} } = req.body;
 
     try {
+        console.log(`Création d'intent: montant=${amount}, devise=${currency}, metadata=`, metadata);
+
+        // Création ou récupération d'un client
+        let customer;
+        if (metadata.user_id && metadata.user_id !== 0) {
+            // Recherche d'un client existant pour l'utilisateur
+            const customers = await stripe.customers.list({
+                limit: 1,
+                metadata: { user_id: metadata.user_id.toString() }
+            });
+
+            if (customers.data.length > 0) {
+                customer = customers.data[0].id;
+            } else {
+                // Création d'un nouveau client
+                const newCustomer = await stripe.customers.create({
+                    metadata: { user_id: metadata.user_id.toString() }
+                });
+                customer = newCustomer.id;
+            }
+        } else {
+            // Client anonyme pour les dons sans compte
+            const anonymousCustomer = await stripe.customers.create();
+            customer = anonymousCustomer.id;
+        }
+
+        // Création d'une clé éphémère pour le client
+        const ephemeralKey = await stripe.ephemeralKeys.create(
+            { customer: customer },
+            { apiVersion: '2023-10-16' } // Utilisez la dernière version de l'API
+        );
+
+        // Création de l'intention de paiement
         const paymentIntent = await stripe.paymentIntents.create({
-            amount,
-            currency,
+            amount: Math.round(amount), // Montant en centimes
+            currency: currency.toLowerCase(),
+            customer: customer,
+            metadata: metadata,
+            // Pour les dons récurrents, utilisez setup_future_usage
+            setup_future_usage: metadata.donation_type === 'recurrent' ? 'off_session' : undefined,
             payment_method_types: ['card'],
+            // Préférences d'UI pour le PaymentSheet
+            payment_method_options: {
+                card: {
+                    request_three_d_secure: 'automatic'
+                }
+            }
         });
 
-        res.send({
+        console.log(`Intent créé avec succès: ${paymentIntent.id}`);
+
+        // Envoi de la réponse au client
+        res.json({
             clientSecret: paymentIntent.client_secret,
+            ephemeralKey: ephemeralKey.secret,
+            customer: customer,
+            paymentIntentId: paymentIntent.id
         });
     } catch (error) {
         // Vérification que l'erreur est bien une instance d'Error
+        console.error('Erreur lors de la création du payment intent:', error);
+
         if (error instanceof Error) {
-            res.status(500).send({ error: error.message });
+            res.status(500).send({
+                error: error.message,
+            });
         } else {
             res.status(500).send({ error: 'Une erreur inconnue est survenue.' });
         }
