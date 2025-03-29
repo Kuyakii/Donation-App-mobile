@@ -319,21 +319,35 @@ app.post('/dons', async (req: Request, res: Response) => {
     res.status(201).json({ message: 'Don réalisé avec succès.' });
 });
 const stripe = require('stripe')('sk_test_51R0Q18IsFroIM4A9oGqJkSFPR8IXesbB9k43TNCGafDJq2nTeWQuGieDiwrdQudTBfjSb55nGboOud4Lq9NrglOg00aVADzSkZ');
+
 app.post('/create-payment-intent', async (req, res) => {
-    const { amount, currency } = req.body;
+    // Extraction de tous les paramètres de la requête
+    const { amount, currency = 'eur' } = req.body;
+
+    // Suppression des champs que nous ne voulons pas passer à Stripe
+    const { metadata, ...otherParams } = req.body;
 
     try {
+        console.log(`Création d'intent: montant=${amount}, devise=${currency}`);
+
+        // Création de l'intention de paiement avec seulement les paramètres supportés
         const paymentIntent = await stripe.paymentIntents.create({
-            amount,
-            currency,
+            amount: Math.round(amount), // Montant en centimes
+            currency: currency.toLowerCase(),
             payment_method_types: ['card'],
+            // Pour les dons récurrents, utilisez setup_future_usage si nécessaire
+            ...(req.body.donation_type === 'recurrent' && { setup_future_usage: 'off_session' })
         });
 
-        res.send({
-            clientSecret: paymentIntent.client_secret,
+        console.log(`Intent créé avec succès: ${paymentIntent.id}`);
+
+        // Envoi de la réponse au client
+        res.json({
+            clientSecret: paymentIntent.client_secret
         });
     } catch (error) {
-        // Vérification que l'erreur est bien une instance d'Error
+        console.error('Erreur lors de la création du payment intent:', error);
+
         if (error instanceof Error) {
             res.status(500).send({ error: error.message });
         } else {
