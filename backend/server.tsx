@@ -9,7 +9,7 @@ import {DonationRepository} from "./repositories/DonationRepository";
 
 const app = express();
 const port = 3000;
-const APP_URL = 'exp://192.168.1.134:8082'; // à changer
+const APP_URL = 'exp://192.168.1.134:8081'; // à changer
 const SERVER_URL = `http://192.168.1.134:${port}`; // à changer
 
 // Middleware
