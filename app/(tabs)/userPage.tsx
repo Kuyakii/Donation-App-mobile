@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import {
     View,
     Text,
@@ -22,14 +22,28 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_URL } from "@/config";
 import AssociationListModal from "@/components/DonationListModal";
-import {router, useFocusEffect} from "expo-router";
+import {router} from "expo-router";
 import {useTranslation} from "react-i18next";
 import AssociationFavoritesModal from "@/components/AssociationFavoritesModal";
 import UserModal from "@/components/UserModal";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 export default function UserProfileScreen() {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+        fontSizeGrosTitre,
+    });
+
     const [isLoading, setIsLoading] = useState(true);
     const navigation = useNavigation();
     const [user, setUser] = useState<IUtilisateur | null>(null);
@@ -150,20 +164,20 @@ export default function UserProfileScreen() {
         <View style={styles.container}>
             <Header />
             <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollViewContent}>
-                <Text style={[styles.welcomeTitle, {fontSize : fontSizeGrosTitre}]}>{t('hello')}, {user?.pseudonyme}</Text>
+                <Text style={styles.welcomeTitle}>{t('hello')}, {user?.pseudonyme}</Text>
 
                 <View style={styles.actionsContainer}>
                     <TouchableOpacity style={styles.actionButton} onPress={() => setUserModalVisible(true)}>
                         <View style={styles.iconContainer}>
-                            <Feather name="user" size={icon_size} color="black" />
-                            <Text style={[styles.actionText, {fontSize : fontSizePetit}]}>{t('profile')}</Text>
+                            <Feather name="user" size={icon_size} color={themeColors.text} />
+                            <Text style={styles.actionText}>{t('profile')}</Text>
                         </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.actionButton} onPress={() => setModalVisible(true)}>
                         <View style={styles.iconContainer}>
-                            <Feather name="gift" size={icon_size} color="black" />
-                            <Text style={[styles.actionText, {fontSize : fontSizePetit}]}>{t('donations')}</Text>
+                            <Feather name="gift" size={icon_size} color={themeColors.text} />
+                            <Text style={styles.actionText}>{t('donations')}</Text>
                         </View>
                     </TouchableOpacity>
 
@@ -173,7 +187,7 @@ export default function UserProfileScreen() {
                     >
                         <View style={styles.iconContainer}>
                             <Feather name="star" size={icon_size} color="#FFD700" />
-                            <Text style={[styles.actionText, {fontSize : fontSizePetit}]}>{t('favorites')}</Text>
+                            <Text style={styles.actionText}>{t('favorites')}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -188,7 +202,7 @@ export default function UserProfileScreen() {
 
                 <View>
                     <TouchableOpacity style={styles.button} onPress={goAPropos}>
-                        <Text style={[styles.buttonText, {fontSize : fontSize}]}>{t('info')}</Text>
+                        <Text style={styles.buttonText}>{t('info')}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -208,14 +222,29 @@ export default function UserProfileScreen() {
 }
 
 const icon_size = 30;
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
     },
     scrollView: {
         flex: 1,
         paddingHorizontal: 16,
+    },
+    scrollViewContent: {
+        padding: 16,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: themeColors.background,
+    },
+    welcomeTitle: {
+        fontSize: fontSizes.fontSizeGrosTitre,
+        fontWeight: 'bold',
+        color: themeColors.text,
+        marginBottom: 10,
     },
     actionsContainer: {
         flexDirection: 'row',
@@ -230,28 +259,16 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 8,
-        backgroundColor: Colors.container_light.backgroundColor,
-        borderWidth: 0.5,
-        borderColor: 'grey',
+        backgroundColor: themeColors.card.background,
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: 5,
     },
     actionText: {
-     //   fontSize: 14,
-    },
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    scrollViewContent: {
-        padding: 16
-    },
-    welcomeTitle: {
-     //   fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10
+        fontSize: fontSizes.fontSizePetit,
+        color: themeColors.text,
     },
     button: {
         height: 40,
@@ -259,11 +276,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 20,
+        backgroundColor: themeColors.container.backgroundColor,
     },
     buttonText: {
-        color: Colors.primary_dark.background,
-     //   fontSize: 16,
+        color: themeColors.primary.background,
+        fontSize: fontSizes.fontSize,
         fontWeight: 'bold',
     },
-
 });

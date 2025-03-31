@@ -10,11 +10,22 @@ import {
 import Colors from '@/constants/Colors';
 import RGPDModal from "@/components/RGPDModal";
 import useFontStore from '@/store/fontStore';
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 // @ts-ignore
 export default function UserModal({visible, onClose ,user}) {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     const [modalVisible, setModalVisible] = useState(false);
     return (
     <Modal
@@ -25,17 +36,15 @@ export default function UserModal({visible, onClose ,user}) {
     >
         <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-                <View style={styles.modalText}>
-                   <Text style={{fontSize : fontSize}}> Mon pseudonyme : {user.pseudonyme}</Text>
-                    <Text style={{fontSize : fontSize}}> Mon adresse mail : {user.email}</Text>
-                </View>
+                   <Text style={styles.modalText}> Mon pseudonyme : {user.pseudonyme}</Text>
+                    <Text style={styles.modalText}> Mon adresse mail : {user.email}</Text>
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Text style={[styles.rgpdLinkText, {fontSize : fontSizeTresPetit}]}>
+                    <Text style={styles.rgpdLinkText}>
                         En vous inscrivant, vous acceptez notre politique de confidentialité.
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                    <Text style={[styles.closeButtonText, {fontSize : fontSize}]}>Fermer</Text>
+                    <Text style={styles.closeButtonText}>Fermer</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -43,7 +52,7 @@ export default function UserModal({visible, onClose ,user}) {
     </Modal>
 )
 }
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -53,7 +62,7 @@ const styles = StyleSheet.create({
     modalContent: {
         width: '80%',
         padding: 20,
-        backgroundColor: '#FFF',
+        backgroundColor: themeColors.background,
         borderRadius: 12,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
@@ -62,27 +71,26 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     modalText: {
-     //   fontSize: 16,
-        color: '#333',
+        color: themeColors.text,
         lineHeight: 22,
         marginBottom: 10,
+        fontSize: fontSizes.fontSize,
     },
     closeButton: {
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         paddingVertical: 10,
         borderRadius: 8,
         alignItems: 'center',
     },
     closeButtonText: {
-        color: '#FFF',
-     //   fontSize: 16,
+        color: themeColors.primary.text,
+        fontWeight: 'bold',
     },
     rgpdLinkText: {
-    //    fontSize: 12,
-        color: Colors.primary_dark.background,
+        color: themeColors.primary.background,
         textAlign: 'center',
         textDecorationLine: 'underline',
         margin: 10,
+        fontSize: fontSizes.fontSizeTresPetit,
     },
 });
-

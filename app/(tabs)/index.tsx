@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, Platform, StatusBar } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
 import Header from '../../components/header';
 import SearchBar from '../../components/SearchBar';
 import Section from '../../components/Section';
@@ -14,30 +14,25 @@ import {useRouter} from "expo-router";
 import * as SplashScreen from 'expo-splash-screen';
 import { useTranslation } from 'react-i18next';
 import FirstTimeModal from "@/components/FirstTimeModal";
-import {BASE_URL} from "@/config";
-import Colors from "@/constants/Colors";
 import useFontStore from "@/store/fontStore";
-import { Appearance, useColorScheme } from 'react-native';
-import FontSizeButton from "@/components/ProfileComponents/FontSizeButton";
-import AccessibilityButton from "@/components/AccessibilityButton";
 
-import {useTheme} from "react-native-paper";
-import { ThemeProvider } from "@/context/ThemeContext";
+import { ThemeProvider, useTheme } from "@/context/ThemeContext";
+import {ThemeColors} from "@/constants/ThemeColor";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
-    return (
-        <ThemeProvider>
-            <LayoutContent />
-        </ThemeProvider>
-    );
-}
-
-function LayoutContent() {
-    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
-    const  theme  = useTheme();
-
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre} = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+        fontSizeGrosTitre
+    });
     const { t } = useTranslation();
     const associations = getAllAssociation();
     const slicedAssociations = associations.slice(0, 3);
@@ -55,8 +50,6 @@ function LayoutContent() {
     const [HandicapModalVisible, setHandicapModalVisible] = useState(false);
 
     const [token, setToken] = useState<string | null>(null);
-
-
 
     const userConnected = estConnecte();
     console.log(userConnected);
@@ -116,7 +109,7 @@ function LayoutContent() {
                     </FavoriteProvider>
                 ) : (
                     <View style={styles.banner}>
-                        <Text style={[styles.bannerText, {fontSize : fontSize}]}>
+                        <Text style={styles.bannerText}>
                             {t('login_required_for_favorites')} {/* Clé de traduction */}
                         </Text>
                     </View>
@@ -264,11 +257,11 @@ function LayoutContent() {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         flex: 1,
-        paddingBottom : 15,
-        backgroundColor: 'white',
+        paddingBottom: 15,
+        backgroundColor: themeColors.background,
     },
     contentContainer: {
         flex: 1,
@@ -280,24 +273,25 @@ const styles = StyleSheet.create({
         paddingRight: 16,
     },
     banner: {
-        backgroundColor: '#ffcc00',
+        backgroundColor: themeColors.primaryAlt?.background || '#ffcc00',
         padding: 10,
         marginBottom: 10,
         alignItems: 'center',
     },
     bannerText: {
-        color: 'black',
-     //   fontSize: 16,
+        color: themeColors.text,
+        fontSize: fontSizes.fontSize,
     },
     loadingText: {
         padding: 10,
         fontStyle: 'italic',
-        color: '#666',
+        color: themeColors.text,
+        fontSize: fontSizes.fontSizePetit,
     },
     noDataText: {
         padding: 10,
         fontStyle: 'italic',
-        color: '#666',
+        color: themeColors.text,
+        fontSize: fontSizes.fontSizePetit,
     }
-
 });

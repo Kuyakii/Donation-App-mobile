@@ -2,13 +2,15 @@ import React from 'react';
 import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import AssociationItem from './AssociationItem';
 import { useRouter } from "expo-router";
-import Colors from "@/constants/Colors";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
+import {useTranslation} from "react-i18next";
 
 // @ts-ignore
 export default function AssociationTypeModal({ visible, onClose, associations, typeTitle }) {
     const router = useRouter();
-
+    const { t } = useTranslation();
     const handleNavigate = (idAssos: number) => {
         onClose();
         router.push({
@@ -17,12 +19,22 @@ export default function AssociationTypeModal({ visible, onClose, associations, t
         });
     };
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre
+    });
 
     return (
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={[styles.modalTitle, {fontSize : fontSizeSousTitre}]}>{typeTitle || "Associations"}</Text>
+                    <Text style={styles.modalTitle}>{typeTitle || "Associations"}</Text>
 
                     {/* Liste des associations */}
                     {associations.length > 0 ? (
@@ -41,13 +53,13 @@ export default function AssociationTypeModal({ visible, onClose, associations, t
                         />
                     ) : (
                         <View style={styles.emptyContainer}>
-                            <Text style={[styles.emptyText, {fontSize : fontSize}]}>Aucune association disponible</Text>
+                            <Text style={styles.emptyText}>Aucune association disponible</Text>
                         </View>
                     )}
 
                     {/* Bouton pour fermer le modal */}
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                        <Text style={[styles.closeButtonText, {fontSize : fontSize}]}>Fermer</Text>
+                        <Text style={styles.closeButtonText}>{t('close_button')}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -55,34 +67,37 @@ export default function AssociationTypeModal({ visible, onClose, associations, t
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     modalContainer: {
         flex: 1,
         justifyContent: 'flex-end',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         width: '100%',
         height: '90%',
         padding: 20,
-        borderRadius: 10,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
     },
     modalTitle: {
-     //   fontSize: 18,
+        fontSize: fontSizes.fontSizeSousTitre,
         fontWeight: 'bold',
         marginBottom: 10,
+        color: themeColors.text,
     },
     closeButton: {
         marginTop: 10,
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         padding: 10,
-        borderRadius: 5,
+        borderRadius: 8,
         alignItems: 'center',
     },
     closeButtonText: {
-        color: Colors.primary_dark.text,
-     //   fontSize: 16,
+        fontSize: fontSizes.fontSize,
+        color: themeColors.primary.text,
+        fontWeight: 'bold',
     },
     emptyContainer: {
         flex: 1,
@@ -91,8 +106,9 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     emptyText: {
-    //    fontSize: 16,
-        color: '#666',
+        fontSize: fontSizes.fontSize,
+        color: themeColors.text,
         fontStyle: 'italic',
+        opacity: 0.6,
     },
 });

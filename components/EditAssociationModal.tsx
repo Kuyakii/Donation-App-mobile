@@ -15,6 +15,8 @@ import { IAssociation } from "@/backend/interfaces/IAssociation";
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import { Picker } from '@react-native-picker/picker';
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 interface EditAssociationModalProps {
     isVisible: boolean;
@@ -61,7 +63,16 @@ export const EditAssociationModal: React.FC<EditAssociationModalProps> = ({
         onClose();
     };
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     return (
         <Modal
             animationType="slide"
@@ -157,9 +168,7 @@ export const EditAssociationModal: React.FC<EditAssociationModalProps> = ({
     );
 };
 
-// Styles are taken from the existing styles in the original file
-const styles = StyleSheet.create({
-    // ... (copy the relevant styles from the original StyleSheet)
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: 'center',
@@ -168,10 +177,10 @@ const styles = StyleSheet.create({
     },
     modalView: {
         width: '90%',
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         borderRadius: 20,
         padding: 20,
-        shadowColor: '#000',
+        shadowColor: themeColors.shadowColor,
         shadowOffset: {
             width: 0,
             height: 2,
@@ -179,31 +188,35 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+        borderWidth: 1,
+        borderColor: "#ddd",
     },
     modalScrollViewContent: {
         paddingBottom: 20,
     },
     modalTitle: {
-    //    fontSize: 20,
+        fontSize: fontSizes.fontSizeSousTitre,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
-        color: 'purple',
+        color: themeColors.primary.background,
     },
     inputContainer: {
         marginBottom: 15,
     },
     label: {
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
         marginBottom: 5,
         fontWeight: '600',
+        color: themeColors.text,
     },
     input: {
         borderWidth: 1,
         borderColor: '#ddd',
         borderRadius: 8,
         padding: 10,
-    //    fontSize: 16,
+        color: themeColors.text,
+        fontSize: fontSizes.fontSize,
     },
     textArea: {
         minHeight: 100,
@@ -226,19 +239,22 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonCancel: {
-        backgroundColor: '#f3f3f3',
+        backgroundColor: themeColors.background,
+        borderWidth: 1,
+        borderColor: "#ddd",
     },
     buttonCancelText: {
         fontWeight: 'bold',
-    //    fontSize: 16,
-        color: '#333',
+        fontSize: fontSizes.fontSize,
+        color: themeColors.text,
+        opacity: 0.8,
     },
     buttonSave: {
-        backgroundColor: 'purple',
+        backgroundColor: themeColors.primary.background,
     },
     buttonText: {
         fontWeight: 'bold',
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
         color: 'white',
     },
 });

@@ -2,21 +2,34 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import useFontStore from '@/store/fontStore';
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 // @ts-ignore
 export default function Section({ title, icon, children, onSeeAllPress }) {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+        fontSizeGrosTitre
+    });
 
     return (
         <View style={styles.section}>
             <View style={styles.sectionHeader}>
                 <View style={styles.sectionTitleContainer}>
-                    <MaterialIcons name={icon} size={20} color="black" />
-                    <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{title}</Text>
+                    <MaterialIcons name={icon} size={20} color={themeColors.text} />
+                    <Text style={styles.sectionTitle}>{title}</Text>
                 </View>
                 {onSeeAllPress && (
                     <TouchableOpacity onPress={onSeeAllPress}>
-                        <Text style={[styles.seeAllText, {fontSize : fontSizePetit}]}>Voir tout</Text>
+                        <Text style={styles.seeAllText}>Voir tout</Text>
                     </TouchableOpacity>
                 )}
             </View>
@@ -25,7 +38,7 @@ export default function Section({ title, icon, children, onSeeAllPress }) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     section: {
         paddingHorizontal: 16,
         marginBottom: 20,
@@ -41,12 +54,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     sectionTitle: {
-     //   fontSize: 18,
+        fontSize: fontSizes.fontSizeSousTitre,
         fontWeight: '500',
         marginLeft: 8,
+        color: themeColors.text,
     },
     seeAllText: {
-   //     fontSize: 14,
-        color: '#777',
+        fontSize: fontSizes.fontSizePetit,
+        color: themeColors.tint,
     },
 });

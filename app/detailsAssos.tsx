@@ -12,9 +12,22 @@ import BoutonFavorite from "@/components/BoutonFavorite";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
 import {useTranslation} from "react-i18next";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 export default function DetailsAssos() {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+        fontSizeGrosTitre
+    });
 
     const user = getUtilisateurConnecte()
     const userId = user?.idUtilisateur
@@ -62,7 +75,7 @@ export default function DetailsAssos() {
             {/* Bouton "Donner" */}
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity style={styles.donnerButton} onPress={navigateToDons}>
-                    <Text style={[styles.donnerButtonText, {fontSize : fontSizeSousTitre}]}>{t('don_title')}</Text>
+                    <Text style={styles.donnerButtonText}>{t('don_title')}</Text>
                 </TouchableOpacity>
                 <BoutonFavorite idAssociation={id} idUtilisateur={userId} />
             </View>
@@ -70,12 +83,11 @@ export default function DetailsAssos() {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         padding: 5,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
     contentContainer: {
         flex: 1,
@@ -83,9 +95,8 @@ const styles = StyleSheet.create({
     scrollContent: {
         paddingBottom: 20,
     },
-
     donnerButton: {
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         paddingVertical: 15,
         paddingHorizontal: 40,
         borderRadius: 10,
@@ -94,14 +105,13 @@ const styles = StyleSheet.create({
         marginLeft: 45,
     },
     donnerButtonText: {
-        color: 'white',
-    //    fontSize: 18,
+        color: themeColors.primary.text,
+        fontSize: fontSizes.fontSizeSousTitre,
         fontWeight: 'bold',
     },
     buttonsContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         padding: 15,
-    }
-
+    },
 });

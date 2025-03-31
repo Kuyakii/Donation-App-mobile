@@ -6,7 +6,8 @@ import { Image, StyleSheet } from "react-native";
 import { images } from "@/config";
 import { I18nextProvider } from 'react-i18next';
 import { i18n } from '../../i18n';
-
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 // Fonction pour générer les icônes de la barre de navigation
 // @ts-ignore
 function TabBarIcon({ name, color }) {
@@ -15,6 +16,8 @@ function TabBarIcon({ name, color }) {
 
 export default function TabLayout() {
     const pathname = usePathname();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
     // Déterminer si nous sommes sur la page admin
     const isAdminRoute = pathname.includes('AdminAssoScreen');
@@ -28,12 +31,14 @@ export default function TabLayout() {
                 tabBarActiveTintColor: Colors.primary_dark.background,
                 tabBarInactiveTintColor: 'gray',
                 tabBarStyle: {
-                    backgroundColor: '#f2f2f2',
+                    backgroundColor: themeColors.background,
                     height: 60,
                     paddingTop: 10,
                     marginBottom: 10,
                     marginHorizontal: 20,
                     borderRadius: 16,
+                    borderWidth: 1,
+                    borderColor: theme == 'dark' ? themeColors.card.border : 'transparent',
                     position: 'absolute',
                     bottom: 10,
                     left: 0,

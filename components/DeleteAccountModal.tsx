@@ -7,6 +7,9 @@ import {useTranslation} from "react-i18next";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useRouter} from "expo-router";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
+
 // @ts-ignore
 const DeleteAccountModal = ({ visible, onClose, email }) => {
     const [password, setPassword] = useState('');
@@ -55,12 +58,21 @@ const DeleteAccountModal = ({ visible, onClose, email }) => {
         }
     };
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     return (
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={[styles.modalTitle, {fontSize : fontSizeSousTitre}]}>{t("changePassword")}</Text>
+                    <Text style={styles.modalTitle}>{t("changePassword")}</Text>
 
                     {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
@@ -88,7 +100,7 @@ const DeleteAccountModal = ({ visible, onClose, email }) => {
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -96,24 +108,30 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalContent: {
-        backgroundColor: 'white',
+        backgroundColor: themeColors.container.backgroundColor,
         padding: 20,
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
         borderRadius: 10,
         width: '80%',
         alignItems: 'center',
     },
     modalTitle: {
-     //   fontSize: 20,
+        fontSize: fontSizes.fontSizeSousTitre,
         fontWeight: 'bold',
         marginBottom: 15,
+        color: themeColors.text,
     },
     input: {
         width: '100%',
         padding: 10,
         borderWidth: 1,
-        borderColor: '#ddd',
+        borderColor: themeColors.primaryAlt?.background || '#ddd',
         borderRadius: 5,
         marginBottom: 15,
+        color: themeColors.text,
+        fontSize: fontSizes.fontSize,
+        backgroundColor: themeColors.input.backgroundColor,
     },
     modalButtons: {
         flexDirection: 'row',
@@ -131,22 +149,26 @@ const styles = StyleSheet.create({
     cancelButtonText: {
         color: 'white',
         fontWeight: 'bold',
+        fontSize: fontSizes.fontSizePetit,
     },
     confirmButton: {
         flex: 1,
-        backgroundColor: '#4CAF50',
+        backgroundColor: themeColors.primary.background,
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
         marginLeft: 5,
     },
     confirmButtonText: {
-        color: 'white',
+        color: themeColors.primary.text,
         fontWeight: 'bold',
+        fontSize: fontSizes.fontSizePetit,
     },
     errorText: {
         color: "red",
-        marginBottom: 10
+        marginBottom: 10,
+        fontSize: fontSizes.fontSizeTresPetit,
+        textAlign: 'center',
     },
 });
 

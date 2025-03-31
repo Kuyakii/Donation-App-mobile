@@ -2,10 +2,21 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { images } from "@/config";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 // @ts-ignore
 export default function AssociationItem({ name, description, imageName }) {
     const {fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+
+    const styles = getStyles(themeColors, {
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
 
     return (
         <View style={styles.associationItem}>
@@ -24,7 +35,7 @@ export default function AssociationItem({ name, description, imageName }) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     associationItem: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -41,13 +52,15 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     associationName: {
-        //fontSize: 16,
+        fontSize: fontSizes.fontSize,
         fontWeight: '500',
         marginBottom: 4,
+        color: themeColors.text,
     },
     associationDescription: {
-       // fontSize: 14,
-        color: '#666',
+        fontSize: fontSizes.fontSizePetit,
+        color: themeColors.text,
+        opacity: 0.7,
         flexWrap: 'wrap',
     },
 });

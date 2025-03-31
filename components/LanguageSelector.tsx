@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from "react-native";
 import { useTranslation } from "react-i18next";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 export default function LanguageSelector() {
     const { t, i18n } = useTranslation();
@@ -25,23 +27,33 @@ export default function LanguageSelector() {
         setModalVisible(false);
     };
 
-    const LanguageItem = ({ item }) => (
+    // @ts-ignore
+    const LanguageItem = ({ item  }) => (
         <TouchableOpacity
             style={styles.languageItem}
             onPress={() => changeLanguage(item.code)}
         >
-            <Text style={[styles.languageText, {fontSize : fontSize}]}>{item.name}</Text>
+            <Text style={styles.languageText}>{item.name}</Text>
         </TouchableOpacity>
     );
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     return (
         <View style={styles.container}>
             <TouchableOpacity
                 style={styles.selectButton}
                 onPress={() => setModalVisible(true)}
             >
-                <Text style={[styles.selectedLanguageText, {fontSize : fontSize}]}>
+                <Text style={styles.selectedLanguageText}>
                     {languages.find(lang => lang.code === selectedLanguage)?.name}
                 </Text>
             </TouchableOpacity>
@@ -63,7 +75,7 @@ export default function LanguageSelector() {
                             style={styles.cancelButton}
                             onPress={() => setModalVisible(false)}
                         >
-                            <Text style={[styles.cancelButtonText, {fontSize : fontSize}]}>
+                            <Text style={styles.cancelButtonText}>
                                 {t("cancel_button")}
                             </Text>
                         </TouchableOpacity>
@@ -74,19 +86,19 @@ export default function LanguageSelector() {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         width: 'auto',
     },
     selectButton: {
         borderWidth: 1,
-        borderColor: 'gray',
+        borderColor: themeColors.text,
         borderRadius: 5,
         padding: 10,
     },
     selectedLanguageText: {
-    //    fontSize: 16,
-        color: 'black',
+        fontSize: fontSizes.fontSize,
+        color: themeColors.text,
     },
     modalContainer: {
         flex: 1,
@@ -96,29 +108,34 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '80%',
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         borderRadius: 10,
         padding: 20,
         maxHeight: '70%',
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
     },
     languageItem: {
         padding: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
+        borderBottomWidth: 0.7,
+        borderBottomColor: themeColors.card.border,
     },
     languageText: {
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
         textAlign: 'center',
+        color: themeColors.text,
     },
     cancelButton: {
         marginTop: 15,
         padding: 15,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: themeColors.backgroundColor,
         borderRadius: 5,
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
     },
     cancelButtonText: {
         textAlign: 'center',
-    //    fontSize: 16,
-        color: 'black',
+        fontSize: fontSizes.fontSize,
+        color: themeColors.text,
     },
 });

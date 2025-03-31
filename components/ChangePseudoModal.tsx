@@ -5,6 +5,8 @@ import {useNavigation} from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useTranslation} from "react-i18next";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 interface ChangePseudoModal {
     visible: boolean;
     onClose: () => void;
@@ -18,7 +20,17 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
     const [error, setError] = useState<string>("");
     const navigation = useNavigation();
     const { t } = useTranslation();
+    const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     const handleChangePseudonyme = async () => {
         setLoading(true);
         setError('');
@@ -58,7 +70,7 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
         <Modal visible={visible} animationType="slide" transparent={true} onRequestClose={onClose}>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-
+                    <Text style={styles.modalTitle}>{t("changeUsername")}</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Mot de passe actuel"
@@ -94,7 +106,7 @@ const ChangePseudoModal = ({ visible, onClose, email }: ChangePseudoModal) => {
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -102,57 +114,68 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.5)',
     },
     modalContent: {
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         padding: 20,
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
         borderRadius: 10,
-        width: '80%',
+        width: '85%',
         alignItems: 'center',
     },
     modalTitle: {
-        fontSize: 20,
+        fontSize: fontSizes.fontSizeSousTitre,
         fontWeight: 'bold',
         marginBottom: 15,
+        color: themeColors.text,
     },
     input: {
         width: '100%',
-        padding: 10,
+        padding: 12,
         borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 5,
+        borderColor: themeColors.primaryAlt?.background || '#ddd',
+        borderRadius: 8,
         marginBottom: 15,
+        fontSize: fontSizes.fontSize,
+        backgroundColor: themeColors.input.backgroundColor,
+        color: themeColors.text,
     },
     modalButtons: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
+        marginTop: 10,
     },
     cancelButton: {
         flex: 1,
-        backgroundColor: 'red',
+        backgroundColor: '#e74c3c',
         padding: 10,
-        borderRadius: 5,
+        borderRadius: 8,
         alignItems: 'center',
         marginRight: 5,
     },
     cancelButtonText: {
         color: 'white',
         fontWeight: 'bold',
+        fontSize: fontSizes.fontSizePetit,
     },
     confirmButton: {
         flex: 1,
-        backgroundColor: '#4CAF50',
+        backgroundColor: themeColors.primary.background,
         padding: 10,
-        borderRadius: 5,
+        borderRadius: 8,
         alignItems: 'center',
         marginLeft: 5,
     },
     confirmButtonText: {
-        color: 'white',
+        color: themeColors.primary.text,
         fontWeight: 'bold',
+        fontSize: fontSizes.fontSizePetit,
     },
     errorText: {
         color: "red",
-        marginBottom: 10
+        marginBottom: 10,
+        fontSize: fontSizes.fontSizeTresPetit,
+        textAlign: 'center',
     },
 });
 

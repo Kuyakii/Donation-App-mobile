@@ -4,6 +4,8 @@ import React, {useState} from 'react';
 import {View, TextInput, StyleSheet, Text, TouchableOpacity, FlatList} from 'react-native';
 import {router} from "expo-router";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 type Association = {
     idAssociation: number;
@@ -21,7 +23,15 @@ export default function SearchBar({associations}) {
     const [value, setValue] = useState("");
     const [filteredAssociations, setFilteredAssociations] = useState<Association[]>([]);
     const {fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     const handleChange = (text: string) => {
         setValue(text);
         if (text && associations) {
@@ -47,7 +57,7 @@ export default function SearchBar({associations}) {
                 style={styles.suggestionItem}
                 onPress={() => handleSelectAssociation(item)}
             >
-                <Text>{item.nom}</Text>
+                <Text style={styles.suggestionName}>{item.nom}</Text>
             </TouchableOpacity>
         );
     };
@@ -57,7 +67,7 @@ export default function SearchBar({associations}) {
             <View style={styles.searchBar}>
                 <Feather name="search" size={18} color="gray" style={styles.searchIcon}/>
                 <TextInput
-                    style={[styles.searchInput, {fontSize: fontSizePetit}]}
+                    style={styles.searchInput}
                     value={value}
                     onChangeText={handleChange}
                     placeholder={t('searchBar_placeholder')}
@@ -77,7 +87,7 @@ export default function SearchBar({associations}) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     searchContainer: {
         paddingHorizontal: 16,
         margin: 16,
@@ -85,7 +95,7 @@ const styles = StyleSheet.create({
     searchBar: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         borderWidth: 1,
         borderColor: '#ddd',
         borderRadius: 20,
@@ -98,10 +108,10 @@ const styles = StyleSheet.create({
     searchInput: {
         flex: 1,
         height: 40,
-       // fontSize: 14,
+        fontSize: fontSizes.fontSizePetit,
     },
     suggestionsList: {
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         borderWidth: 1,
         borderColor: '#ddd',
         borderRadius: 10,
@@ -112,4 +122,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
     },
+    suggestionName: {
+        color: themeColors.text,
+    }
 });

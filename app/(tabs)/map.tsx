@@ -6,13 +6,23 @@ import { images} from '@/config';
 import {useRouter} from "expo-router";
 import {getAllAssociation} from "@/helpers";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
-import Colors from "@/constants/Colors";
 import {useTranslation} from "react-i18next";
 import useFontStore from "@/store/fontStore";
-import AccessibilityButton from "@/components/AccessibilityButton";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
+
 export default function MapScreen() {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     const [location, setLocation] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedAssociation, setSelectedAssociation] = useState<IAssociation | null>(null);
@@ -74,12 +84,12 @@ export default function MapScreen() {
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
                             <View style={styles.modalHeader}>
-                                <Text style={[styles.modalTitle, {fontSize : fontSizeTitre}]}>{selectedAssociation.nom}</Text>
+                                <Text style={styles.modalTitle}>{selectedAssociation.nom}</Text>
                                 {/* @ts-ignore */}
                                 <Image source={images[selectedAssociation.nomImage]} style={styles.image} />
                             </View>
 
-                            <Text style={[styles.modalDescription, {fontSize : fontSizeSousTitre}]}>{selectedAssociation.descriptionCourte}</Text>
+                            <Text style={styles.modalDescription}>{selectedAssociation.descriptionCourte}</Text>
 
                             <TouchableOpacity
                                 style={styles.button}
@@ -91,14 +101,14 @@ export default function MapScreen() {
                                     setModalVisible(false);
                                 }}
                             >
-                                <Text style={[styles.buttonText, {fontSize : fontSize}]}>{t('voir_association')}</Text>
+                                <Text style={styles.buttonText}>{t('voir_association')}</Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                                 style={styles.button}
                                 onPress={() => setModalVisible(false)}
                             >
-                                <Text style={[styles.buttonText, {fontSize : fontSize}]}>{t('close_button')}</Text>
+                                <Text style={styles.buttonText}>{t('close_button')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -108,10 +118,10 @@ export default function MapScreen() {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: themeColors.backgroundColor,
     },
     map: {
         flex: 1,
@@ -122,27 +132,32 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    modalHeader: {
-        flexDirection: "row",
-        alignItems: "center",
-    },
     modalContent: {
         padding: 20,
         height: '50%',
         width: '100%',
-        backgroundColor: 'white',
-        borderRadius: 10,
+        backgroundColor: themeColors.background,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
+    },
+    modalHeader: {
+        flexDirection: "row",
+        alignItems: "center",
     },
     modalTitle: {
         padding: 15,
         flex: 1,
-    //    fontSize: 20,
+        fontSize: fontSizes.fontSizeTitre,
         textAlign: 'left',
         fontWeight: 'bold',
+        color: themeColors.text,
     },
     modalDescription: {
+        fontSize: fontSizes.fontSizeSousTitre,
         marginBottom: 30,
-   //     fontSize: 20,
+        color: themeColors.text,
     },
     image: {
         width: 100,
@@ -152,7 +167,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     button: {
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 15,
@@ -164,8 +179,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     buttonText: {
-        color: Colors.primary_dark.text,
-      //  fontSize: 15,
+        color: themeColors.primary.text,
+        fontSize: fontSizes.fontSize,
         fontWeight: '500',
-    }
+    },
 });

@@ -11,10 +11,10 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import BoutonRetour from '@/components/BoutonRetour';
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 import BoutonInscription from '@/components/BoutonInscription';
 import {BASE_URL, images} from '@/config';
-import Colors from "@/constants/Colors";
 import Header from "@/components/header";
 import {useTranslation} from "react-i18next";
 import Partenariat from "@/components/Partenariat";
@@ -23,6 +23,16 @@ import useFontStore from "@/store/fontStore";
 
 const LoginScreen = () => {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+        fontSizeGrosTitre
+    });
 
     const { t } = useTranslation();
     const navigation = useNavigation();
@@ -81,7 +91,7 @@ const LoginScreen = () => {
                     onChangeText={setEmail}
                     keyboardType="email-address"
                     autoCapitalize="none"
-                    placeholderTextColor="#888"
+                    placeholderTextColor={themeColors.input.placeholderTextColor}
                 />
                 <TextInput
                     style={styles.input}
@@ -89,17 +99,17 @@ const LoginScreen = () => {
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
-                    placeholderTextColor="#888"
+                    placeholderTextColor={themeColors.input.placeholderTextColor}
                 />
                 <TouchableOpacity
-                    style={[styles.button, isLoading && styles.buttonDisabled]}
+                    style={styles.button}
                     onPress={handleLogin}
                     disabled={isLoading}
                 >
                     {isLoading ? (
                         <ActivityIndicator size="small" color="#FFF" />
                     ) : (
-                        <Text style={[styles.buttonText, {fontSize : fontSizeSousTitre}]}>{t('login_button')}</Text>
+                        <Text style={styles.buttonText}>{t('login_button')}</Text>
                     )}
                 </TouchableOpacity>
                 <BoutonInscription />
@@ -110,11 +120,11 @@ const LoginScreen = () => {
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
-        backgroundColor: '#F9FAFB',
+        backgroundColor: themeColors.background,
     },
     scroll: {
         flexGrow: 1,
@@ -122,21 +132,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 32,
+        fontSize: fontSizes.fontSizeTitre,
         fontWeight: 'bold',
-        color: '#333',
+        color: themeColors.text,
         marginBottom: 24,
     },
     input: {
         height: 50,
         width: '100%',
-        borderColor: '#DDD',
+        borderColor: themeColors.primaryAlt?.background || '#DDD',
         borderWidth: 1,
         borderRadius: 12,
         marginVertical: 10,
         paddingHorizontal: 16,
-        backgroundColor: '#FFF',
-        color: '#333',
+        backgroundColor: themeColors.input.backgroundColor,
+        color: themeColors.input.placeholderTextColor,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -146,12 +156,12 @@ const styles = StyleSheet.create({
     button: {
         height: 50,
         width: '100%',
-        backgroundColor:  Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
         marginVertical: 20,
-        shadowColor: '#000',
+        shadowColor: themeColors.shadowColor,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
@@ -161,10 +171,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#A9A9A9',
     },
     buttonText: {
-        color: '#FFF',
-   //     fontSize: 18,
+        color: themeColors.primary.text,
+        fontSize: fontSizes.fontSizeSousTitre,
         fontWeight: 'bold',
     },
-
 });
 export default LoginScreen;

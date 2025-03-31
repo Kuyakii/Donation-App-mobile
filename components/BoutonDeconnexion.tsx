@@ -5,9 +5,16 @@ import {router} from "expo-router";
 import Colors from "@/constants/Colors";
 import {useTranslation} from "react-i18next";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 const BoutonDeconnexion = () => {
     const { t } = useTranslation();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+
+    const styles = getStyles(themeColors);
+
     const logout = async () => {
         try {
             // Supprimer le token de AsyncStorage
@@ -34,9 +41,9 @@ const BoutonDeconnexion = () => {
 export default BoutonDeconnexion;
 
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
     button: {
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 15,
@@ -48,8 +55,7 @@ const styles = StyleSheet.create({
         marginBottom: 90,
     },
     buttonText: {
-        color: Colors.primary_dark.text,
-      //  fontSize: 16,
+        color: themeColors.text,
         fontWeight: '500',
     }
 })

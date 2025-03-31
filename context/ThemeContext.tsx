@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { ColorTheme } from '../constants/Colors';
+import { ColorTheme } from '@/constants/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ThemeContextType {

@@ -21,16 +21,25 @@ import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import {IAssociation} from "@/backend/interfaces/IAssociation";
 import AssociationItem from "@/components/AssociationItem";
 import {useRouter} from "expo-router";
-import {useNavigation} from "@react-navigation/native";
 import { EditAssociationModal } from '@/components/EditAssociationModal';
 import {UtilisateursList} from "@/components/UtilisateursList";
 import {t} from "i18next";
 import useFontStore from "@/store/fontStore";
-import { Appearance, useColorScheme } from 'react-native';
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 export default function AdminAppScreen() {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
     const [user, setUser] = useState<IUtilisateur | null>(null);
@@ -158,10 +167,10 @@ export default function AdminAppScreen() {
         return asso ? asso.nom : "Toutes les associations";
     };
 
-        // @ts-ignore
+    // @ts-ignore
     const filteredDons = selectedAssociation === "0" || selectedAssociation === 0
-            ? donsAssos
-            : donsAssos.filter(don => don.idAssociation === parseInt(selectedAssociation));
+        ? donsAssos
+        : donsAssos.filter(don => don.idAssociation === parseInt(selectedAssociation as string));
 
     // Fonction pour calculer les montants par mois
     const getMontantsParMois = (year: number) => {
@@ -293,14 +302,14 @@ export default function AdminAppScreen() {
             {/* Statistiques des dons */}
             <View style={styles.adminSection}>
                 <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('stats_dons')}</Text>
-                <Text>{t("total_dons")}{selectedYear} :<Text style={styles.highlight}>{totalDons}€</Text></Text>
-                <Text>{t('dons_recurrents')}<Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
+                <Text style={[{color : themeColors.text}]}>{t("total_dons")}{selectedYear} : <Text style={styles.highlight}>{totalDons}€</Text></Text>
+                <Text style={[{color : themeColors.text}]}>{t('dons_recurrents')} <Text style={styles.highlight}>{donsRecurentsAssos.length}</Text></Text>
             </View>
 
             {/* Favoris */}
             <View style={styles.adminSection}>
                 <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('favorites')}</Text>
-                <Text>{t('user_fav')}<Text style={styles.highlight}>{nbAssosFav}</Text></Text>
+                <Text style={[{color : themeColors.text}]}>{t('user_fav')}<Text style={styles.highlight}>{nbAssosFav}</Text></Text>
             </View>
             {/* Graphique des dons - AMÉLIORÉ */}
             <View style={styles.chartContainer}>
@@ -318,17 +327,18 @@ export default function AdminAppScreen() {
                         width={Math.max(screenWidth, 600)}
                         height={350}
                         yAxisSuffix="€"
+                        // @ts-ignore
                         yAxisMax={yAxisMax}
                         yAxisMin={0}
                         fromZero
                         showValuesOnTopOfBars={true}
                         chartConfig={{
-                            backgroundColor: "#ffffff",
-                            backgroundGradientFrom: "#ffffff",
-                            backgroundGradientTo: "#ffffff",
+                            backgroundColor: themeColors.tabIconDefault,
+                            backgroundGradientFrom:  themeColors.background,
+                            backgroundGradientTo:  themeColors.background,
                             decimalPlaces: 0,
-                            color: () => "rgba(128, 0, 128, 0.8)",
-                            labelColor: () => "rgba(0, 0, 0, 0.8)",
+                            color: () => themeColors.primary.background,
+                            labelColor: () => themeColors.text,
                             style: {
                                 borderRadius: 16,
                             },
@@ -339,7 +349,7 @@ export default function AdminAppScreen() {
                             },
                             propsForBackgroundLines: {
                                 strokeDasharray: '',
-                                stroke: "rgba(0, 0, 0, 0.1)",
+                                stroke: themeColors.text,
                                 strokeWidth: 1,
                             },
                         }}
@@ -357,14 +367,14 @@ export default function AdminAppScreen() {
             {/* Activités récentes */}
             <View style={styles.adminSection}>
                 <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>{t('recent_activity')}</Text>
-                <Text>{t('new_dons')}<Text style={styles.highlight}>{getRecentDonsCount(filteredDons)}</Text></Text>
-                <Text>{t('new_recurrent_dons')}<Text style={styles.highlight}>{getRecentDonsCountReccurent(filteredDons)}</Text></Text>
+                <Text style={[{color : themeColors.text}]}>{t('new_dons')} <Text style={styles.highlight}>{getRecentDonsCount(filteredDons)}</Text></Text>
+                <Text style={[{color : themeColors.text}]}>{t('new_recurrent_dons')} <Text style={styles.highlight}>{getRecentDonsCountReccurent(filteredDons)}</Text></Text>
             </View>
 
             {/* Wall of Givers - Meilleurs donateurs */}
             <View style={styles.adminSection}>
                 <Text style={[styles.sectionTitle, {fontSize : fontSizeSousTitre}]}>🏆 Wall of Givers 🏆</Text>
-                <Text style={{marginBottom: 10}}>{t('best_donateurs')}</Text>
+                <Text style={[{marginBottom: 10}, {color : themeColors.text}]}>{t('best_donateurs')}</Text>
                 {meilleursDonateurs.length > 0 ? (
                     meilleursDonateurs.map((donateur, index) => (
                         <View key={donateur.idUtilisateur} style={styles.donateurItem}>
@@ -378,18 +388,19 @@ export default function AdminAppScreen() {
                 )}
             </View>
             <BoutonDeconnexion />
-    </View>
+        </View>
     );
     // @ts-ignore
     const renderUsers = () => (
-            <View style={styles.container}>
-                <Text style={[styles.title, {fontSize : fontSizeSousTitre}]}>{t('gestion_user')}</Text>
-                <UtilisateursList
-                    utilisateurs={utilisateurs}
-                    onUpdateUsers={(updatedUsers) => setUtilisateurs(updatedUsers)}
-                    user={user}
-                />
-            </View>
+        <View style={styles.container}>
+            <Text style={[styles.title, {fontSize : fontSizeSousTitre}]}>{t('gestion_user')}</Text>
+            <UtilisateursList
+                // @ts-ignore
+                utilisateurs={utilisateurs}
+                onUpdateUsers={(updatedUsers) => setUtilisateurs(updatedUsers)}
+                user={user}
+            />
+        </View>
     );
     const handleEditAssociation = (association: IAssociation) => {
         setSelectedAssociationForEdit(association);
@@ -413,6 +424,7 @@ export default function AdminAppScreen() {
 
             // Mettre à jour la liste des associations
             setAssociation(prevAssociations =>
+                // @ts-ignore
                 prevAssociations.map(asso =>
                     asso.idAssociation === updatedAssociation.idAssociation
                         ? { ...asso, ...updatedAssociation }
@@ -459,6 +471,7 @@ export default function AdminAppScreen() {
                             }
                             let data;
                             setAssociation(prevAssociations =>
+                                // @ts-ignore
                                 prevAssociations.filter(asso => asso.idAssociation !== id)
                             );
                             Alert.alert("Succès", "L'association a été supprimée avec succès");
@@ -466,6 +479,7 @@ export default function AdminAppScreen() {
                             console.error('Erreur détaillée de suppression:', error);
                             Alert.alert(
                                 "Erreur",
+                                // @ts-ignore
                                 `Impossible de supprimer l'association. Détails: ${error.message}`,
                                 [{ text: "OK" }]
                             );
@@ -512,20 +526,20 @@ export default function AdminAppScreen() {
                     </TouchableOpacity>
                     <View style={styles.associationActions}>
 
-                    <TouchableOpacity
-                        style={[styles.actionButton, styles.editButton]}
-                        onPress={() => handleEditAssociation(asso)}
-                    >
-                        <Text style={styles.actionButtonText}>{t('edit_amount')}</Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.actionButton, styles.editButton]}
+                            onPress={() => handleEditAssociation(asso)}
+                        >
+                            <Text style={styles.actionButtonText}>{t('edit_amount')}</Text>
+                        </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={[styles.actionButton, styles.deleteButton]}
-                        onPress={() => handleDeleteAssociation(asso.idAssociation)}
-                    >
-                        <Text style={styles.actionButtonText}>{t('delete')}</Text>
-                    </TouchableOpacity>
-                </View>
+                        <TouchableOpacity
+                            style={[styles.actionButton, styles.deleteButton]}
+                            onPress={() => handleDeleteAssociation(asso.idAssociation)}
+                        >
+                            <Text style={styles.actionButtonText}>{t('delete')}</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             ))}
             <EditAssociationModal
@@ -584,18 +598,18 @@ export default function AdminAppScreen() {
                         ]}>{t('asso_tab')}</Text>
                     </TouchableOpacity>
                 </View>
-            {activeTab === 'stats' && renderStats()}
-            {activeTab === 'users' && renderUsers()}
-            {activeTab === 'associations' && renderAssociations()}
+                {activeTab === 'stats' && renderStats()}
+                {activeTab === 'users' && renderUsers()}
+                {activeTab === 'associations' && renderAssociations()}
             </ScrollView>
         </View>
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         marginBottom: 125,
         minHeight: 500
     },
@@ -608,23 +622,29 @@ const styles = StyleSheet.create({
         padding: 16
     },
     welcomeTitle: {
-     //   fontSize: 22,
+        fontSize: fontSizes.fontSizeTitre,
         fontWeight: 'bold',
-        marginBottom: 10
+        marginBottom: 10,
+        color: themeColors.text,
     },
     welcomeTitle2: {
-    //    fontSize: 18,
-        marginBottom: 10
+        fontSize: fontSizes.fontSize,
+        marginBottom: 10,
+        color: themeColors.text,
     },
     adminSection: {
-        backgroundColor: "#f3f3f3",
+        backgroundColor: themeColors.admin_section.background,
         padding: 15,
         borderRadius: 10,
-        marginBottom: 15
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
+        marginBottom: 15,
     },
     chartContainer: {
-        backgroundColor: "#f3f3f3",
+        backgroundColor: themeColors.admin_section.background,
         padding: 15,
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
         borderRadius: 10,
         marginBottom: 15,
     },
@@ -634,9 +654,10 @@ const styles = StyleSheet.create({
         paddingRight: 15,
     },
     sectionTitle: {
-     //   fontSize: 18,
+        fontSize: fontSizes.fontSizeSousTitre,
         fontWeight: "bold",
-        marginBottom: 15
+        marginBottom: 15,
+        color: themeColors.text,
     },
     highlight: {
         color: "purple",
@@ -645,13 +666,13 @@ const styles = StyleSheet.create({
     yearSelector: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginBottom: 10
+        marginBottom: 10,
     },
     yearButton: {
         padding: 10,
         borderRadius: 5,
         borderWidth: 1,
-        borderColor: "purple"
+        borderColor: themeColors.card.border,
     },
     selectedYear: {
         backgroundColor: "purple"
@@ -660,8 +681,8 @@ const styles = StyleSheet.create({
         color: "white"
     },
     yearText: {
-        color: "black",
-        fontWeight: "bold"
+        color: themeColors.text,
+        fontWeight: "bold",
     },
     adminButton: {
         backgroundColor: "purple",
@@ -674,18 +695,20 @@ const styles = StyleSheet.create({
     adminButtonText: {
         color: "white",
         fontWeight: "bold",
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
     },
     propsForLabels: {
-        fontSize: 12, // Réduit de 14 à 12
+        fontSize: 12,
         fontWeight: 'bold',
     },
     donateurItem: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        backgroundColor: "#fff",
+        backgroundColor: themeColors.background,
         padding: 12,
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
         borderRadius: 8,
         marginVertical: 5,
         shadowColor: "#000",
@@ -695,21 +718,22 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     donateurRank: {
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
         fontWeight: "bold",
         color: "gold",
         width: 30,
     },
     donateurName: {
-   //     fontSize: 16,
+        fontSize: fontSizes.fontSize,
         fontWeight: "600",
         flex: 1,
         textAlign: "left",
+        color: themeColors.text,
     },
     donateurAmount: {
-     //   fontSize: 16,
+        fontSize: fontSizes.fontSize,
         fontWeight: "bold",
-        color: "purple",
+        color: themeColors.primary.background,
     },
     assoCard: {
         flexDirection: 'row',
@@ -725,7 +749,7 @@ const styles = StyleSheet.create({
         marginRight: 15,
     },
     assoName: {
-    //    fontSize: 18,
+        fontSize: fontSizes.fontSizeSousTitre,
         fontWeight: 'bold',
         flex: 1,
         flexShrink: 1,
@@ -762,7 +786,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     modalTitle: {
-   //     fontSize: 20,
+        fontSize: fontSizes.fontSizeTitre,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
@@ -772,7 +796,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     label: {
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
         marginBottom: 5,
         fontWeight: '600',
     },
@@ -781,7 +805,7 @@ const styles = StyleSheet.create({
         borderColor: '#ddd',
         borderRadius: 8,
         padding: 10,
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
     },
     textArea: {
         minHeight: 100,
@@ -798,13 +822,12 @@ const styles = StyleSheet.create({
         minWidth: '45%',
         alignItems: 'center',
     },
-
     buttonCancel: {
         backgroundColor: '#f3f3f3',
     },
     buttonCancelText: {
         fontWeight: 'bold',
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
         color: '#333',
     },
     buttonSave: {
@@ -812,11 +835,11 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         fontWeight: 'bold',
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
         color: 'white',
     },
     dropdownButton: {
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         padding: 12,
         borderRadius: 8,
         borderWidth: 1,
@@ -826,11 +849,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     dropdownButtonText: {
-    //    fontSize: 16,
-        color: 'black',
+        fontSize: fontSizes.fontSize,
+        color: themeColors.text,
     },
     dropdownIcon: {
-    //    fontSize: 12,
+        fontSize: fontSizes.fontSizePetit,
         color: 'purple',
     },
     modalOverlay: {
@@ -841,9 +864,11 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     dropdownListContainer: {
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         borderRadius: 8,
         width: '90%',
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
         maxHeight: 300,
         shadowColor: "#000",
         shadowOffset: {
@@ -863,8 +888,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#F3E5F5',
     },
     dropdownItemText: {
-    //    fontSize: 16,
-        color: 'black',
+        fontSize: fontSizes.fontSize,
+        color: themeColors.text,
     },
     dropdownItemTextSelected: {
         color: 'purple',
@@ -874,9 +899,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginBottom: 20,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: themeColors.background,
         borderRadius: 10,
-        padding: 4
+        padding: 4,
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
     },
     tabButton: {
         padding: 10,
@@ -885,10 +912,9 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         marginHorizontal: 2,
-        transition: 'background-color 0.3s',
     },
     activeTab: {
-        backgroundColor: 'white',
+        backgroundColor: themeColors.primary.background,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -896,18 +922,28 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     tabButtonText: {
-        color: '#666',
+        color: themeColors.text,
+        opacity: 0.8,
         fontWeight: '500',
     },
     activeTabButtonText: {
-        color: 'purple',
+        color: themeColors.primary.text,
         fontWeight: 'bold',
     },
-    title: { //fontSize: 18
-        fontWeight: 'bold', marginBottom: 10 },
-    listItem: { padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc'},
-    container2: {backgroundColor: 'white'},
-
+    title: {
+        fontSize: fontSizes.fontSize,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        color: themeColors.text,
+    },
+    listItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    container2: {
+        backgroundColor: themeColors.background,
+    },
     addButton: {
         backgroundColor: '#4CAF50',
         paddingHorizontal: 16,
@@ -919,14 +955,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     associationCard: {
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         borderRadius: 8,
+        borderWidth: 1,
+        borderColor: "#ddd",
         marginBottom: 16,
-        shadowColor: "#000",
+        shadowColor: themeColors.shadowColor,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
-        elevation: 3,
+        elevation: 20,
         overflow: 'hidden',
     },
     associationContent: {
@@ -945,14 +983,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     statLabel: {
-    //    fontSize: 12,
-        color: '#666',
+        fontSize: fontSizes.fontSizeTresPetit,
+        color: themeColors.text,
+        opacity: 0.8,
         marginBottom: 2,
     },
     statValue: {
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
         fontWeight: '600',
-        color: '#333',
+        color: themeColors.text,
+        opacity: 0.8,
     },
     deleteButton: {
         backgroundColor: '#f44336',

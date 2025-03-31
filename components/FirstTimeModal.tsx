@@ -11,8 +11,9 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {images} from "@/config";
-import Colors from "@/constants/Colors";
 import useFontStore from '@/store/fontStore';
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 const FirstTimeModal = () => {
     const [isVisible, setIsVisible] = useState(true);
@@ -42,7 +43,16 @@ const FirstTimeModal = () => {
         });
     };
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     return (
         <Modal
             visible={isVisible}
@@ -73,14 +83,14 @@ const FirstTimeModal = () => {
                         />
                     </View>
 
-                    <Text style={[styles.modalText, {fontSize : fontSizePetit}]}>
+                    <Text style={styles.modalText}>
                         Soteria est une application innovante dédiée à la gestion des dons pour les associations partenaires de France Assos Santé.
                         {'\n\n'}
                         En collaborant étroitement avec cette union nationale, qui regroupe près de 85 associations  militant pour les droits des patients et des usagers , Soteria facilite le processus de don en offrant une plateforme centralisée et sécurisée.
                         {'\n\n'}
                         Notre objectif est de renforcer le soutien aux associations membres de France Assos Santé, contribuant ainsi à améliorer la représentation et la défense des droits des usagers du système de santé en France.
                         {'\n\n'}
-                        <Text style={[styles.modalTextPlus, {fontSize : fontSizePetit}]}> Retrouvez plus d’informations dans l’onglet "Profil" de l’application.
+                        <Text style={styles.modalTextPlus}> Retrouvez plus d’informations dans l’onglet "Profil" de l’application.
                         </Text>
                     </Text>
 
@@ -88,7 +98,7 @@ const FirstTimeModal = () => {
                         style={styles.closeButton}
                         onPress={handleClose}
                     >
-                        <Text style={[styles.closeButtonText, {fontSize : fontSize}]}>Fermer</Text>
+                        <Text style={styles.closeButtonText}>Fermer</Text>
                     </TouchableOpacity>
                 </Animated.View>
             </View>
@@ -96,26 +106,28 @@ const FirstTimeModal = () => {
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     modalContainer: {
         flex: 1,
         backgroundColor: 'rgba(0,0,0,0.5)',
         justifyContent: 'flex-start',
     },
     modalContent: {
-        backgroundColor: Colors.primary_lighter.background,
+        backgroundColor: themeColors.background,
         height: '80%',
         width: '100%',
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
-        paddingTop: 50,
-        paddingHorizontal: 20,
+        paddingTop: 30,
+        borderWidth: 1,
+        borderColor: themeColors.card.background,
+        paddingHorizontal: 30,
         paddingBottom: 20,
     },
     logoContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginVertical:30,
+        marginVertical: 30,
     },
     soteriaLogo: {
         width: 200,
@@ -127,30 +139,30 @@ const styles = StyleSheet.create({
     },
     modalText: {
         textAlign: 'center',
-        color: '#333',
-    //    fontSize: 14,
+        color: themeColors.text,
+        fontSize: fontSizes.fontSizePetit,
         marginBottom: 20,
         lineHeight: 20,
     },
     modalTextPlus: {
-        textAlign:'center',
-        color: Colors.primary_dark.background,
+        textAlign: 'center',
+        color: themeColors.primary.background,
         fontWeight: 'bold',
-    //    fontSize: 14,
+        fontSize: fontSizes.fontSizePetit,
         marginBottom: 20,
         lineHeight: 20,
     },
     closeButton: {
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         borderRadius: 25,
         paddingVertical: 12,
         alignItems: 'center',
         marginTop: 'auto',
     },
     closeButtonText: {
-        color: 'white',
+        color: themeColors.primary.text,
         fontWeight: 'bold',
-     //   fontSize: 16,
+        fontSize: fontSizes.fontSize,
     },
 });
 

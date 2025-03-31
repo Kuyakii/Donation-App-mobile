@@ -19,7 +19,7 @@ const useFontStore = create<FontStore>((set) => ({
     fontSize: 16, // Taille par défaut
     fontSizeSousTitre: 18,
     fontSizeTitre: 22, // Taille par défaut des titres
-    fontSizeGrosTitre: 24, // Taille par défaut des titres
+    fontSizeGrosTitre: 26, // Taille par défaut des titres
 
     increaseFontSize: () => {
         set((state) => {

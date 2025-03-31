@@ -4,6 +4,9 @@ import Colors from "@/constants/Colors";
 import {getBadgeColor, getSeuils} from "@/helpers";
 import {useTranslation} from "react-i18next";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
+
 // @ts-ignore
 export default function  DonationCard ({montantDon}){
     const { t } = useTranslation();
@@ -24,23 +27,33 @@ export default function  DonationCard ({montantDon}){
         label: `Atteint ${seuil}€`,
         color : getBadgeColor(seuil),
     }));
+
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre
+    });
 
     return (
         <View style={styles.donationCard}>
-            <Text style={[styles.donationTitle, {fontSize : fontSize}]}>{t('alreadyDonatedAmount', { montantDon })}</Text>
+            <Text style={styles.donationTitle}>{t('alreadyDonatedAmount', { montantDon })}</Text>
 
             <View style={styles.progressContainer}>
                 <View style={styles.progressBar}>
-                    <View style={[styles.progressFill, { width: progressWidth }]} />
+                    <View style={[styles.progressFill, { width: progressWidth as any}]} />
                 </View>
                 <Text style={[styles.progressText, {fontSize: fontSizePetit}]}>{max}€</Text>
             </View>
 
-            <Text style={[styles.badgesTitle, {fontSize : fontSize}]}>{t('yourBadges')}</Text>
+            <Text style={styles.badgesTitle}>{t('yourBadges')}</Text>
             <View style={styles.badgesContainer}>
                 {badges.map((badge) => (
-                    <Text key={badge.id} style={[styles.badge, { backgroundColor: badge.color },{fontSize : fontSizePetit}]}>
+                    <Text key={badge.id} style={styles.badge}>
                         🏆 {badge.label}
                     </Text>
                 ))}
@@ -49,18 +62,19 @@ export default function  DonationCard ({montantDon}){
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     donationCard: {
-        borderWidth: 0.5,
-        borderColor: 'grey',
-        backgroundColor: Colors.container_light.backgroundColor,
+        borderWidth: 1,
+        borderColor: themeColors.card.border,
+        backgroundColor: themeColors.card.background,
         borderRadius: 12,
         padding: 16,
         marginBottom: 20,
     },
     donationTitle: {
-       // fontSize: 16,
+        fontSize: fontSizes.fontSize,
         fontWeight: 'bold',
+        color: themeColors.text,
         marginBottom: 16,
     },
     progressContainer: {
@@ -71,25 +85,29 @@ const styles = StyleSheet.create({
     progressBar: {
         flex: 1,
         height: 20,
-        backgroundColor: '#f2f2f2',
+        backgroundColor: themeColors.input.backgroundColor,
         borderRadius: 10,
         borderWidth: 1,
         overflow: 'hidden',
+        borderColor: themeColors.primaryAlt?.background || '#ccc',
     },
     progressFill: {
         height: '100%',
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         borderRadius: 10,
         borderWidth: 0.5,
+        borderColor: themeColors.primaryAlt?.background || '#ccc',
     },
     progressText: {
         marginLeft: 8,
-      //  fontSize: 14,
+        fontSize: fontSizes.fontSizePetit,
         fontWeight: 'bold',
+        color: themeColors.text,
     },
     badgesTitle: {
-      //  fontSize: 16,
+        fontSize: fontSizes.fontSize,
         fontWeight: 'bold',
+        color: themeColors.text,
         marginBottom: 12,
     },
     badgesContainer: {
@@ -98,12 +116,13 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     badge: {
-      //  fontSize: 14,
+        fontSize: fontSizes.fontSizePetit,
         fontWeight: 'bold',
-        backgroundColor: '#FFD700',
+        backgroundColor: '#FFD700', // couleur custom par seuil, reste inchangée
         paddingVertical: 4,
         paddingHorizontal: 8,
         borderRadius: 8,
         marginRight: 8,
+        color: themeColors.text,
     },
 });

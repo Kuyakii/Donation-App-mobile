@@ -3,13 +3,20 @@ import { View, TouchableOpacity, Text, StyleSheet, Animated, Easing } from "reac
 import { Scale } from 'lucide-react-native';
 import useFontStore from "@/store/fontStore";
 import Colors from "@/constants/Colors";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 export default function FontSizeButton() {
     const { increaseFontSize, decreaseFontSize, fontSize } = useFontStore();
     const [isExpanded, setIsExpanded] = useState(false);
     const slideAnim = React.useRef(new Animated.Value(0)).current;
     const rotateAnim = React.useRef(new Animated.Value(0)).current;
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSize,
+    });
     const toggleAccessibilityPanel = () => {
         setIsExpanded(!isExpanded);
 
@@ -98,7 +105,7 @@ export default function FontSizeButton() {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         position: "absolute",
         right: 20,
@@ -107,14 +114,17 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     accessibilityPanel: {
-        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        backgroundColor: themeColors.background,
         borderRadius: 15,
         marginRight: 10,
-        shadowColor: '#000',
+        borderWidth: 1,
+        borderColor: "white",
+        shadowColor: themeColors.shadow,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,
+
     },
     panelContent: {
         flexDirection: 'row',
@@ -122,27 +132,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     button: {
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         width: 50,
         height: 50,
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
         marginHorizontal: 5,
-        elevation: 5,
+        elevation: 10,
     },
     buttonText: {
-        color: "white",
-        fontSize: 20,
+        color: themeColors.primary.text,
+        fontSize: fontSizes.fontSizePetit,
         fontWeight: "bold",
     },
     sizeText: {
-        color: "white",
-        fontSize: 10,
-        marginTop: 5,
+        color: themeColors.primary.text,
+        fontSize: fontSizes.fontSizeTresPetit,
+        marginTop: 2,
     },
     mainButton: {
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.background,
         width: 50,
         height: 50,
         borderRadius: 25,

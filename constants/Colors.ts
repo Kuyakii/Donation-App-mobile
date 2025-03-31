@@ -1,51 +1,56 @@
 const tintColorLight = '#2f95dc';
-const tintColorDark = '#fff';
+const tintColorDark = '#BB86FC'; // mieux qu’un blanc pur
 const primarydark = '#9e25d5';
 const primarylight = '#E5B6FA';
 
 export default {
+    light: {
+        text: '#000',
+        background: '#fff',
+        tint: tintColorLight,
+        tabIconDefault: '#f3f2f2',
+        tabIconSelected: tintColorLight,
 
-  light: {
-      text: '#000',
-      background: '#fff',
-      tint: tintColorLight,
-      tabIconDefault: '#ccc',
-      tabIconSelected: tintColorLight,
-
-  },
-  container_light: {
-    backgroundColor: '#9E25D51A',
-  },
-
-  dark: {
-      text: '#fff',
-      background: '#000',
-      tint: tintColorDark,
-      tabIconDefault: '#ccc',
-      tabIconSelected: tintColorDark,
-
-    primary_darker: {
-      text: '#fff',
-      background: '#201723'
+        primary_lighter: {
+            text: '#000',
+            background: '#0268b3',
+        },
     },
-    container_dark: {
-      backgroundColor: '#9E25D51A',
-    }
-  },
-  primary_dark: {
-    text: '#fff',
-    background: '#9e25d5',
-  },
 
-  primary_light: {
-    text: '#fff',
-    background: '#E5B6FA'
+    container_light: {
+        backgroundColor: '#f2e9f7', // plus clair et plus propre que l’opacité hex (#9E25D51A)
+    },
 
-  },
-  primary_lighter: {
-    text: '#fff',
-    background: '#ebd1f6'
+    dark: {
+        text: '#F5F5F5',
+        background: '#121212',
+        tint: tintColorDark,
+        tabIconDefault: '#888',
+        tabIconSelected: tintColorDark,
 
-  },
+        primary_darker: {
+            text: '#F5F5F5',
+            background: '#eac0fb',
+        },
+        container_dark: {
+            backgroundColor: '#1e1e1e',
+        },
+    },
+
+    primary_dark: {
+        text: '#fff',
+        background: primarydark,
+    },
+
+    primary_light: {
+        text: '#fff',
+        background: primarylight,
+    },
+
+    primary_lighter: {
+        text: '#fff',
+        background: '#eac0fb',
+    },
 }
+
 export type ColorTheme = 'light' | 'dark';

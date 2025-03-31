@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, Modal } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import BoutonRetour from "@/components/BoutonRetour";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 import { BASE_URL } from "@/config";
 import Header from "@/components/header";
 import Colors from "@/constants/Colors";
@@ -14,6 +14,17 @@ import useFontStore from "@/store/fontStore";
 
 const LoginScreen = () => {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+        fontSizeGrosTitre
+    });
 
     const { t } = useTranslation();
     const navigation = useNavigation();
@@ -71,7 +82,7 @@ const LoginScreen = () => {
                     onChangeText={setEmail}
                     keyboardType="email-address"
                     autoCapitalize="none"
-                    placeholderTextColor="#888"
+                    placeholderTextColor={themeColors.input.placeholderTextColor}
                 />
                 <TextInput
                     style={styles.input}
@@ -79,7 +90,7 @@ const LoginScreen = () => {
                     value={pseudonyme}
                     onChangeText={setPseudo}
                     autoCapitalize="none"
-                    placeholderTextColor="#888"
+                    placeholderTextColor={themeColors.input.placeholderTextColor}
                 />
                 <TextInput
                     style={styles.input}
@@ -87,7 +98,7 @@ const LoginScreen = () => {
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
-                    placeholderTextColor="#888"
+                    placeholderTextColor={themeColors.input.placeholderTextColor}
                 />
                 <TextInput
                     style={styles.input}
@@ -95,22 +106,22 @@ const LoginScreen = () => {
                     value={re_password}
                     onChangeText={setRePassword}
                     secureTextEntry
-                    placeholderTextColor="#888"
+                    placeholderTextColor={themeColors.input.placeholderTextColor}
                 />
                 <TouchableOpacity
-                    style={[styles.button, isLoading && styles.buttonDisabled]}
+                    style={styles.button}
                     onPress={handleRegister}
                     disabled={isLoading}
                 >
                     {isLoading ? (
-                        <Text style={[styles.buttonText, {fontSize : fontSizeSousTitre}]}>{t('registering_button')}</Text>
+                        <Text style={styles.buttonText}>{t('registering_button')}</Text>
                     ) : (
-                        <Text style={[styles.buttonText, {fontSize : fontSizeSousTitre}]}>{t('register_button')}</Text>
+                        <Text style={styles.buttonText}>{t('register_button')}</Text>
                     )}
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <Text style={[styles.rgpdLinkText, {fontSize : fontSizeTresPetit}]}>
+                    <Text style={styles.rgpdLinkText}>
                         {t('privacy_policy_text')}
                     </Text>
                 </TouchableOpacity>
@@ -123,31 +134,32 @@ const LoginScreen = () => {
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#F9FAFB',
+        backgroundColor: themeColors.background,
     },
     scroll: {
         flexGrow: 1,
         alignItems: 'center',
     },
     title: {
-        fontSize: 32,
+        fontSize: fontSizes.fontSizeTitre,
         fontWeight: 'bold',
-        color: '#333',
+        color: themeColors.text,
         marginBottom: 24,
     },
     input: {
         height: 50,
         width: '100%',
-        borderColor: '#DDD',
+        borderColor: themeColors.primaryAlt?.background || '#DDD',
         borderWidth: 1,
         borderRadius: 12,
         marginVertical: 10,
         paddingHorizontal: 16,
-        backgroundColor: '#FFF',
+        backgroundColor: themeColors.input.backgroundColor,
+        color: themeColors.input.placeholderTextColor,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -157,7 +169,7 @@ const styles = StyleSheet.create({
     button: {
         height: 50,
         width: '100%',
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
@@ -172,18 +184,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#A9A9A9',
     },
     buttonText: {
-        color: '#FFF',
-    //    fontSize: 18,
+        color: themeColors.primary.text,
+        fontSize: fontSizes.fontSizeSousTitre,
         fontWeight: 'bold',
     },
     rgpdLinkText: {
-    //    fontSize: 12,
-        color: Colors.primary_dark.background,
+        fontSize: fontSizes.fontSizeTresPetit,
+        color: themeColors.primary.background,
         textAlign: 'center',
         textDecorationLine: 'underline',
         marginTop: 20,
     },
-
 });
 
 export default LoginScreen;

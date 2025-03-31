@@ -4,11 +4,22 @@ import { MaterialIcons } from '@expo/vector-icons';
 import {images} from "@/config";
 import {t} from "i18next";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 // @ts-ignore
 export default function Partenariat() {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     return (
         <View style={styles.partnershipContainer}>
             <Image
@@ -22,14 +33,14 @@ export default function Partenariat() {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     partnershipContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
         padding: 10,
-        backgroundColor: '#F0F0F0',
+        backgroundColor: themeColors.card.background,
         borderRadius: 10,
     },
     partnershipLogo: {
@@ -40,8 +51,8 @@ const styles = StyleSheet.create({
     },
     partnershipText: {
         flex: 1,
-     //   fontSize: 12,
-        color: 'black',
+        fontSize: fontSizes.fontSizeTresPetit,
+        color: themeColors.text,
         textAlign: 'left',
     },
 });

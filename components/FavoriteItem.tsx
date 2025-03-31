@@ -2,10 +2,22 @@ import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {images} from "@/config";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 // @ts-ignore
 export default function FavoriteItem({ name, imageName }) {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
 
     return (
         <View style={styles.favoriteItem}>
@@ -19,7 +31,7 @@ export default function FavoriteItem({ name, imageName }) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     favoriteItem: {
         alignItems: 'center',
         width: 64,
@@ -28,15 +40,16 @@ const styles = StyleSheet.create({
     favoriteImage: {
         width: 70,
         height: 70,
-        backgroundColor: '#f2f2f2',
+        backgroundColor: themeColors.input.backgroundColor,
         resizeMode: 'contain',
         marginBottom: 4,
         borderRadius: 4,
         borderWidth: 0.5,
-        borderColor: 'grey',
+        borderColor: themeColors.card.border,
     },
     favoriteText: {
-      //  fontSize: 12,
+        fontSize: fontSizes.fontSizeTresPetit,
         textAlign: 'center',
+        color: themeColors.text,
     },
 });

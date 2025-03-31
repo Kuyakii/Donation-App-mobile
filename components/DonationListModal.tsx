@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, FlatList, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { IDon } from '@/backend/interfaces/IDon';
-import Colors from '@/constants/Colors';
 import {useTranslation} from "react-i18next";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
+
 // @ts-ignore
 export default function AssociationListModal({ visible, onClose, dons, total }) {
     const { t } = useTranslation();
@@ -46,19 +48,28 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
     const getCurrentTypeLabel = () => typeOptions.find(option => option.value === filterType)?.label;
     const getCurrentSortLabel = () => sortOptions.find(option => option.value === sortOrder)?.label;
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     return (
         <Modal visible={visible} animationType="slide" transparent>
             <View style={styles.modalContainer}>
                 <View style={styles.modalContent}>
-                    <Text style={[styles.modalTitle, {fontSize : fontSizeTitre}]}>{t("your_donations", { total })}</Text>
-                    <Text style={[styles.modalSubTitle, {fontSize : fontSize}]}>{t("donations_subtitle", { donCount: dons.length, total })}</Text>
+                    <Text style={styles.modalTitle}>{t("your_donations", { total })}</Text>
+                    <Text style={styles.modalSubTitle}>{t("donations_subtitle", { donCount: dons.length, total })}</Text>
 
                     {/* Filtres et tris */}
                     <View style={styles.filterContainer}>
                         {/* Filtre par type de don */}
                         <View style={styles.dropdownContainer}>
-                            <Text style={[styles.dropdownLabel, {fontSize : fontSizePetit}]}>{t("donation_type")}</Text>
+                            <Text style={styles.dropdownLabel}>{t("donation_type")}</Text>
                             <View style={styles.relativeContainer}>
                                 <TouchableOpacity
                                     style={styles.dropdownButton}
@@ -67,7 +78,7 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
                                         setSortDropdownOpen(false);
                                     }}
                                 >
-                                    <Text style={[styles.dropdownButtonText, {fontSize : fontSizePetit}]}>{getCurrentTypeLabel()}</Text>
+                                    <Text style={styles.dropdownButtonText}>{getCurrentTypeLabel()}</Text>
                                     <Text style={styles.dropdownArrow}>▼</Text>
                                 </TouchableOpacity>
 
@@ -83,7 +94,7 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
                                                         setTypeDropdownOpen(false);
                                                     }}
                                                 >
-                                                    <Text style={[styles.dropdownItemText, {fontSize : fontSizePetit}]}>{option.label}</Text>
+                                                    <Text style={styles.dropdownItemText}>{option.label}</Text>
                                                 </TouchableOpacity>
                                             ))}
                                         </ScrollView>
@@ -94,7 +105,7 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
 
                         {/* Tri par montant */}
                         <View style={styles.dropdownContainer}>
-                            <Text style={[styles.dropdownLabel, {fontSize : fontSizePetit}]}>{t("filter_sort_label")}</Text>
+                            <Text style={styles.dropdownLabel}>{t("filter_sort_label")}</Text>
                             <View style={styles.relativeContainer}>
                                 <TouchableOpacity
                                     style={styles.dropdownButton}
@@ -103,7 +114,7 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
                                         setTypeDropdownOpen(false);
                                     }}
                                 >
-                                    <Text style={[styles.dropdownButtonText, {fontSize : fontSizePetit}]}>{getCurrentSortLabel()}</Text>
+                                    <Text style={styles.dropdownButtonText}>{getCurrentSortLabel()}</Text>
                                     <Text style={styles.dropdownArrow}>▼</Text>
                                 </TouchableOpacity>
 
@@ -119,7 +130,7 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
                                                         setSortDropdownOpen(false);
                                                     }}
                                                 >
-                                                    <Text style={[styles.dropdownItemText, {fontSize : fontSizePetit}]}>{option.label}</Text>
+                                                    <Text style={styles.dropdownItemText}>{option.label}</Text>
                                                 </TouchableOpacity>
                                             ))}
                                         </ScrollView>
@@ -135,11 +146,11 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
                         keyExtractor={(item: IDon) => item.idDon.toString()}
                         renderItem={({ item }) => (
                             <View style={styles.donItem}>
-                                <Text style={[styles.donType, {fontSize : fontSize}]}>{item.typeDon}</Text>
-                                <Text style={[styles.donMontant, {fontSize : fontSize}]}>{t("donation_amount")}: {item.montant}€</Text>
-                                <Text style={[styles.donDate, {fontSize : fontSizePetit}]}>{t("start_date")}: {new Date(item.dateDon).toLocaleDateString()}</Text>
+                                <Text style={styles.donType}>{item.typeDon}</Text>
+                                <Text style={styles.donMontant}>{t("donation_amount")}: {item.montant}€</Text>
+                                <Text style={styles.donDate}>{t("start_date")}: {new Date(item.dateDon).toLocaleDateString()}</Text>
                                 {item.frequence && (
-                                    <Text style={[styles.donFrequence, {fontSize : fontSizePetit}]}>{t('frequency')} {item.frequence}</Text>
+                                    <Text style={styles.donFrequence}>{t('frequency')} {item.frequence}</Text>
                                 )}
                             </View>
                         )}
@@ -147,7 +158,7 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
 
                     {/* Bouton de fermeture */}
                     <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-                        <Text style={[styles.closeButtonText, {fontSize : fontSize}]}>{t('close_button')}</Text>
+                        <Text style={styles.closeButtonText}>{t('close_button')}</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -166,14 +177,14 @@ export default function AssociationListModal({ visible, onClose, dons, total }) 
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     modalContainer: {
         flex: 1,
         justifyContent: 'flex-end',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         width: '100%',
         height: '90%',
         padding: 20,
@@ -181,18 +192,18 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
     },
     modalTitle: {
-    //    fontSize: 22,
+        fontSize: fontSizes.fontSizeTitre,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
-        color: '#333',
+        color: themeColors.text,
     },
     modalSubTitle: {
-    //    fontSize: 15,
+        fontSize: fontSizes.fontSize,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
-        color: '#333',
+        color: themeColors.text,
     },
     filterContainer: {
         flexDirection: 'row',
@@ -204,8 +215,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
     },
     dropdownLabel: {
-    //    fontSize: 14,
-        color: '#333',
+        fontSize: fontSizes.fontSizePetit,
+        color: themeColors.text,
         marginBottom: 5,
         fontWeight: '500',
     },
@@ -214,7 +225,7 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
     dropdownButton: {
-        backgroundColor: '#f5f5f5',
+        backgroundColor: themeColors.background,
         borderRadius: 8,
         borderWidth: 1,
         borderColor: '#ddd',
@@ -225,19 +236,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     dropdownButtonText: {
-        color: '#333',
-    //    fontSize: 14,
+        color: themeColors.text,
+        fontSize: fontSizes.fontSizePetit,
     },
     dropdownArrow: {
-    //    fontSize: 10,
-        color: '#333',
+        color: themeColors.text,
     },
     dropdownMenu: {
         position: 'absolute',
         top: 42,
         left: 0,
         right: 0,
-        backgroundColor: 'white',
+        backgroundColor: themeColors.background,
         borderWidth: 1,
         borderColor: '#ddd',
         borderRadius: 8,
@@ -254,8 +264,8 @@ const styles = StyleSheet.create({
         borderBottomColor: '#f0f0f0',
     },
     dropdownItemText: {
-        color: '#333',
-    //    fontSize: 14,
+        color: themeColors.text,
+        fontSize: fontSizes.fontSizePetit,
     },
     overlay: {
         position: 'absolute',
@@ -266,44 +276,44 @@ const styles = StyleSheet.create({
         zIndex: 0,
     },
     donItem: {
-        backgroundColor: '#f5f5f5',
+        backgroundColor: themeColors.card.background,
         borderRadius: 10,
         padding: 15,
         marginBottom: 10,
         borderWidth: 1,
-        borderColor: '#eee',
+        borderColor: themeColors.card.border,
     },
     donType: {
-   //     fontSize: 16,
+        fontSize: fontSizes.fontSize,
         fontWeight: 'bold',
-        color: '#333',
+        color: themeColors.text,
         marginBottom: 4,
     },
     donMontant: {
-    //    fontSize: 15,
-        color: '#333',
+        fontSize: fontSizes.fontSize,
+        color: themeColors.text,
         marginBottom: 2,
     },
     donDate: {
-    //    fontSize: 14,
-        color: '#333',
+        fontSize: fontSizes.fontSizePetit,
+        color: themeColors.text,
         marginBottom: 2,
     },
     donFrequence: {
-    //    fontSize: 14,
-        color: '#333',
+        fontSize: fontSizes.fontSizePetit,
+        color: themeColors.text,
         fontStyle: 'italic',
     },
     closeButton: {
         marginTop: 20,
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         padding: 12,
         borderRadius: 10,
         alignItems: 'center',
     },
     closeButtonText: {
-        color: 'white',
-    //    fontSize: 16,
+        fontSize: fontSizes.fontSize,
+        color: themeColors.primary.text,
         fontWeight: 'bold',
     },
 });

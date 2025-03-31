@@ -8,16 +8,27 @@ import {
     Image,
     Linking
 } from 'react-native';
-import Colors from "@/constants/Colors";
 import { router } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
 import { useTranslation } from "react-i18next";
 import Header from "@/components/header";
 import { images } from "@/config";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 export default function APropos() {
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
+
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
 
     const { t } = useTranslation();
     const navigation = useNavigation();
@@ -44,7 +55,7 @@ export default function APropos() {
                 <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
                     <Text style={styles.backButtonText}>←</Text>
                 </TouchableOpacity>
-                <Text style={[styles.pageTitle, {fontSize : fontSizeGrosTitre}]}>{t('info')}</Text>
+                <Text style={styles.pageTitle}>{t('info')}</Text>
             </View>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.logoContainer}>
@@ -52,7 +63,7 @@ export default function APropos() {
                     <Image source={images["france-asso.png"]} style={styles.franceSanteLogo} resizeMode="contain" />
                 </View>
 
-                <Text style={[styles.modalText , {fontSize : fontSizePetit}]}>
+                <Text style={styles.modalText}>
                     {t('a_propos_text1')}
                     {'\n\n'}
                     {t('a_propos_text2')}
@@ -62,12 +73,12 @@ export default function APropos() {
 
                 {/* Bouton vers le site de France Assos Santé */}
                 <TouchableOpacity style={styles.websiteButton} onPress={openFranceAssosSanteWebsite}>
-                    <Text style={[styles.websiteButtonText, {fontSize : fontSizePetit}]}> {t('button_france_asso')}</Text>
+                    <Text style={styles.websiteButtonText}> {t('button_france_asso')}</Text>
                 </TouchableOpacity>
 
                 {/* Section sur les créateurs */}
                 <View style={styles.creatorsSection}>
-                    <Text style={[styles.sectionTitle, {fontSize : fontSizeTitre}]}>{t('createur_title')}</Text>
+                    <Text style={styles.sectionTitle}>{t('createur_title')}</Text>
                     <Text style={styles.modalText}>
                         {t('createurs_text')}
                         {'\n\n'}
@@ -89,10 +100,10 @@ export default function APropos() {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f7f7f7',
+        backgroundColor: themeColors.background,
     },
     titleContainer: {
         flexDirection: 'row',
@@ -109,12 +120,12 @@ const styles = StyleSheet.create({
     },
     backButtonText: {
         fontSize: 30,
-        color: Colors.primary_dark.background,
+        color: themeColors.text,
     },
     pageTitle: {
-    //    fontSize: 30,
+        fontSize: fontSizes.fontSizeGrosTitre,
         fontWeight: 'bold',
-        color: '#000',
+        color: themeColors.text,
         textAlign: 'center',
     },
     scrollView: {
@@ -136,45 +147,46 @@ const styles = StyleSheet.create({
     },
     modalText: {
         textAlign: 'center',
-        color: '#333',
-    //    fontSize: 14,
+        color: themeColors.text,
+        fontSize: fontSizes.fontSizePetit,
         marginBottom: 20,
         lineHeight: 20,
     },
     websiteButton: {
-        backgroundColor: Colors.primary_dark.background,
+        backgroundColor: themeColors.primary.background,
         padding: 12,
         borderRadius: 8,
         alignItems: 'center',
         marginVertical: 10,
     },
     websiteButtonText: {
-        color: '#fff',
-   //     fontSize: 14,
+        color: themeColors.primary.text,
+        fontSize: fontSizes.fontSizePetit,
         fontWeight: 'bold',
     },
     creatorsSection: {
         marginTop: 30,
         marginBottom: 50,
         padding: 15,
-        backgroundColor: '#fff',
+        backgroundColor: themeColors.background,
         borderRadius: 10,
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
+        shadowColor: themeColors.shadowColor,
+        shadowOffset: { width: 4, height: 4 },
         shadowRadius: 4,
-        elevation: 2,
+        elevation: 20,
     },
     sectionTitle: {
-   //     fontSize: 22,
+        fontSize: fontSizes.fontSizeTitre,
         fontWeight: 'bold',
-        color: Colors.primary_dark.background,
+        color: themeColors.primary.background,
         textAlign: 'center',
         marginBottom: 10,
     },
     NomText: {
         textAlign: 'left',
         fontWeight: 'bold',
-    }
-
+        color: themeColors.text,
+    },
 });
+
+

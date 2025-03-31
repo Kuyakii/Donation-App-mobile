@@ -14,6 +14,8 @@ import {
 import { IUtilisateur } from "@/backend/interfaces/IUtilisateur";
 import { BASE_URL } from "@/config";
 import useFontStore from "@/store/fontStore";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeColors } from "@/constants/ThemeColor";
 
 interface UtilisateursListProps {
     utilisateurs: IUtilisateur[];
@@ -124,7 +126,16 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
         );
     };
     const {fontSizeTresPetit ,fontSizePetit, fontSize, fontSizeSousTitre,fontSizeTitre,fontSizeGrosTitre, increaseFontSize, decreaseFontSize } = useFontStore();
+    const { theme } = useTheme();
+    const themeColors = ThemeColors[theme];
 
+    const styles = getStyles(themeColors, {
+        fontSizeTresPetit,
+        fontSizePetit,
+        fontSize,
+        fontSizeSousTitre,
+        fontSizeTitre,
+    });
     const renderUserItem = (item: IUtilisateur) => (
         <View key={item.idUtilisateur} style={styles.userItem}>
             <View style={styles.userInfo}>
@@ -217,124 +228,132 @@ export const UtilisateursList: React.FC<UtilisateursListProps> = ({
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-        minWidth: "auto",
-    },
-    userItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 15,
-        borderBottomWidth: 1,
-        borderBottomColor: '#e0e0e0',
-    },
-    userInfo: {
-        flex: 1,
-        marginRight: 10,
-    },
-    userName: {
-   //     fontSize: 16,
-        fontWeight: 'bold',
-    },
-    userEmail: {
-   //     fontSize: 14,
-        color: '#666',
-    },
-    userActions: {
-        flexDirection: 'row',
-    },
-    actionButton: {
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderRadius: 5,
-        marginLeft: 5,
-    },
-    editButton: {
-        backgroundColor: '#4CAF50',
-    },
-    deleteButton: {
-        backgroundColor: '#f44336',
-    },
-    actionButtonText: {
-        color: 'white',
-        fontWeight: '500',
-    },
-    emptyListText: {
-        textAlign: 'center',
-        marginTop: 20,
-    //    fontSize: 16,
-        color: '#666',
-    },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-    },
-    modalContent: {
-        width: '90%',
-        backgroundColor: 'white',
-        borderRadius: 10,
-        padding: 20,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
+const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
+        container: {
+            flex: 1,
+            backgroundColor: themeColors.background,
+            minWidth: 'auto',
+            borderWidth: 1,
+            borderColor: "#ddd"
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    },
-    modalTitle: {
-    //    fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
-        color: 'purple',
-    },
-    inputContainer: {
-        marginBottom: 15,
-    },
-    label: {
-     //   fontSize: 16,
-        marginBottom: 5,
-        fontWeight: '600',
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 8,
-        padding: 10,
-     //   fontSize: 16,
-    },
-    modalButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 20,
-    },
-    button: {
-        padding: 12,
-        borderRadius: 8,
-        minWidth: '45%',
-        alignItems: 'center',
-    },
-    buttonCancel: {
-        backgroundColor: '#f3f3f3',
-    },
-    buttonCancelText: {
-        fontWeight: 'bold',
-    //    fontSize: 16,
-        color: '#333',
-    },
-    buttonSave: {
-        backgroundColor: 'purple',
-    },
-    buttonText: {
-        fontWeight: 'bold',
-   //     fontSize: 16,
-        color: 'white',
-    },
-});
+        userItem: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: 15,
+            borderBottomWidth: 1,
+            borderBottomColor: '#e0e0e0',
+        },
+        userInfo: {
+            flex: 1,
+            marginRight: 10,
+        },
+        userName: {
+            fontSize: fontSizes.fontSize,
+            fontWeight: 'bold',
+            color: themeColors.text,
+        },
+        userEmail: {
+            fontSize: fontSizes.fontSizePetit,
+            color: themeColors.text,
+            opacity: 0.8,
+        },
+        userActions: {
+            flexDirection: 'row',
+        },
+        actionButton: {
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderRadius: 5,
+            marginLeft: 5,
+        },
+        editButton: {
+            backgroundColor: '#4CAF50',
+        },
+        deleteButton: {
+            backgroundColor: '#f44336',
+        },
+        actionButtonText: {
+            color: 'white',
+            fontWeight: '500',
+        },
+        emptyListText: {
+            textAlign: 'center',
+            marginTop: 20,
+            fontSize: fontSizes.fontSize,
+            color: themeColors.text,
+            opacity: 0.8,
+        },
+        modalContainer: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+        },
+        modalContent: {
+            width: '90%',
+            backgroundColor: themeColors.background,
+            borderRadius: 10,
+            padding: 20,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5,
+            borderWidth: 1,
+            borderColor: "#ddd",
+        },
+        modalTitle: {
+            fontSize: fontSizes.fontSizeSousTitre,
+            fontWeight: 'bold',
+            marginBottom: 20,
+            textAlign: 'center',
+            color: themeColors.primary.background,
+        },
+        inputContainer: {
+            marginBottom: 15,
+        },
+        label: {
+            fontSize: fontSizes.fontSize,
+            marginBottom: 5,
+            fontWeight: '600',
+        },
+        input: {
+            borderWidth: 1,
+            borderColor: '#ddd',
+            borderRadius: 8,
+            padding: 10,
+            fontSize: fontSizes.fontSize,
+            color: themeColors.text,
+        },
+        modalButtons: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: 20,
+        },
+        button: {
+            padding: 12,
+            borderRadius: 8,
+            minWidth: '45%',
+            alignItems: 'center',
+        },
+        buttonCancel: {
+            backgroundColor: themeColors.background,
+            borderStyle: "solid",
+            borderWidth: 1,
+            borderColor: '#ddd',
+        },
+        buttonCancelText: {
+            fontWeight: 'bold',
+            fontSize: fontSizes.fontSize,
+            color: themeColors.text,
+        },
+        buttonSave: {
+            backgroundColor: themeColors.primary.background,
+        },
+        buttonText: {
+            fontWeight: 'bold',
+            fontSize: fontSizes.fontSize,
+            color: 'white',
+        },
+    });
