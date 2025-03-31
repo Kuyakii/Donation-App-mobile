@@ -392,6 +392,7 @@ export default function AdminAssoScreen() {
                             width={Math.max(screenWidth, 600)}
                             height={350}
                             yAxisSuffix="€"
+                            // @ts-ignore
                             yAxisMax={yAxisMax}
                             yAxisMin={0}
                             fromZero

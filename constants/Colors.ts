@@ -42,6 +42,21 @@ export default {
         background: primarydark,
     },
 
+    daltonien: {
+        text: '#000',
+        background: '#FFFFFF',
+        tint: '#FF6600',
+        tabIconDefault: '#FF6600',
+        tabIconSelected: '#0066FF',
+        primary_lighter: {
+            text: '#fff',
+            background: '#0066FF',
+        },
+        container_daltonien: {
+            backgroundColor: '#F5F5F5',
+        },
+    },
+
     primary_light: {
         text: '#fff',
         background: primarylight,
@@ -53,4 +68,4 @@ export default {
     },
 }
 
-export type ColorTheme = 'light' | 'dark';
+export type ColorTheme = 'light' | 'dark' | 'daltonien';

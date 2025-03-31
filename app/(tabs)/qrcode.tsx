@@ -43,7 +43,7 @@ export default function QRCodeScanner() {
         }
     }, [scanned]);
 
-    const handleNavigate = (path: string) => {
+    const handleNavigate = (path: any) => {
         router.push({
             pathname: path,
         });
@@ -100,7 +100,7 @@ export default function QRCodeScanner() {
                     <View style={styles.resultContainer}>
                         <Text style={[styles.resultText, {fontSize : fontSizeTitre}]}>{t('scanned_qr_code')}</Text>
                         <Text style={[styles.resultData,{fontSize : fontSize}]}>{scannedData}</Text>
-                        <TouchableOpacity style={styles.rescanButton} onPress={() => handleNavigate(scannedData)} >
+                        <TouchableOpacity style={styles.rescanButton} onPress={() => handleNavigate(scannedData as string)} >
                             <Text style={styles.rescanButtonText}>{t('go_to_scanned_qr')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.rescanButton} onPress={() => setScanned(false)} >

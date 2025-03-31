@@ -98,4 +98,36 @@ export const ThemeColors: Record<ColorTheme, ThemeColorsType> = {
             background: Colors.dark.background,
         }
     },
+
+    daltonien: {
+        text: Colors.daltonien.text,
+        card: {
+            background: '#FFF',
+            border: Colors.daltonien.tabIconSelected,
+        },
+        background: Colors.daltonien.background,
+        tint: Colors.daltonien.tint,
+        tabIconDefault: Colors.daltonien.tabIconDefault,
+        tabIconSelected: Colors.daltonien.tabIconSelected,
+        input: {
+            backgroundColor: Colors.daltonien.background,
+            placeholderTextColor: Colors.daltonien.text,
+        },
+        container: {
+            backgroundColor: Colors.daltonien.container_daltonien.backgroundColor,
+        },
+        primary: {
+            text: '#fff',
+            background: Colors.daltonien.tabIconSelected, // 🔵 Bleu
+        },
+        primaryAlt: {
+            text: '#fff',
+            background: Colors.daltonien.tint, // 🟠 Orange
+        },
+        shadowColor: Colors.daltonien.tabIconSelected,
+        admin_section: {
+            background: Colors.daltonien.container_daltonien.backgroundColor,
+        },
+    }
+
 };

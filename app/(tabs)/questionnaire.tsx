@@ -534,7 +534,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
         flex: 1,
         backgroundColor: themeColors.container.backgroundColor,
         paddingTop: 50,
-        paddingBottom: 30,
+        paddingBottom: 50,
     },
     title: {
         fontSize: fontSizes.fontSizeGrosTitre,
@@ -714,7 +714,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         marginTop: 20,
-        marginBottom :90,
+        marginBottom :150,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

@@ -11,7 +11,7 @@ export default function FontSizeButton() {
     const [isExpanded, setIsExpanded] = useState(false);
     const slideAnim = React.useRef(new Animated.Value(0)).current;
     const rotateAnim = React.useRef(new Animated.Value(0)).current;
-    const { theme } = useTheme();
+    const { theme, setTheme } = useTheme();
     const themeColors = ThemeColors[theme];
 
     const styles = getStyles(themeColors, {
@@ -82,6 +82,18 @@ export default function FontSizeButton() {
                         <Text style={styles.buttonText}>A+</Text>
                         <Text style={styles.sizeText}>{fontSize.toFixed(1)}</Text>
                     </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={[
+                            styles.button,
+                            isExpanded && { backgroundColor: Colors.primary_dark.background }
+                        ]}
+                        onPress={() => setTheme("daltonien")}
+                    >
+                        <Text style={styles.buttonText}>👓</Text>
+                        <Text style={styles.sizeText}>Dalto</Text>
+                    </TouchableOpacity>
+
                 </View>
             </Animated.View>
 
