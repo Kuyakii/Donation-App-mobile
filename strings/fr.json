@@ -198,9 +198,10 @@
   "description": "Description",
   "short_description": "Description courte",
   "save": "Enregistrer",
-  "best_donateurs_asso": "Meilleurs donateurs de :"
+  "best_donateurs_asso": "Meilleurs donateurs de :",
 
-
-
-
+  "tap_to_pay": "Appuyez sur le bouton ci-dessous pour procéder au paiement sécurisé",
+  "payment_information": "Informations de paiement",
+  "processing": "Traitement en cours...",
+  "proceed_to_payment":  "Procéder au paiement"
 }

@@ -132,7 +132,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: fontSizes.fontSizeTitre,
+        fontSize: fontSizes.fontSizeGrosTitre,
         fontWeight: 'bold',
         color: themeColors.text,
         marginBottom: 24,

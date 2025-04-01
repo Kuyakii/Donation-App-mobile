@@ -532,7 +532,7 @@ export default function QuestionnaireScreen() {
 const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: themeColors.container.backgroundColor,
+        backgroundColor: themeColors.background,
         paddingTop: 50,
         paddingBottom: 50,
     },
@@ -644,6 +644,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     resultsContainer: {
         marginTop: 10,
         marginBottom: 20,
+        padding: 15,
     },
     resultsSummary: {
         fontSize: fontSizes.fontSizeSousTitre,
@@ -651,6 +652,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
         marginTop: 20,
         marginBottom: 10,
         color: themeColors.text,
+        marginLeft: 15,
     },
     resultItem: {
         backgroundColor: themeColors.background,
@@ -686,6 +688,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
         borderRadius: 12,
         padding: 16,
         borderWidth: 1,
+        marginHorizontal: 15,
         borderColor: themeColors.card.border,
         marginBottom: 16,
         shadowColor: '#000',
@@ -712,6 +715,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     restartButton: {
         backgroundColor: themeColors.primary.background,
         padding: 15,
+        marginHorizontal: 25,
         borderRadius: 10,
         marginTop: 20,
         marginBottom :150,

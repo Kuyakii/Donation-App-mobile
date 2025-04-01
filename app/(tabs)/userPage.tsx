@@ -276,7 +276,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 20,
-        backgroundColor: themeColors.container.backgroundColor,
+        backgroundColor: themeColors.background,
     },
     buttonText: {
         color: themeColors.primary.background,

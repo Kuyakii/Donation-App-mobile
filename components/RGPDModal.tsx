@@ -59,7 +59,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     modalContent: {
         width: '80%',
         padding: 20,
-        backgroundColor: themeColors.card.background,
+        backgroundColor: themeColors.background,
         borderRadius: 12,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },

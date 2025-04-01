@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
     StyleSheet,
     View,
@@ -28,6 +28,7 @@ export default function APropos() {
         fontSize,
         fontSizeSousTitre,
         fontSizeTitre,
+        fontSizeGrosTitre,
     });
 
     const { t } = useTranslation();
@@ -171,9 +172,10 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
         backgroundColor: themeColors.background,
         borderRadius: 10,
         shadowColor: themeColors.shadowColor,
-        shadowOffset: { width: 4, height: 4 },
+        shadowOpacity: 0.2,
+        shadowOffset: { width: 0, height: 6 },
         shadowRadius: 4,
-        elevation: 20,
+        elevation: 10,
     },
     sectionTitle: {
         fontSize: fontSizes.fontSizeTitre,

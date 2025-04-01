@@ -38,6 +38,7 @@ export default function DetailAssociation({ nom, description, localisation, desc
         fontSize,
         fontSizeSousTitre,
         fontSizeTitre,
+        fontSizeGrosTitre,
     });
 
     return (

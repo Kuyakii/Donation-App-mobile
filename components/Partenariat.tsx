@@ -40,7 +40,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
         justifyContent: 'center',
         marginTop: 20,
         padding: 10,
-        backgroundColor: themeColors.card.background,
+        backgroundColor: themeColors.grey,
         borderRadius: 10,
     },
     partnershipLogo: {

@@ -31,6 +31,8 @@ export type ThemeColorsType = {
     admin_section: {
         background: string;
     }
+
+    grey: string;
 };
 
 // 🔹 Mapping des thèmes disponibles
@@ -65,7 +67,9 @@ export const ThemeColors: Record<ColorTheme, ThemeColorsType> = {
 
         admin_section: {
             background: Colors.light.tabIconDefault
-        }
+        },
+
+        grey: Colors.grey,
     },
     dark: {
         text: Colors.dark.text,
@@ -96,7 +100,8 @@ export const ThemeColors: Record<ColorTheme, ThemeColorsType> = {
         shadowColor: Colors.dark.text,
         admin_section: {
             background: Colors.dark.background,
-        }
+        },
+        grey: Colors.grey,
     },
 
     daltonien: {
@@ -118,16 +123,17 @@ export const ThemeColors: Record<ColorTheme, ThemeColorsType> = {
         },
         primary: {
             text: '#fff',
-            background: Colors.daltonien.tabIconSelected, // 🔵 Bleu
+            background: Colors.daltonien.tabIconSelected,
         },
         primaryAlt: {
             text: '#fff',
-            background: Colors.daltonien.tint, // 🟠 Orange
+            background: Colors.daltonien.tint,
         },
         shadowColor: Colors.daltonien.tabIconSelected,
         admin_section: {
             background: Colors.daltonien.container_daltonien.backgroundColor,
         },
+        grey: Colors.grey,
     }
 
 };

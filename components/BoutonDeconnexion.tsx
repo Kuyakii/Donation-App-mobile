@@ -55,7 +55,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         marginBottom: 90,
     },
     buttonText: {
-        color: themeColors.text,
+        color: themeColors.background,
         fontWeight: '500',
     }
 })

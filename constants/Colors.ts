@@ -18,9 +18,9 @@ export default {
     },
 
     container_light: {
-        backgroundColor: '#f2e9f7', // plus clair et plus propre que l’opacité hex (#9E25D51A)
+        backgroundColor: '#f2e9f7',
     },
-
+    grey: '#e3e3e3',
     dark: {
         text: '#F5F5F5',
         background: '#121212',

@@ -281,6 +281,8 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
     bannerText: {
         color: themeColors.text,
         fontSize: fontSizes.fontSize,
+        textAlign: "center",
+        paddingVertical: 10,
     },
     loadingText: {
         padding: 10,
