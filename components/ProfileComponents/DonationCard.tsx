@@ -53,7 +53,7 @@ export default function  DonationCard ({montantDon}){
             <Text style={styles.badgesTitle}>{t('yourBadges')}</Text>
             <View style={styles.badgesContainer}>
                 {badges.map((badge) => (
-                    <Text key={badge.id} style={styles.badge}>
+                    <Text key={badge.id} style={[styles.badge, { backgroundColor: badge.color }]}>
                         🏆 {badge.label}
                     </Text>
                 ))}
