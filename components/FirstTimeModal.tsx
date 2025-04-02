@@ -113,7 +113,7 @@ const getStyles = (themeColors: any, fontSizes: any) => StyleSheet.create({
         justifyContent: 'flex-start',
     },
     modalContent: {
-        backgroundColor: themeColors.background,
+        backgroundColor: themeColors.primaryAlt.background,
         height: '80%',
         width: '100%',
         borderBottomLeftRadius: 30,
