@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     },
     camera: {
         flex: 1,
+        justifyContent: 'center',
     },
     overlay: {
         flex: 1,
