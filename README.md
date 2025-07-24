@@ -1,4 +1,5 @@
 # SaeS4
+*Ce projet a été réalisé dans le cadre d’un travail en groupe durant ma formation à I.U.T. Paris Rives-de-Seine en équipe.*
 
 ## Pour lancer l'application en dev :
 ### Mettre à jour le fichier ./config.tsx avec son adresse ip
