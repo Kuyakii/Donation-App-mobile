@@ -1,4 +1,4 @@
-<img width="613" height="542" alt="image" src="https://github.com/user-attachments/assets/685bb2d6-5191-45b7-8c83-d45a5b417894" /># Donation App - SAE S4
+# Donation App - SAE S4
 
 > Réalisé en équipe dans le cadre de la formation à l'IUT Paris Rives-de-Seine.  
 > Application mobile de gestion de dons aux associations, avec back-end en Node.js/TypeScript et base de données MariaDB.
