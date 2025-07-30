@@ -158,7 +158,6 @@ Ces routes permettent de gérer les données de l’application via des requête
 <img width="525" height="210" alt="image" src="https://github.com/user-attachments/assets/15a40258-831c-4f59-bdee-5c73e202947e" />
 <img width="289" height="447" alt="image" src="https://github.com/user-attachments/assets/bd8a6735-ca78-4068-a262-ddbcc016bede" />
 
-
 ---
 
 ## 📄 Auteur
