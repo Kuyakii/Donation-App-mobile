@@ -1,4 +1,4 @@
-# Donation App - SAE S4
+<img width="613" height="542" alt="image" src="https://github.com/user-attachments/assets/685bb2d6-5191-45b7-8c83-d45a5b417894" /># Donation App - SAE S4
 
 > Réalisé en équipe dans le cadre de la formation à l'IUT Paris Rives-de-Seine.  
 > Application mobile de gestion de dons aux associations, avec back-end en Node.js/TypeScript et base de données MariaDB.
@@ -140,12 +140,24 @@ Ces routes permettent de gérer les données de l’application via des requête
 ---
 
 ## 📷 Screenshots
+<img width="670" height="564" alt="image" src="https://github.com/user-attachments/assets/419c655a-bdea-4365-b19f-65c57a4fdba7" />
+<img width="373" height="510" alt="image" src="https://github.com/user-attachments/assets/13b01a1b-783a-4377-995c-a9613059173a" />
+<img width="613" height="542" alt="image" src="https://github.com/user-attachments/assets/d7e426ca-84be-4749-8c43-87022cb3cd24" />
+<img width="729" height="542" alt="image" src="https://github.com/user-attachments/assets/a6c79d43-9b34-4072-97a4-e43792a04f36" />
+<img width="743" height="571" alt="image" src="https://github.com/user-attachments/assets/ee4a7d52-6910-4fda-bc96-e07b0cb9240f" />
+<img width="650" height="522" alt="image" src="https://github.com/user-attachments/assets/400aac87-0468-48de-a489-9d4bc9570c3a" />
+<img width="563" height="487" alt="image" src="https://github.com/user-attachments/assets/e8514034-ae93-49ee-afdc-d3b97c6d906e" />
+<img width="515" height="589" alt="image" src="https://github.com/user-attachments/assets/6b7c19a6-848a-4ebe-916c-96f988a282ef" />
+<img width="604" height="529" alt="image" src="https://github.com/user-attachments/assets/895ca674-20db-4b15-b5a3-455819cce949" />
+<img width="454" height="449" alt="image" src="https://github.com/user-attachments/assets/cb6e0963-8234-4e16-b862-f4d66e879bc2" />
+<img width="479" height="474" alt="image" src="https://github.com/user-attachments/assets/16a474e6-d2ab-4d60-9b56-7d4a87254a20" />
+<img width="745" height="487" alt="image" src="https://github.com/user-attachments/assets/4f14d15a-de8b-43c3-828d-db5ea3f5f460" />
+<img width="776" height="536" alt="image" src="https://github.com/user-attachments/assets/5c9080b1-2df9-4d2a-b56b-b1e8043d734f" />
+<img width="272" height="514" alt="image" src="https://github.com/user-attachments/assets/e5d62c89-5e1c-46e4-965f-5f1e10756de2" />
+<img width="521" height="553" alt="image" src="https://github.com/user-attachments/assets/d1aac363-17eb-40a1-9cb5-67d127acb986" />
+<img width="525" height="210" alt="image" src="https://github.com/user-attachments/assets/15a40258-831c-4f59-bdee-5c73e202947e" />
+<img width="289" height="447" alt="image" src="https://github.com/user-attachments/assets/bd8a6735-ca78-4068-a262-ddbcc016bede" />
 
-<img width="363" height="302" alt="image" src="https://github.com/user-attachments/assets/7a29e32a-5e49-44f5-b043-4e58e1ee0707" />
-```md
-![Page utilisateur](./assets/screens/user-page.png)
-![Carte des associations](./assets/screens/map.png)
-```
 
 ---
 
