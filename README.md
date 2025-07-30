@@ -159,7 +159,8 @@ Ces routes permettent de gérer les données de l’application via des requête
 <img width="289" height="447" alt="image" src="https://github.com/user-attachments/assets/bd8a6735-ca78-4068-a262-ddbcc016bede" />
 
 ---
-![GitHub last commit](https://img.shields.io/github/last-commit/Kuyakii/Donation-App-mobile)
-![GitHub repo size](https://img.shields.io/github/repo-size/Kuyakii/Donation-App-mobile)
 
 *Ce projet a été réalisé dans un contexte d'apprentissage mais reflète une véritable application mobile connectée à une base de données, dotée de fonctionnalités complètes et professionelles.*
+
+![GitHub last commit](https://img.shields.io/github/last-commit/Kuyakii/Donation-App-mobile)
+![GitHub repo size](https://img.shields.io/github/repo-size/Kuyakii/Donation-App-mobile)
