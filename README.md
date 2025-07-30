@@ -160,7 +160,4 @@ Ces routes permettent de gérer les données de l’application via des requête
 
 ---
 
-## 📄 Auteur
----
-
 *Ce projet a été réalisé dans un contexte d'apprentissage mais reflète une véritable application mobile connectée à une base de données, dotée de fonctionnalités complètes et professionelles.*
