@@ -1,5 +1,10 @@
 # Donation App - SAE S4
 
+![GitHub last commit](https://img.shields.io/github/last-commit/Kuyakii/Donation-App-mobile)
+![GitHub repo size](https://img.shields.io/github/repo-size/Kuyakii/Donation-App-mobile)
+[![Lint Check](https://github.com/Kuyakii/Donation-App-mobile/actions/workflows/link.yml/badge.svg)](https://github.com/Kuyakii/Donation-App-mobile/actions/workflows/link.yml)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 > Réalisé en équipe dans le cadre de la formation à l'IUT Paris Rives-de-Seine.  
 > Application mobile de gestion de dons aux associations, avec back-end en Node.js/TypeScript et base de données MariaDB.
 
@@ -161,7 +166,3 @@ Ces routes permettent de gérer les données de l’application via des requête
 ---
 
 *Ce projet a été réalisé dans un contexte d'apprentissage mais reflète une véritable application mobile connectée à une base de données, dotée de fonctionnalités complètes et professionelles.*
-
-![GitHub last commit](https://img.shields.io/github/last-commit/Kuyakii/Donation-App-mobile)
-![GitHub repo size](https://img.shields.io/github/repo-size/Kuyakii/Donation-App-mobile)
-[![Lint Check](https://github.com/Kuyakii/Donation-App-mobile/actions/workflows/link.yml/badge.svg)](https://github.com/Kuyakii/Donation-App-mobile/actions/workflows/link.yml)
