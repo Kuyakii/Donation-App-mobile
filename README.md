@@ -164,3 +164,4 @@ Ces routes permettent de gérer les données de l’application via des requête
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/Kuyakii/Donation-App-mobile)
 ![GitHub repo size](https://img.shields.io/github/repo-size/Kuyakii/Donation-App-mobile)
+![Lint Check](https://github.com/Kuyakii/Donation-App-mobile/actions/workflows/lint.yml/badge.svg)
